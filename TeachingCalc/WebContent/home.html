@@ -1,0 +1,62 @@
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>TeachingCalculator</title>
+	<link rel="stylesheet" type="text/css" href="CSS/style.css">
+
+	<script src="js/FarbenPalette.js"></script>
+	<script src="js/Parser.js"></script>
+	<script src="js/FunktionSyntaxbaum.js"></script>
+	<script src="js/FunktionAlsVectorSyntaxbaum.js"></script>
+	<script src="js/RechnerLibrary.js"></script>
+	<script src="js/Validator.js"></script>
+	<script src="js/Graphics.js"></script>
+	<script src="js/StyleControl.js"></script>
+	<script src="js/ReiterZeichnen.js"></script>
+	
+	
+</head>
+
+<body>
+	<nav id="leftNavBar">
+		<select id="funktionenDropdown" onchange="onChangeFunktionenDropdown()"></select><br>
+		<input type="checkbox" name="GraphAnzeigen" class="checkboxen" id="GraphAnzeigenCheckbox" onchange="onChangeGraphAnzeigen()"> Graph anzeigen<br>
+		<input type="checkbox" name="ErsteAbleitungAnzeigen" class="checkboxen" id="ErsteAbleitungAnzeigenCheckbox" onchange="onChangeErsteAbleitungAnzeigen()"> Erste Ableitung anzeigen<br>
+		<input type="checkbox" name="ZweiteAbleitungAnzeigen" class="checkboxen" id="ZweiteAbleitungAnzeigenCheckbox" onchange="onChangeZweiteAbleitungAnzeigen()"> Zweite Ableitung anzeigen<br>
+		<input type="checkbox" name="DritteAbleitungAnzeigen" class="checkboxen" id="DritteAbleitungAnzeigenCheckbox" onchange="onChangeDritteAbleitungAnzeigen()"> Dritte Ableitung anzeigen<br>
+		<input type="checkbox" name="TangenteAnzeigen" class="checkboxen" id="TangenteAnzeigenCheckbox" onchange="onChangeTangenteAnzeigen()"> Tangente anzeigen<br>
+		<input type="checkbox" name="NormaleAnzeigen" class="checkboxen" id="NormaleAnzeigenCheckbox" onchange="onChangeNormaleAnzeigen()"> Normale anzeigen<br>
+		<input type="checkbox" name="KrümmungskreisAnzeigen" class="checkboxen" id="KrümmungskreisAnzeigenCheckbox" onchange="onChangeKrümmungskreisAnzeigen()"> Krümmungskreis anzeigen<br>
+		<h3 id="Nullstellen">Nullstellen</h3>
+		<button type="button" onclick="onClickGeradengleichungNullstellen()">Mit Geradengleichung</button><br>
+		<button type="button" onclick="onClickMitternachtsformelNullstellen()">Mit Mitternachtsformel</button><br>
+		<button type="button" onclick="onClickPQFormelNullstellen()">Mit PQ-Formel</button><br>
+		<button type="button" onclick="onClickSatzVonVietaNullstellen()">Mit dem Satz von Vieta</button><br>
+		<button type="button">Mit Newton Verfahren</button><br>
+		<button type="button">Mit Regula Falsi</button><br>
+		<label for="NullstellenLabel" id="NullstellenLabel">Nullstellen:
+		    <input type="text" id="NullstellenTextfeld" name="nullstellenTextfeld">
+		  </label><br>
+		<input type="checkbox" name="NullstellenAnzeigen" class="checkboxen" id="NullstellenAnzeigenCheckbox" onchange="onChangeNullstellenAnzeigen()"> Nullstellen anzeigen<br>
+		<h3 id="Nullstellen">Polstellen</h3>
+		<button type="button" onclick="onClickGeradengleichungPolstellen()">Mit Geradengleichung</button><br>
+		<button type="button" onclick="onClickMitternachtsformelPolstellen()">Mit Mitternachtsformel</button><br>
+		<button type="button" onclick="onClickPQFormelPolstellen()">Mit PQ-Formel</button><br>
+		<button type="button" onclick="onClickSatzVonVietaPolstellen()">Mit dem Satz von Vieta</button><br>
+		<button type="button">Mit Newton Verfahren</button><br>
+		<button type="button">Mit Regula Falsi</button><br>
+		<label for="PolstellenLabel" id="PolstellenLabel">Polstellen:
+		    <input type="text" id="PolstellenTextfeld" name="PolstellenTextfeld">
+		  </label><br>
+		<input type="checkbox" name="PolstellenAnzeigen" class="checkboxen" id="PolstellenAnzeigenCheckbox" onchange="onChangePolstellenAnzeigen()"> Polstellen anzeigen<br>
+	</nav>
+	
+	<div id=eingabefeld  >	
+		  f(x)= <input type="text" name="equationForm"  id="equationForm">
+	</div>
+    <canvas id="canvasCalc"></canvas>
+    <script src="js/RenderEngine.js"></script>
+    
+</body>
+
+</html>
