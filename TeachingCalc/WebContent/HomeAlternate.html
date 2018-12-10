@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>TeachingCalculator</title>
+	<link rel="stylesheet" type="text/css" href="CSS/style.css">
+
+	<script src="js/NewtonVerfahren.js"></script>
+	<script src="js/FarbenPalette.js"></script>
+	<script src="js/Parser.js"></script>
+	<script src="js/FunktionSyntaxbaum.js"></script>
+	<script src="js/FunktionAlsVectorSyntaxbaum.js"></script>
+	<script src="js/RechnerLibrary.js"></script>
+	<script src="js/Validator.js"></script>
+	<script src="js/Graphics.js"></script>
+	<script src="js/StyleControl.js"></script>
+	<script src="js/ReiterZeichnen.js"></script>
+	
+	
+</head>
+
+<body>
+	<nav id="leftNavBar">
+		<select id="funktionenDropdown" onchange="onChangeFunktionenDropdown()"></select><br>
+		<input type="checkbox" name="GraphAnzeigen" class="checkboxen" id="GraphAnzeigenCheckbox" onchange="onChangeGraphAnzeigen()"> Graph anzeigen<br>
+		<input type="checkbox" name="ErsteAbleitungAnzeigen" class="checkboxen" id="ErsteAbleitungAnzeigenCheckbox" onchange="onChangeErsteAbleitungAnzeigen()"> Erste Ableitung anzeigen<br>
+		<input type="checkbox" name="ZweiteAbleitungAnzeigen" class="checkboxen" id="ZweiteAbleitungAnzeigenCheckbox" onchange="onChangeZweiteAbleitungAnzeigen()"> Zweite Ableitung anzeigen<br>
+		<input type="checkbox" name="DritteAbleitungAnzeigen" class="checkboxen" id="DritteAbleitungAnzeigenCheckbox" onchange="onChangeDritteAbleitungAnzeigen()"> Dritte Ableitung anzeigen<br>
+		<input type="checkbox" name="TangenteAnzeigen" class="checkboxen" id="TangenteAnzeigenCheckbox" onchange="onChangeTangenteAnzeigen()"> Tangente anzeigen<br>
+		<input type="checkbox" name="NormaleAnzeigen" class="checkboxen" id="NormaleAnzeigenCheckbox" onchange="onChangeNormaleAnzeigen()"> Normale anzeigen<br>
+		<input type="checkbox" name="KrümmungskreisAnzeigen" class="checkboxen" id="KrümmungskreisAnzeigenCheckbox" onchange="onChangeKrümmungskreisAnzeigen()"> Krümmungskreis anzeigen<br>
+		
+		<h3 id="Ueberschrift">Nullstellen</h3>
+			<button type="button" onclick="onClickGeradengleichungNullstellen()" class="Gerade">Mit Geradengleichung</button> <!-- <br class="Gerade">  -->
+			<button type="button" onclick="onClickMitternachtsformelNullstellen()" class="ZweitenGrades">Mit Mitternachtsformel</button>  <!-- <br class="ZweitenGrades"> -->
+			<button type="button" onclick="onClickPQFormelNullstellen()" class="ZweitenGrades">Mit PQ-Formel</button> <!-- <br class="ZweitenGrades">-->
+			<button type="button" onclick="onClickSatzVonVietaNullstellen()" class="ZweitenGrades">Mit dem Satz von Vieta</button> <!-- <br class="ZweitenGrades">-->
+			<button type="button" onclick="onClickNewtonVerfahrenNullstellen()" class="DrittenGrades ViertenGrades FuenftenGrades">Mit Newton Verfahren</button> <!-- <br class="DrittenGrades">-->
+			<button type="button" onclick="onClickRegulaFalsiNullstellen()" class="DrittenGrades ViertenGrades FuenftenGrades">Mit Regula Falsi</button> <!-- <br class="DrittenGrades">-->
+			<label for="NullstellenLabel" id="NullstellenLabel">Nullstellen:
+			    <input type="text" id="NullstellenTextfeld" name="nullstellenTextfeld">
+			  </label><br>
+			<input type="checkbox" name="NullstellenAnzeigen" class="checkboxen" id="NullstellenAnzeigenCheckbox" onchange="onChangeNullstellenAnzeigen()"> Nullstellen anzeigen<br>
+		
+		<h3 id="Ueberschrift">Extremstellen (Hoch-/Tiefpunkte)</h3>
+			<button type="button" onclick="onClickGeradengleichungExtremstellen()" class="ZweitenGrades">Mit Geradengleichung</button>
+			<button type="button" onclick="onClickMitternachtsformelExtremstellen()" class="DrittenGrades">Mit Mitternachtsformel</button>
+			<button type="button" onclick="onClickPQFormelExtremstellen()" class="DrittenGrades">Mit PQ-Formel</button>
+			<button type="button" onclick="onClickSatzVonVietaExtremstellen()" class="DrittenGrades">Mit dem Satz von Vieta</button>
+			<button type="button" onclick="onClickNewtonVerfahrenExtremstellen()" class="ViertenGrades FuenftenGrades">Mit Newton Verfahren</button>
+			<button type="button" onclick="onClickRegulaFalsiExtremstellen()" class="ViertenGrades FuenftenGrades">Mit Regula Falsi</button>
+			<label for="ExtremstellenLabel" id="ExtremstellenLabel">Extremst.:
+			    <input type="text" id="ExtremstellenTextfeld" name="ExtremstellenTextfeld">
+			  </label><br>
+			<input type="checkbox" name="ExtremstellenAnzeigen" class="checkboxen" id="ExtremstellenAnzeigenCheckbox" onchange="onChangeExtremstellenAnzeigen()"> Extremstellen anzeigen<br>
+
+		<h3 id="Ueberschrift">Wendepunkte</h3>
+			<button type="button" onclick="onClickGeradengleichungWendepunkte()" class="DrittenGrades">Mit Geradengleichung</button>
+			<button type="button" onclick="onClickMitternachtsformelWendepunkte()" class="ViertenGrades">Mit Mitternachtsformel</button>
+			<button type="button" onclick="onClickPQFormelWendepunkte()" class="ViertenGrades">Mit PQ-Formel</button>
+			<button type="button" onclick="onClickSatzVonVietaWendepunkte()" class="ViertenGrades">Mit dem Satz von Vieta</button>
+			<button type="button" onclick="onClickNewtonVerfahrenWendepunkte()" class="FuenftenGrades">Mit Newton Verfahren</button>
+			<button type="button" onclick="onClickRegulaFalsiWendepunkte()" class="FuenftenGrades">Mit Regula Falsi</button>
+			<label for="WendepunkteLabel" id="WendepunkteLabel">Wendepkt.:
+			    <input type="text" id="WendepunkteTextfeld" name="WendepunkteTextfeld">
+			  </label><br>
+			<input type="checkbox" name="WendepunkteAnzeigen" class="checkboxen" id="WendepunkteAnzeigenCheckbox" onchange="onChangeWendepunkteAnzeigen()"> Wendepunkte anzeigen<br>
+		
+		<h3 id="Ueberschrift" class="gebrochenRational">Polstellen</h3>
+		<button type="button" onclick="onClickPolstellenBerechnungErklaeren()" class="gebrochenRational">Berechnung zeigen</button><br class="gebrochenRational">
+		<label for="PolstellenLabel" id="PolstellenLabel" class="gebrochenRational">Polstellen:
+		    <input type="text" id="PolstellenTextfeld" name="PolstellenTextfeld" class="gebrochenRational">
+		  </label><br class="gebrochenRational">
+		<input type="checkbox" name="PolstellenAnzeigen" class="checkboxen gebrochenRational" id="PolstellenAnzeigenCheckbox" onchange="onChangePolstellenAnzeigen()"> <label class="gebrochenRational">Polstellen anzeigen</label>    <br class="gebrochenRational">
+	</nav>
+	
+	<div id=eingabefeld  >	
+		  f(x)= <input type="text" name="equationFormAlternativ"  id="equationFormAlternativ">
+	</div>
+    <canvas id="canvasCalc"></canvas>
+    <script src="js/RenderEngine.js"></script>
+    
+</body>
+
+</html>

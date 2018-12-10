@@ -1,4 +1,4 @@
-//berechnet die punkte einer funktion als vektor
+//berechnet die punkte einer funktion als vektor (x^3+2*x-2)/(x-2) macht probleme
 function f(x, funktion) {
 	let y = 0.0;
 	for (let j = 0; j < funktion.length; j++) {
@@ -385,3 +385,249 @@ function polynomMultiplikation(poly1, poly2) {
 	}
 	return ergebnis;
 }
+
+
+
+//function newtonVerfahren(startPunktNewton, funktion){
+//	let xn = startPunktNewton;
+//	let xn1 =0;
+//	let counter = 0;
+//	let yVonXn1 = 0;
+//	let funktionTmp = funktion;
+//
+//	while((Math.abs(xn-xn1)>tolleranz || Math.abs(getPunkt(xn1,funktionTmp))>tolleranz) && counter<1000){
+//		if(counter>0){
+//			xn = xn1;
+//		}
+//		xn1 = xn - (getPunkt(xn,funktionTmp) / getPunkt(xn,funktionTmp.ersteAbleitung));
+//		yVonXn1 = getPunkt(xn1,funktionTmp);
+//		counter++;
+//	}
+//	let vector2D = {
+//			x: xn1,
+//			y: getPunkt(xn1,funktionTmp)
+//	}
+//	
+//	if(Math.abs(vector2D.y)> tolleranz){
+//		
+//	}else if(Math.abs(vector2D.y) < tolleranz){
+//		return vector2D;
+//	}
+//}
+
+function newtonVerfahren_GebrochenRational(startPunktNewton, funktion, gebrochenRationalPolstellen){
+	let tolleranz = Math.pow(10,-15);
+	let xnZaehler = startPunktNewton;
+	let xn1Zaehler = 0;
+	let counterZaehler = 0;
+	let yVonXn1Zaehler = 0;
+	let fXZaehler = undefined;
+	let fStrichXZaehler = undefined;
+	
+	if(gebrochenRationalPolstellen==false){
+		if(funktion.inhaltKnotenSymbol === "/"){
+			fXZaehler = funktion.linkesChild;
+			fStrichXZaehler = funktionAbleitenGebrochenRational(funktion.linkesChild);
+		}else{
+			if(funktion.gekürzt!=undefined){
+				fXZaehler = funktion.gekürzt;
+				fStrichXZaehler = funktionAbleitenGebrochenRational(funktion.gekürzt);
+			}else{
+				fXZaehler = funktion;
+				fStrichXZaehler = funktionAbleitenGebrochenRational(funktion);
+			}
+			
+		}
+		while (getPunkt(xn1Zaehler, fStrichXZaehler) == 0) {
+			xn1Zaehler++;
+		}
+		while ((Math.abs(xnZaehler - xn1Zaehler)>tolleranz || Math.abs(getPunkt(xn1Zaehler, fXZaehler))>tolleranz) && counterZaehler<1000) {
+			if (counterZaehler > 0) {
+				xnZaehler = xn1Zaehler;
+			}
+			xn1Zaehler = xnZaehler - (getPunkt(xn1Zaehler, fXZaehler) / getPunkt(xn1Zaehler, fStrichXZaehler));
+			yVonXn1Zaehler = getPunkt(xn1Zaehler, fXZaehler);
+			counterZaehler++;
+		}
+		let p1Zaehler = {
+				x:xn1Zaehler,
+				y:getPunkt(xn1Zaehler, fXZaehler)
+		}
+
+		if (Math.abs(p1Zaehler.y) > tolleranz) {
+
+		}
+		else if (Math.abs(p1Zaehler.y) < tolleranz) {
+			return p1Zaehler;
+		}
+	}else{
+		
+		if (funktion.gekürzt.inhaltKnotenSymbol == '/') {
+			let xnNenner = x;
+			let xn1Nenner = 0;
+			let counterNenner = 0;
+			let yVonXn1Nenner = 0;
+			let tmp1 = 0;
+			let tmp2 = 0;
+		
+			let fXNenner = undefined;
+			let fStrichXNenner = undefined;
+
+			if (funktion.gekürzt.inhaltKnotenSymbol == '/') {
+				fXNenner = funktion.gekürzt.rechtesChild;
+				fStrichXNenner = funktionAbleitenGebrochenRational(funktion.gekürzt.rechtesChild);
+			}
+			while (getPunkt(xn1Nenner, fStrichXNenner) == 0) {
+				xn1Nenner++;
+			}
+			while ((Math.abs(xnNenner - xn1Nenner) > tolleranz || Math.abs(getPunkt(xn1Nenner, fXNenner)) > tolleranz) && counterNenner < 1000) {
+				if (counterNenner > 0) {
+					xnNenner = xn1Nenner;
+				}
+				tmp1 = getPunkt(xn1Nenner, fXNenner);
+				tmp2 = getPunkt(xn1Nenner, fStrichXNenner);
+				xn1Nenner = xnNenner - (tmp1 / tmp2);
+				yVonXn1Nenner = getPunkt(xn1Nenner, fXNenner);
+				counterNenner++;
+			}
+			let p1Nenner = {
+					x:xn1Nenner,
+					y:getPunkt(xn1Nenner, fXNenner)
+			}
+
+			if (Math.abs(p1Nenner.y) > tolleranz) {
+
+			}
+			else if (Math.abs(p1Nenner.y) < tolleranz) {
+				return p1Nenner;
+			}
+		}
+	}
+}
+
+function regulaFalsi_GebrochenRational( a,  b, funktion) {
+	let tolleranz = Math.pow(10,-10);
+	let c = 0;
+	let counter = 0;
+	let fb = f(b, funktion);
+	let fa = f(a, funktion);
+	let fc = 0;
+	
+	while (Math.abs(fb) > tolleranz && Math.abs(fa) > tolleranz && counter<1000) {
+		fb = f(b, funktion);
+		fa = f(a, funktion);
+		c = b - (((b - a) / (fb - fa))*fb);
+		let fc = f(c, funktion);
+		if (fc*fa<0) {
+			a = c;
+		}
+		else if (fc*fb<0) {
+			b = c;
+		}
+		counter++;
+	}
+	
+	let p = undefined;
+	if (Math.abs(fa) < tolleranz) {
+		p = {
+				x:a,
+				y:f(a, funktion)
+		};
+		return p;
+	}
+	if (Math.abs(fb) < tolleranz) {
+		p = {
+				x:b,
+				y:f(b, funktion)
+		};
+		return p;
+	}
+	
+}
+
+tolleranzRunden = Math.pow(10,-10);
+function zahlRunden(zahl){
+	if(  Math.abs(zahl - Math.round(zahl)) <tolleranzRunden  ){
+		return Math.round(zahl);
+	}else{
+		return zahl.toFixed(2);
+	}
+}
+
+
+function berechneKurvenDiskusionsPunkte(funktionObjekt){
+	
+	if(funktionObjekt.inhaltKnotenSymbol==="/"){
+		let polynomGradZaehler = funktionObjekt.gekürzt.linkesChild.inhaltKnotenVektor.length-1;
+		let polynomGradNenner = funktionObjekt.gekürzt.rechtesChild.inhaltKnotenVektor.length-1;
+		let polynomGradZaehlerErsteAbleitung = funktionObjekt.gekürzt.ersteAbleitung.linkesChild.inhaltKnotenVektor.length-1;
+		let polynomGradZaehlerZweiteAbleitung = funktionObjekt.gekürzt.zweiteAbleitung.linkesChild.inhaltKnotenVektor.length-1;
+		
+		if(polynomGradZaehler===1){
+			onClickGeradengleichungNullstellen();
+		}else if(polynomGradZaehler===2){
+			onClickMitternachtsformelNullstellen()
+		}else if(polynomGradZaehler===3){
+			onClickRegulaFalsiNullstellen();
+		}
+		
+		if(polynomGradZaehlerErsteAbleitung===1){
+			onClickGeradengleichungExtremstellen();
+		}else if(polynomGradZaehlerErsteAbleitung===2){
+			onClickMitternachtsformelExtremstellen();
+		}else if(polynomGradZaehlerErsteAbleitung>=3){
+			onClickRegulaFalsiExtremstellen();
+		}
+		
+		if(polynomGradZaehlerZweiteAbleitung===1){
+			onClickGeradengleichungWendepunkte();
+		}else if(polynomGradZaehlerZweiteAbleitung===2){
+			onClickMitternachtsformelWendepunkte();
+		}else if(polynomGradZaehlerZweiteAbleitung>=3){
+			onClickRegulaFalsiWendepunkte();
+		}
+		
+
+		if(polynomGradNenner===1){
+			onClickGeradengleichungPolstellen();
+		}else if(polynomGradNenner===2){
+			onClickMitternachtsformelPolstellen();
+		}else if(polynomGradNenner>=3){
+			onClickRegulaFalsiPolstellen();
+		}
+		
+	}else{
+		let polynomGrad = funktionObjekt.gekürzt.inhaltKnotenVektor.length-1;
+		if(polynomGrad===1){
+			
+		}else if(polynomGrad===2){
+			onClickGeradengleichungNullstellen();
+			onClickGeradengleichungExtremstellen();
+		}else if(polynomGrad===3){
+			onClickRegulaFalsiNullstellen();
+			onClickMitternachtsformelExtremstellen();
+			onClickGeradengleichungWendepunkte();
+		}else if(polynomGrad===4){
+			onClickRegulaFalsiNullstellen();
+			onClickRegulaFalsiExtremstellen();
+			onClickMitternachtsformelWendepunkte();
+		}else if(polynomGrad>=5){
+			onClickRegulaFalsiNullstellen();
+			onClickRegulaFalsiExtremstellen();
+			onClickRegulaFalsiWendepunkte();
+		}
+	}
+}
+
+function integrieren(funktionAlsVektor){
+	let stammfunktionAlsVektor = [];
+	while(stammfunktionAlsVektor.length<funktionAlsVektor.length+1){
+		stammfunktionAlsVektor.push(0);
+	}
+	for(let i=0;i<funktionAlsVektor.length;i++){
+		stammfunktionAlsVektor[i+1] = funktionAlsVektor[i] / (i+1);
+	}
+	return stammfunktionAlsVektor;
+}
+
+

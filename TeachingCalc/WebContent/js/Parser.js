@@ -938,6 +938,52 @@ function ausSyntaxbaumVektorErstellen(aktuellerKnoten,  functionAlsVectorLokal) 
 				functionAlsVectorLokal[hochZahl] += multiplyer;
 			}			
 		}
+		
+		
+		else if ((parseInt(aktuellerKnoten.rechtesChild.inhaltKnoten) >= 1 && parseInt(aktuellerKnoten.rechtesChild.inhaltKnoten) <= 9) && (parseInt(aktuellerKnoten.rechtesChild.inhaltKnoten) >= 1 && parseInt(aktuellerKnoten.rechtesChild.inhaltKnoten) <= 9)) {
+			let konstante = Math.pow(parseInt(aktuellerKnoten.linkesChild.inhaltKnoten),parseInt(aktuellerKnoten.rechtesChild.inhaltKnoten));
+			let hochZahl = 0;
+			if (functionAlsVectorLokal.length < hochZahl + 1) {
+				functionAlsVectorLokal.push(0);
+			}
+			let multiplyer = 1.0;
+			if (aktuellerKnoten.parent !== null) {
+				if (aktuellerKnoten.parent.inhaltKnoten === '*' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					multiplyer = parseInt(aktuellerKnoten.parent.linkesChild.inhaltKnoten);
+				}
+			}
+			let vorzeichen = false;
+			let next = aktuellerKnoten;
+			while (next.parent !== null) {
+				/*if ((next.parent.inhalt === '+'|| next.parent.inhalt === '-') && next.parent.linkesChild === next) {
+					next = next.parent;
+				}
+				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
+					next = next.parent;
+				}*/
+				
+				if ((next.parent.inhaltKnoten === '+' || next.parent.inhaltKnoten === '-') && next.parent.rechtesChild === next) {
+					if (next.parent.inhaltKnoten === '+') {
+						vorzeichen = false;
+						break;
+					}
+					else if (next.parent.inhaltKnoten === '-') {
+						vorzeichen = true;
+						break;
+					}
+				}
+				else {
+					next = next.parent;
+				}
+			}
+			//if (aktuellerKnoten.parent.rechtesChild.inhalt >= '1' && aktuellerKnoten.parent.rechtesChild.inhalt >= '9' && aktuellerKnoten.parent.parent.inhalt === '-') {				
+			if(vorzeichen){
+				functionAlsVectorLokal[hochZahl] -= multiplyer*konstante;
+			}
+			else {
+				functionAlsVectorLokal[hochZahl] += multiplyer*konstante;
+			}			
+		}
 	}
 
 	if (aktuellerKnoten.inhaltKnoten === '*') {

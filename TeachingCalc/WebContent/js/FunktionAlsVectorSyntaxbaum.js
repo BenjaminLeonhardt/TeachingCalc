@@ -17,6 +17,7 @@ class FunktionAlsVektorSyntaxbaum {
 		this.ersteAbleitung = null;
 		this.zweiteAbleitung = null;
 		this.dritteAbleitung = null;
+		this.stammfunktion = null;
 		this.graphAnzeigen = true;
 		this.tangenteAnzeigen = false;
 		this.ersteAbleitungAnzeigen = false;
@@ -25,8 +26,13 @@ class FunktionAlsVektorSyntaxbaum {
 		this.normaleAnzeigen = false;
 		this.krümmungskreisAnzeigen = false;
 		this.nullstellen = [];
+		this.extremstellen = [];
+		this.wendepunkte = [];
 		this.polstellen = [];
 		this.nullstellenAnzeigen = false;
+		this.extremstellenAnzeigen = false;
+		this.wendepunkteAnzeigen = false;
 		this.polstellenAnzeigen = false;
+		this.stammfunktionAnzeigen = false;
 	}; 
 };

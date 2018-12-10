@@ -4,6 +4,7 @@
 	<title>TeachingCalculator</title>
 	<link rel="stylesheet" type="text/css" href="CSS/style.css">
 
+	<script src="js/NewtonVerfahren.js"></script>
 	<script src="js/FarbenPalette.js"></script>
 	<script src="js/Parser.js"></script>
 	<script src="js/FunktionSyntaxbaum.js"></script>
@@ -27,24 +28,46 @@
 		<input type="checkbox" name="TangenteAnzeigen" class="checkboxen" id="TangenteAnzeigenCheckbox" onchange="onChangeTangenteAnzeigen()"> Tangente anzeigen<br>
 		<input type="checkbox" name="NormaleAnzeigen" class="checkboxen" id="NormaleAnzeigenCheckbox" onchange="onChangeNormaleAnzeigen()"> Normale anzeigen<br>
 		<input type="checkbox" name="KrümmungskreisAnzeigen" class="checkboxen" id="KrümmungskreisAnzeigenCheckbox" onchange="onChangeKrümmungskreisAnzeigen()"> Krümmungskreis anzeigen<br>
-		<h3 id="Nullstellen">Nullstellen</h3>
+		<h3 id="Ueberschrift">Nullstellen</h3>
 		<button type="button" onclick="onClickGeradengleichungNullstellen()">Mit Geradengleichung</button><br>
 		<button type="button" onclick="onClickMitternachtsformelNullstellen()">Mit Mitternachtsformel</button><br>
 		<button type="button" onclick="onClickPQFormelNullstellen()">Mit PQ-Formel</button><br>
 		<button type="button" onclick="onClickSatzVonVietaNullstellen()">Mit dem Satz von Vieta</button><br>
-		<button type="button">Mit Newton Verfahren</button><br>
-		<button type="button">Mit Regula Falsi</button><br>
+		<button type="button" onclick="onClickNewtonVerfahrenNullstellen()">Mit Newton Verfahren</button><br>
+		<button type="button" onclick="onClickRegulaFalsiNullstellen()">Mit Regula Falsi</button><br>
 		<label for="NullstellenLabel" id="NullstellenLabel">Nullstellen:
 		    <input type="text" id="NullstellenTextfeld" name="nullstellenTextfeld">
 		  </label><br>
 		<input type="checkbox" name="NullstellenAnzeigen" class="checkboxen" id="NullstellenAnzeigenCheckbox" onchange="onChangeNullstellenAnzeigen()"> Nullstellen anzeigen<br>
-		<h3 id="Nullstellen">Polstellen</h3>
+		<h3 id="Ueberschrift">Extremstellen (Hoch-/Tiefpunkte)</h3>
+		<button type="button" onclick="onClickGeradengleichungExtremstellen()">Mit Geradengleichung</button><br>
+		<button type="button" onclick="onClickMitternachtsformelExtremstellen()">Mit Mitternachtsformel</button><br>
+		<button type="button" onclick="onClickPQFormelExtremstellen()">Mit PQ-Formel</button><br>
+		<button type="button" onclick="onClickSatzVonVietaExtremstellen()">Mit dem Satz von Vieta</button><br>
+		<button type="button" onclick="onClickNewtonVerfahrenExtremstellen()">Mit Newton Verfahren</button><br>
+		<button type="button" onclick="onClickRegulaFalsiExtremstellen()">Mit Regula Falsi</button><br>
+		<label for="ExtremstellenLabel" id="ExtremstellenLabel">Extremst.:
+		    <input type="text" id="ExtremstellenTextfeld" name="ExtremstellenTextfeld">
+		  </label><br>
+		<input type="checkbox" name="ExtremstellenAnzeigen" class="checkboxen" id="ExtremstellenAnzeigenCheckbox" onchange="onChangeExtremstellenAnzeigen()"> Extremstellen anzeigen<br>
+		<h3 id="Ueberschrift">Wendepunkte</h3>
+		<button type="button" onclick="onClickGeradengleichungWendepunkte()">Mit Geradengleichung</button><br>
+		<button type="button" onclick="onClickMitternachtsformelWendepunkte()">Mit Mitternachtsformel</button><br>
+		<button type="button" onclick="onClickPQFormelWendepunkte()">Mit PQ-Formel</button><br>
+		<button type="button" onclick="onClickSatzVonVietaWendepunkte()">Mit dem Satz von Vieta</button><br>
+		<button type="button" onclick="onClickNewtonVerfahrenWendepunkte()">Mit Newton Verfahren</button><br>
+		<button type="button" onclick="onClickRegulaFalsiWendepunkte()">Mit Regula Falsi</button><br>
+		<label for="WendepunkteLabel" id="WendepunkteLabel">Wendepkt.:
+		    <input type="text" id="WendepunkteTextfeld" name="WendepunkteTextfeld">
+		  </label><br>
+		<input type="checkbox" name="WendepunkteAnzeigen" class="checkboxen" id="WendepunkteAnzeigenCheckbox" onchange="onChangeWendepunkteAnzeigen()"> Wendepunkte anzeigen<br>
+		<h3 id="Ueberschrift">Polstellen</h3>
 		<button type="button" onclick="onClickGeradengleichungPolstellen()">Mit Geradengleichung</button><br>
 		<button type="button" onclick="onClickMitternachtsformelPolstellen()">Mit Mitternachtsformel</button><br>
 		<button type="button" onclick="onClickPQFormelPolstellen()">Mit PQ-Formel</button><br>
 		<button type="button" onclick="onClickSatzVonVietaPolstellen()">Mit dem Satz von Vieta</button><br>
-		<button type="button">Mit Newton Verfahren</button><br>
-		<button type="button">Mit Regula Falsi</button><br>
+		<button type="button" onclick="onClickNewtonVerfahrenPolstellen()">Mit Newton Verfahren</button><br>
+		<button type="button" onclick="onClickRegulaFalsiPolstellen()">Mit Regula Falsi</button><br>
 		<label for="PolstellenLabel" id="PolstellenLabel">Polstellen:
 		    <input type="text" id="PolstellenTextfeld" name="PolstellenTextfeld">
 		  </label><br>

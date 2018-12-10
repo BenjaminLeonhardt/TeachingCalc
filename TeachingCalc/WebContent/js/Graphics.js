@@ -189,9 +189,15 @@ function DrawLineOhneVergroeserung(x1, y1) {
 		return;
 	}
 
-//	if(y1<0||y1>canvas.height){
-//		return;
-//	}
+	if(y1<0||y1>canvas.height){
+		if(y1<0){
+			y1=0;
+		}if(y1>canvas.height){
+			y1=canvas.height;
+		}
+		canvasContext.moveTo(x1, y1);
+		return;
+	}
 	
 	canvasContext.lineTo(x1, y1);
 }

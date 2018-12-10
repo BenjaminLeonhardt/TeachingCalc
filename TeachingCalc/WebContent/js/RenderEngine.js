@@ -14,9 +14,14 @@ let funktionenListe = [];
 hoeheInfoLeiste = 50;
 hoeheInfoLeisteReiter = 20;
 canvasContext.font = '15px Calibri';
-//canvasContext.fillStyle = 'rgba(30,30,30,1)';
+//canvasContext.fillStyle = 'rgba(30,30,30,1)'
 canvasContext.textAlign = "left";
 let breitePunktAmGraph = canvasContext.measureText("Punkt am Graph");
+
+let workersAvailable =false;
+if(window.Worker){
+	workersAvailable = true;
+}
 
 let verschiebungDurchBenutzer = {
 	x : 0,
@@ -83,9 +88,23 @@ let farbeReiter6 = {
 }
 
 let farbeNullstellen = {
-		r:100,
+		r:200,
 		b:0,
 		g:0,
+		a:1
+}
+
+let farbeExtremstellen = {
+		r:200,
+		b:0,
+		g:100,
+		a:1
+}
+
+let farbeWendestellen = {//TODO angleichen stelle und punkte
+		r:04,
+		b:180,
+		g:130,
 		a:1
 }
 
@@ -95,6 +114,9 @@ let farbePolstellen = {
 		g:0,
 		a:1
 }
+
+
+
 
 let farbeSchriftInfoLeiste = {
 		r:0,
@@ -454,102 +476,263 @@ canvas.addEventListener("mouseup", function(event) {
 });
 
 equationForm = document.getElementById("equationForm");
-equationForm.addEventListener("keypress", function(event) {//todo felder leermachen bei neuer eingabe
-	let key = event.keyCode;
-	if(key === 13){
-		if(funktionenVorschau!=0){
-			funktionenListe.push(funktionenVorschau);
-			let funktionGekuerzt = funktionenVorschau; 
-			kuerzeSyntaxbaumGebrochenRational(funktionGekuerzt);
-			funktionenListe[funktionenListe.length-1].gekürzt = funktionGekuerzt;
-			addToFunctionDropdownList(funktionenVorschau);
-			funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenGebrochenRational(funktionGekuerzt);
-			funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].ersteAbleitung);
-			funktionenListe[funktionenListe.length-1].ersteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung;
-			funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung);
-			funktionenListe[funktionenListe.length-1].ersteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
-			funktionenListe[funktionenListe.length-1].zweiteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
-			funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung);
-			funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
-			funktionenListe[funktionenListe.length-1].dritteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
-			funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung);
-			funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung;
-			funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung);
-			
-			for(let i=0;i<1000;i+=0.1){
-				let punkterste = {
-						x:i,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)
-				}
-				let punktzweite = {
-						x:i,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)
-				}
-				let punktdritte = {
-						x:i,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)
-				}
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
-				let punktVergroessertErste = {
-						x:i*vergroesserung,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)*vergroesserung
-				}
-				let punktVergroessertZweite = {
-						x:i*vergroesserung,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)*vergroesserung
-				}
-				let punktVergroessertDritte = {
-						x:i*vergroesserung,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)*vergroesserung
-				}
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertDritte);
-	
-			}
-			for(let i=0;i>-1000;i-=0.1){
+if(equationForm!=null){
+	equationForm.addEventListener("keypress", function(event) {//todo felder leermachen bei neuer eingabe
+		let key = event.keyCode;
+		if(key === 13){
+			if(funktionenVorschau!=0){
+				funktionenListe.push(funktionenVorschau);
+				let funktionGekuerzt = funktionenVorschau; 
+				kuerzeSyntaxbaumGebrochenRational(funktionGekuerzt);
+				funktionenListe[funktionenListe.length-1].gekürzt = funktionGekuerzt;
+				addToFunctionDropdownList(funktionenVorschau);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenGebrochenRational(funktionGekuerzt);
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].ersteAbleitung);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung);
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung);
 				
-				let punkterste = {
-						x:i,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)
-				}
-				let punktzweite = {
-						x:i,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)
-				}
-				let punktdritte = {
-						x:i,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)
-				}
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNull.push(punktdritte);
+				for(let i=0;i<1000;i+=0.1){
+					let punkterste = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)
+					}
+					let punktzweite = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)
+					}
+					let punktdritte = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)
+					}
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
+					let punktVergroessertErste = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)*vergroesserung
+					}
+					let punktVergroessertZweite = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)*vergroesserung
+					}
+					let punktVergroessertDritte = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)*vergroesserung
+					}
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertDritte);
 		
-				let punktVergroessErterste = {
-						x:i*vergroesserung,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)*vergroesserung
 				}
-				let punktVergroessertZweite = {
-						x:i*vergroesserung,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)*vergroesserung
-				}
-				let punktVergroessertDritte = {
-						x:i*vergroesserung,
-						y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)*vergroesserung
-				}
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertDritte);
-				
-			}
+				for(let i=0;i>-1000;i-=0.1){
+					
+					let punkterste = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)
+					}
+					let punktzweite = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)
+					}
+					let punktdritte = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)
+					}
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNull.push(punktdritte);
 			
-			funktionenVorschau = 0;
+					let punktVergroessErterste = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)*vergroesserung
+					}
+					let punktVergroessertZweite = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)*vergroesserung
+					}
+					let punktVergroessertDritte = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)*vergroesserung
+					}
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertDritte);
+					
+				}
+				
+				funktionenVorschau = 0;
+			}
 		}
-	}
-});
+	});
 
+}
+
+
+
+equationFormAlternativ = document.getElementById("equationFormAlternativ");
+if(equationFormAlternativ!=null){
+	equationFormAlternativ.addEventListener("keypress", function(event) {//todo felder leermachen bei neuer eingabe
+		let key = event.keyCode;
+		if(key === 13){
+			if(funktionenVorschau!=0){
+				funktionenListe.push(funktionenVorschau);
+				let funktionGekuerzt = funktionenVorschau; 
+				kuerzeSyntaxbaumGebrochenRational(funktionGekuerzt);
+				funktionenListe[funktionenListe.length-1].gekürzt = funktionGekuerzt;
+				addToFunctionDropdownList(funktionenVorschau);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenGebrochenRational(funktionGekuerzt);
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].ersteAbleitung);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung);
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].stammfunktion = 
+				
+				displayButtons(funktionenListe[funktionenListe.length-1]);
+				berechneKurvenDiskusionsPunkte(funktionenListe[funktionenListe.length-1]);
+				
+				let abstandPunktZuPunkt = 0.1;
+				funktionenListe[funktionenListe.length-1].punkteRechtsVonNull = [];
+				funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert = [];
+				
+				for(let i=0;i<1000;i+=abstandPunktZuPunkt){
+					let nahePolstelle = false;
+					for(let j=0;j<funktionenListe[funktionenListe.length-1].polstellen.length;j++){
+						if(i>funktionenListe[funktionenListe.length-1].polstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].polstellen[j]+1){
+							nahePolstelle = true;
+							abstandPunktZuPunkt = 0.01
+						}
+					}
+					if(!nahePolstelle){
+						abstandPunktZuPunkt = 0.1;
+					}
+					
+					let punkt = {
+							x:i,
+							y:getPunkt(i,funktionenVorschau.gekürzt)
+					}
+					funktionenListe[funktionenListe.length-1].punkteRechtsVonNull.push(punkt);
+					let punktVergroessert = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+					}
+					funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert.push(punktVergroessert);
+				}
+				abstandPunktZuPunkt = 0.1;
+				
+				funktionenListe[funktionenListe.length-1].punkteLinksVonNull = [];
+				funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert = [];
+				for(let i=0;i>-1000;i-=0.1){
+					let nahePolstelle = false;
+					for(let j=0;j<funktionenListe[funktionenListe.length-1].polstellen.length;j++){
+						if(i>funktionenListe[funktionenListe.length-1].polstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].polstellen[j]+1){
+							nahePolstelle = true;
+							abstandPunktZuPunkt = 0.01
+						}
+					}
+					if(!nahePolstelle){
+						abstandPunktZuPunkt = 0.1;
+					}
+					let punkt = {
+							x:i,
+							y:getPunkt(i,funktionenVorschau.gekürzt)
+					}
+					funktionenListe[funktionenListe.length-1].punkteLinksVonNull.push(punkt);
+					let punktVergroessert = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+					}
+					funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert.push(punktVergroessert);
+				}
+				
+				for(let i=0;i<1000;i+=0.1){
+					let punkterste = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)
+					}
+					let punktzweite = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)
+					}
+					let punktdritte = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)
+					}
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
+					let punktVergroessertErste = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)*vergroesserung
+					}
+					let punktVergroessertZweite = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)*vergroesserung
+					}
+					let punktVergroessertDritte = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)*vergroesserung
+					}
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertDritte);
+		
+				}
+				for(let i=0;i>-1000;i-=0.1){
+					
+					let punkterste = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)
+					}
+					let punktzweite = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)
+					}
+					let punktdritte = {
+							x:i,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)
+					}
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNull.push(punktdritte);
+			
+					let punktVergroessErterste = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)*vergroesserung
+					}
+					let punktVergroessertZweite = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)*vergroesserung
+					}
+					let punktVergroessertDritte = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)*vergroesserung
+					}
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertDritte);
+					
+				}
+				
+				funktionenVorschau = 0;
+			}
+		}
+	});
+}
 
 function zeichneLegende(){
 	if(funktionenListe.length>0){
@@ -643,17 +826,51 @@ function zeichneInfoLeiste(){
 				}else if(zeigeInhaltReiter6===4){
 					reiter64SatzVonVietaNullstellen(i);
 				}else if(zeigeInhaltReiter6===5){
-					
+					reiter65NewtonVerfahrenNullstellen(i);
 				}else if(zeigeInhaltReiter6===6){
-					
-				}else if(zeigeInhaltReiter6===7){
-					reiter67GeradengleichungPolstellen(i);
+					reiter66RegulaFalsiNullstellen(i);
+				}
+				
+				else if(zeigeInhaltReiter6===7){
+					reiter67GeradengleichungExtremstellen(i);
 				}else if(zeigeInhaltReiter6===8){
-					reiter68MitternachtsformelPolstellen(i);
+					reiter68MitternachtsformelExtremstellen(i);
 				}else if(zeigeInhaltReiter6===9){
-					reiter69PQFormelPolstellen(i);
+					reiter69PQFormelExtremstellen(i);
 				}else if(zeigeInhaltReiter6===10){
-					reiter610SatzVonVietaPolstellen(i);
+					reiter610SatzVonVietaExtremstellen(i);
+				}else if(zeigeInhaltReiter6===11){
+					reiter611NewtonVerfahrenExtremstellen(i);
+				}else if(zeigeInhaltReiter6===12){
+					reiter612RegulaFalsiExtremstellen(i);
+				}
+				
+				else if(zeigeInhaltReiter6===13){
+					reiter613GeradengleichungWendepunkte(i);
+				}else if(zeigeInhaltReiter6===14){
+					reiter614MitternachtsformelWendepunkte(i);
+				}else if(zeigeInhaltReiter6===15){
+					reiter615PQFormelWendepunkte(i);
+				}else if(zeigeInhaltReiter6===16){
+					reiter616SatzVonVietaWendepunkte(i);
+				}else if(zeigeInhaltReiter6===17){
+					reiter617NewtonVerfahrenWendepunkte(i);
+				}else if(zeigeInhaltReiter6===18){
+					reiter618RegulaFalsiWendepunkte(i);
+				}
+				
+				else if(zeigeInhaltReiter6===19){
+					reiter619GeradengleichungPolstellen(i);
+				}else if(zeigeInhaltReiter6===20){
+					reiter620MitternachtsformelPolstellen(i);
+				}else if(zeigeInhaltReiter6===21){
+					reiter621PQFormelPolstellen(i);
+				}else if(zeigeInhaltReiter6===22){
+					reiter622SatzVonVietaPolstellen(i);
+				}else if(zeigeInhaltReiter6===23){
+					reiter623NewtonVerfahrenPolstellen(i);
+				}else if(zeigeInhaltReiter6===24){
+					reiter624RegulaFalsiPolstellen(i);
 				}
 			}
 		}
@@ -839,7 +1056,57 @@ function ClearCanvas() {
 
 let equationOld = "";
 function checkEingabe(){
-	let equation = document.getElementById("equationForm").value;
+	let equation;
+	if(document.getElementById("equationForm")!=null){
+		equation = document.getElementById("equationForm").value;
+	}
+	if(equation!=null){
+		if(!leererString(equation)){
+			if(equation !== equationOld){
+				equationOld=equation;
+				if(checkAufFalscheSymbole(equation)&&checkKlammernKorrekt(equation)&&checkDerSyntax(equation)&&checkObVollständigerAusdruck(equation)){
+					let rootSyntaxbaum = new FunktionAlsVektorSyntaxbaum();	
+					funktionenVorschau = rootSyntaxbaum;
+	
+					splitEquationBuffer(rootSyntaxbaum, equation);
+					let funktionGekuerzt = funktionenVorschau; 
+					kuerzeSyntaxbaumGebrochenRational(funktionGekuerzt);
+					funktionenVorschau.gekürzt = funktionGekuerzt;
+					
+					for(let i=0;i<1000;i+=0.1){
+						let punkt = {
+								x:i,
+								y:getPunkt(i,funktionenVorschau.gekürzt)
+						}
+						rootSyntaxbaum.punkteRechtsVonNull.push(punkt);
+						let punktVergroessert = {
+								x:i*vergroesserung,
+								y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+						}
+						rootSyntaxbaum.punkteRechtsVonNullVergroessert.push(punktVergroessert);
+					}
+					for(let i=0;i>-1000;i-=0.1){
+						let punkt = {
+								x:i,
+								y:getPunkt(i,funktionenVorschau.gekürzt)
+						}
+						rootSyntaxbaum.punkteLinksVonNull.push(punkt);
+						let punktVergroessert = {
+								x:i*vergroesserung,
+								y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+						}
+						rootSyntaxbaum.punkteLinksVonNullVergroessert.push(punktVergroessert);
+					}
+				}
+			}else{			
+				return;
+			}
+		}else{
+			funktionenVorschau = 0;
+		}
+	}
+	
+	equation = document.getElementById("equationFormAlternativ").value;
 	if(!leererString(equation)){
 		if(equation !== equationOld){
 			equationOld=equation;
@@ -925,6 +1192,26 @@ function zeichneFunktionsgraphen(){
 					for(let j=0;j<funktionenListe[i].nullstellen.length;j++){						
 						DrawCircle(funktionenListe[i].nullstellen[j], 0, 0.1, farbeNullstellen.r, farbeNullstellen.g, farbeNullstellen.b, farbeNullstellen.a,true,false);
 					}
+				}if(funktionenListe[i].extremstellenAnzeigen){
+					for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
+						canvasContext.stroke();
+						canvasContext.beginPath();
+						canvasContext.strokeStyle = 'rgba(' + String(farbeExtremstellen.r) + ',' + String(farbeExtremstellen.g) + ',' + String(farbeExtremstellen.b) + ',' + String(farbeExtremstellen.a) + ')';
+						DrawLine(funktionenListe[i].extremstellen[j], 0);	
+						DrawLine(funktionenListe[i].extremstellen[j], -getPunkt(funktionenListe[i].extremstellen[j],funktionenListe[i].gekürzt));	
+						canvasContext.stroke();
+						DrawCircle(funktionenListe[i].extremstellen[j], -getPunkt(funktionenListe[i].extremstellen[j],funktionenListe[i].gekürzt), 0.1, farbeExtremstellen.r, farbeExtremstellen.g, farbeExtremstellen.b, farbeExtremstellen.a,true,false);
+					}
+				}if(funktionenListe[i].wendepunkteAnzeigen){
+					for(let j=0;j<funktionenListe[i].wendepunkte.length;j++){
+						canvasContext.stroke();
+						canvasContext.beginPath();
+						canvasContext.strokeStyle = 'rgba(' + String(farbeWendestellen.r) + ',' + String(farbeWendestellen.g) + ',' + String(farbeWendestellen.b) + ',' + String(farbeWendestellen.a) + ')';
+						DrawLine(funktionenListe[i].wendepunkte[j], 0);	
+						DrawLine(funktionenListe[i].wendepunkte[j], -getPunkt(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekürzt));	
+						canvasContext.stroke();
+						DrawCircle(funktionenListe[i].wendepunkte[j], -getPunkt(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekürzt), 0.1, farbeWendestellen.r, farbeWendestellen.g, farbeWendestellen.b, farbeWendestellen.a,true,false);
+					}
 				}if(funktionenListe[i].polstellenAnzeigen){
 					for(let j=0;j<funktionenListe[i].polstellen.length;j++){
 						canvasContext.stroke();
@@ -936,28 +1223,44 @@ function zeichneFunktionsgraphen(){
 						DrawCircle(funktionenListe[i].polstellen[j], -getPunkt(funktionenListe[i].polstellen[j],funktionenListe[i].gekürzt), 0.1, farbePolstellen.r, farbePolstellen.g, farbePolstellen.b, farbePolstellen.a,true,false);
 					}
 				}if(funktionenListe[i].graphAnzeigen){
-					canvasContext.beginPath();
-					canvasContext.fillStyle = "rgba(70,70,255,1)";
+//					canvasContext.beginPath();
+//					canvasContext.fillStyle = "rgba(70,70,255,1)";
 					DrawCircle(punktAmAusgewaehltenGraph.x,punktAmAusgewaehltenGraph.y, 0.2, 70, 70, 255, 1,true,false);
 //					canvasContext.fill();
 				}
 			}
-		}
+		}//(2^3+2*x-2)/(x-2)
 	}
 
 	for(let k=0;k<funktionenListe.length;k++){
 		if(funktionenListe[k].graphAnzeigen){
 			canvasContext.beginPath();
 			canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionen[k].r) + ',' + String(farbenArrayFunktionen[k].g) + ',' + String(farbenArrayFunktionen[k].b) + ',' + String(farbenArrayFunktionen[k].a) + ')';
-			
+			let xOld=0;
 			for(let i=0;i<funktionenListe[k].punkteRechtsVonNullVergroessert.length;i++){				
-				DrawLineOhneVergroeserung(funktionenListe[k].punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].punkteRechtsVonNullVergroessert[i].y));		
+				for(let j=0;j<funktionenListe[k].polstellen.length;j++){
+					if(xOld<funktionenListe[k].polstellen[j]&&funktionenListe[k].punkteRechtsVonNull[i].x>funktionenListe[k].polstellen[j]){
+						canvasContext.stroke();
+						canvasContext.beginPath();
+					}
+				}
+				
+				DrawLineOhneVergroeserung(funktionenListe[k].punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].punkteRechtsVonNullVergroessert[i].y));	
+				xOld=funktionenListe[k].punkteRechtsVonNull[i].x;
 			}
+			xOld=0;
 			canvasContext.stroke();
 			canvasContext.beginPath();
 			canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionen[k].r) + ',' + String(farbenArrayFunktionen[k].g) + ',' + String(farbenArrayFunktionen[k].b) + ',' + String(farbenArrayFunktionen[k].a) + ')';
 			for(let i=0;i<funktionenListe[k].punkteLinksVonNullVergroessert.length;i++){			
-				DrawLineOhneVergroeserung(funktionenListe[k].punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].punkteLinksVonNullVergroessert[i].y));			
+				for(let j=0;j<funktionenListe[k].polstellen.length;j++){
+					if(xOld>funktionenListe[k].polstellen[j]&&funktionenListe[k].punkteLinksVonNull[i].x<funktionenListe[k].polstellen[j]){
+						canvasContext.stroke();
+						canvasContext.beginPath();
+					}
+				}
+				DrawLineOhneVergroeserung(funktionenListe[k].punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].punkteLinksVonNullVergroessert[i].y));	
+				xOld=funktionenListe[k].punkteLinksVonNull[i].x;
 			}
 			canvasContext.stroke();
 		}		

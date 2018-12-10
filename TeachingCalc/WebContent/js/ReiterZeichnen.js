@@ -130,6 +130,24 @@ function zeichneReiter(){
 		case 12: 
 			canvasContext.fillText( "Regula Falsi", canvas.width-breitePunktAmGraph.width-30, canvas.height-hoeheInfoLeiste-5);
 			break;
+		case 13: 
+			canvasContext.fillText( "Geradengleichung", canvas.width-breitePunktAmGraph.width-30, canvas.height-hoeheInfoLeiste-5);
+			break;
+		case 14: 
+			canvasContext.fillText( "Mitternachtsformel", canvas.width-breitePunktAmGraph.width-30, canvas.height-hoeheInfoLeiste-5);
+			break;
+		case 15: 
+			canvasContext.fillText( "PQ-Formel", canvas.width-breitePunktAmGraph.width-30, canvas.height-hoeheInfoLeiste-5);
+			break;
+		case 16: 
+			canvasContext.fillText( "Satz von Vieta", canvas.width-breitePunktAmGraph.width-30, canvas.height-hoeheInfoLeiste-5);
+			break;
+		case 17: 
+			canvasContext.fillText( "Newton Verfahren", canvas.width-breitePunktAmGraph.width-30, canvas.height-hoeheInfoLeiste-5);
+			break;
+		case 18: 
+			canvasContext.fillText( "Regula Falsi", canvas.width-breitePunktAmGraph.width-30, canvas.height-hoeheInfoLeiste-5);
+			break;
 		}	
 	}
 };
@@ -139,134 +157,71 @@ function textUnausgerechnet(textAktuellerPunktAmGraph,i,funktionAlsVektor){
 		if(j===0){
 			if(funktionAlsVektor[j]===0){
 			}else if(funktionAlsVektor[j]<0){
-				if(aufgerundet){
-					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j];
-				}else{
-					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j];
-				}					
+					textAktuellerPunktAmGraph += " "+zahlRunden(funktionAlsVektor[j]);				
 			}else if(funktionAlsVektor[j]>0){
-				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='){
+				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='||textAktuellerPunktAmGraph.length===0){
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x.toFixed(2);
-						}
+						textAktuellerPunktAmGraph += zahlRunden(punktAmAusgewaehltenGraph.x);
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x.toFixed(2);
-						}		
+						textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + zahlRunden(punktAmAusgewaehltenGraph.x);
 					}
 				}else{
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + "+punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += " + "+punktAmAusgewaehltenGraph.x.toFixed(2);
-						}
+						textAktuellerPunktAmGraph += " + " + zahlRunden(punktAmAusgewaehltenGraph.x);
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j];
-						}else{
-							textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j];
-						}
+						textAktuellerPunktAmGraph += " + " + zahlRunden(funktionAlsVektor[j]);
 					}
 				}
 			}					
 		}else if(j===1){
 			if(funktionAlsVektor[j]===0){
 			}else if(funktionAlsVektor[j]<0){
-				if(aufgerundet){
-					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x;
-				}else{
-					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x.toFixed(2);
-				}
+					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j] + "*" + zahlRunden(punktAmAusgewaehltenGraph.x);
 			}else if(funktionAlsVektor[j]>0){
-				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='){
+				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='||textAktuellerPunktAmGraph.length===0){
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x.toFixed(2);
-						}
+							textAktuellerPunktAmGraph += zahlRunden(punktAmAusgewaehltenGraph.x);
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x.toFixed(2);
-						}
+						textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + zahlRunden(punktAmAusgewaehltenGraph.x);
 					}
-
 				}else{
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + " + punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += " + " + punktAmAusgewaehltenGraph.x.toFixed(2);
-						}	
+						textAktuellerPunktAmGraph += " + " + zahlRunden(punktAmAusgewaehltenGraph.x);
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x.toFixed(2);
-						}
-							
+						textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j] + "*" + zahlRunden(punktAmAusgewaehltenGraph.x);						
 					}
 				}
 			}
 		}else{
 			if(funktionAlsVektor[j]===0){
 			}else if(funktionAlsVektor[j]<0){
-				if(aufgerundet){
-					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x + "^" + j;
-				}else{
-					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x.toFixed(2) + "^" + j;
-				}
-				
+				textAktuellerPunktAmGraph += " "+funktionAlsVektor[j] + "*" + zahlRunden(punktAmAusgewaehltenGraph.x) + "^" + j;
 			}else if(funktionAlsVektor[j]>0){
-				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='){
+				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='||textAktuellerPunktAmGraph.length===0){
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x + "^" + j;
-						}else{
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x.toFixed(2) + "^" + j;
-						}
-						
+						textAktuellerPunktAmGraph += zahlRunden(punktAmAusgewaehltenGraph.x) + "^" + j;
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x + "^" + j;
-						}else{
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x.toFixed(2) + "^" + j;
-						}
-						
+						textAktuellerPunktAmGraph += funktionAlsVektor[j] + "*" + zahlRunden(punktAmAusgewaehltenGraph.x) + "^" + j;
 					}
 				}else{
 					if(funktionAlsVektor[j]===1){
 						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + " + punktAmAusgewaehltenGraph.x + "^" + j;
+							textAktuellerPunktAmGraph += " + " + zahlRunden(punktAmAusgewaehltenGraph.x) + "^" + j;
 						}else{
 							if(punktAmAusgewaehltenGraph.x<0){
-								textAktuellerPunktAmGraph += " " + punktAmAusgewaehltenGraph.x.toFixed(2) + "^" + j;
+								textAktuellerPunktAmGraph += " " + zahlRunden(punktAmAusgewaehltenGraph.x) + "^" + j;
 							}else{
-								textAktuellerPunktAmGraph += " + " + punktAmAusgewaehltenGraph.x.toFixed(2) + "^" + j;
+								textAktuellerPunktAmGraph += " + " + zahlRunden(punktAmAusgewaehltenGraph.x) + "^" + j;
 							}
 						}					
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x + "^" + j;
-
-						}else{
-							textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j] + "*" + punktAmAusgewaehltenGraph.x.toFixed(2) + "^" + j;
-						}
+						textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j] + "*" + zahlRunden(punktAmAusgewaehltenGraph.x) + "^" + j;
 					}
 
 				}
 			}
 		}
 	}
-	
 	return textAktuellerPunktAmGraph;
 }
 
@@ -281,40 +236,28 @@ function textAusgerechnet(textAktuellerPunktAmGraph,i,funktionAlsVektor){
 					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j];
 				}					
 			}else if(funktionAlsVektor[j]>0){
-				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='){
+				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='||textAktuellerPunktAmGraph.length===0){
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x.toFixed(2);
-						}
+							textAktuellerPunktAmGraph += zahlRunden(punktAmAusgewaehltenGraph.x);
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += (funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x).toFixed(2);
-						}		
+						textAktuellerPunktAmGraph += funktionAlsVektor[j] * zahlRunden(punktAmAusgewaehltenGraph.x);
 					}
 				}else{
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + "+punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += " + "+punktAmAusgewaehltenGraph.x.toFixed(2);
-						}
+						textAktuellerPunktAmGraph += " + "+zahlRunden(punktAmAusgewaehltenGraph.x);
 					}else{
 						if(aufgerundet){
-							if(funktionenListe[i].inhaltKnotenVektor[j]<0){
-								textAktuellerPunktAmGraph += funktionenListe[i].inhaltKnotenVektor[j];
+							if(funktionAlsVektor[j]<0){
+								textAktuellerPunktAmGraph += funktionAlsVektor[j];
 							}else{
-								textAktuellerPunktAmGraph += " + "+funktionenListe[i].inhaltKnotenVektor[j];
+								textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j];
 							}
 							
 						}else{
-							if(funktionenListe[i].inhaltKnotenVektor[j]<0){
-								textAktuellerPunktAmGraph += funktionenListe[i].inhaltKnotenVektor[j];
+							if(funktionAlsVektor[j]<0){
+								textAktuellerPunktAmGraph += funktionAlsVektor[j];
 							}else{
-								textAktuellerPunktAmGraph += " + "+funktionenListe[i].inhaltKnotenVektor[j];
+								textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j];
 							}
 						}
 					}
@@ -323,88 +266,40 @@ function textAusgerechnet(textAktuellerPunktAmGraph,i,funktionAlsVektor){
 		}else if(j===1){
 			if(funktionAlsVektor[j]===0){
 			}else if(funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x<0){
-				if(aufgerundet){
-					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x;
-				}else{
-					textAktuellerPunktAmGraph += " "+(funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x).toFixed(2);
-				}
+				textAktuellerPunktAmGraph += " "+zahlRunden(funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x);
 			}else if(funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x>0){
-				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='){
+				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='||textAktuellerPunktAmGraph.length===0){
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += punktAmAusgewaehltenGraph.x.toFixed(2);
-						}
+						textAktuellerPunktAmGraph += zahlRunden(punktAmAusgewaehltenGraph.x);
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += (funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x).toFixed(2);
-						}
+						textAktuellerPunktAmGraph += zahlRunden(funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x);
 					}
 
 				}else{
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + " + punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += " + " + punktAmAusgewaehltenGraph.x.toFixed(2);
-						}	
+							textAktuellerPunktAmGraph += " + " + zahlRunden(punktAmAusgewaehltenGraph.x);
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x;
-						}else{
-							textAktuellerPunktAmGraph += " + "+(funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x).toFixed(2);
-						}
-							
+							textAktuellerPunktAmGraph += " + "+zahlRunden(funktionAlsVektor[j] * punktAmAusgewaehltenGraph.x);		
 					}
 				}
 			}
 		}else{
 			if(funktionAlsVektor[j]===0){
 			}else if(funktionAlsVektor[j]<0){
-				if(aufgerundet){
-					textAktuellerPunktAmGraph += " "+funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x,j);
-				}else{
-					textAktuellerPunktAmGraph += " "+(funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x,j)).toFixed(2);
-				}
-				
+					textAktuellerPunktAmGraph += " "+zahlRunden(funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x,j));
 			}else if(funktionAlsVektor[j]>0){
-				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='){
+				if(textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-4]==='='||textAktuellerPunktAmGraph[textAktuellerPunktAmGraph.length-2]==='='||textAktuellerPunktAmGraph.length===0){
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += Math.pow(punktAmAusgewaehltenGraph.x , j);
-						}else{
-							textAktuellerPunktAmGraph += Math.pow(punktAmAusgewaehltenGraph.x, j).toFixed(2);
-						}
-						
+						textAktuellerPunktAmGraph += zahlRunden(Math.pow(punktAmAusgewaehltenGraph.x , j));
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x,j);
-						}else{
-							textAktuellerPunktAmGraph += (funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x,j)).toFixed(2);
-						}
-						
+						textAktuellerPunktAmGraph += zahlRunden(funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x,j));
 					}
 				}else{
 					if(funktionAlsVektor[j]===1){
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + " + Math.pow(punktAmAusgewaehltenGraph.x ,j);
-						}else{
-							
-							textAktuellerPunktAmGraph += " + " + Math.pow(punktAmAusgewaehltenGraph.x,j).toFixed(2);
-						}
-						
+						textAktuellerPunktAmGraph += " + " + zahlRunden(Math.pow(punktAmAusgewaehltenGraph.x ,j));
 					}else{
-						if(aufgerundet){
-							textAktuellerPunktAmGraph += " + "+funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x, j);
-
-						}else{
-							textAktuellerPunktAmGraph += " + "+(funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x, j)).toFixed(2);
-						}
+						textAktuellerPunktAmGraph += " + "+zahlRunden(funktionAlsVektor[j] * Math.pow(punktAmAusgewaehltenGraph.x, j));
 					}
-
 				}
 			}
 		}
@@ -412,7 +307,7 @@ function textAusgerechnet(textAktuellerPunktAmGraph,i,funktionAlsVektor){
 	return textAktuellerPunktAmGraph;
 }
 
-
+//(x^2+3*x-2)/(x+4)
 function reiter1Aktiv(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -428,26 +323,49 @@ function reiter1Aktiv(i){
 	WriteText(`b[Der Wert der für X eingesetzt wird entspricht dem Wert X-Achse. Der errechnete Wert entspricht dabei dem Wert auf der Y-Achse.] Daher wird auch b[manchal statt f(x)=x+2 y=x+2 geschieben. Beides bedeutet das selbe.]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 	WriteText(`Fahre mit der Maus über den Graph und du kannst die Rechnung sehen wie der Punkt berechnet wird.`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 	
-	
-	let textAktuellerPunktAmGraph = "";
-	if(aufgerundet){
-		textAktuellerPunktAmGraph = `${buchstabenArray[i]}(${punktAmAusgewaehltenGraph.x})   =   `;
-	}else{
-		textAktuellerPunktAmGraph = `${buchstabenArray[i]}(${punktAmAusgewaehltenGraph.x.toFixed(2)})   =   `;
-	}
-	canvasContext.font = fontSchriftInfoLeiste;
-	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
-	canvasContext.textAlign = "left";
+	if(funktionenListe[i].inhaltKnotenSymbol!="/"){
+		let textAktuellerPunktAmGraph = "";
+		textAktuellerPunktAmGraph = `${buchstabenArray[i]}(${zahlRunden(punktAmAusgewaehltenGraph.x)})   =   `;
 
-	textAktuellerPunktAmGraph = textUnausgerechnet(textAktuellerPunktAmGraph,i,funktionenListe[i].inhaltKnotenVektor) + `   =   `; //todo gebrochenrational braucht diese Methode seperat
-	textAktuellerPunktAmGraph = textAusgerechnet(textAktuellerPunktAmGraph,i,funktionenListe[i].inhaltKnotenVektor);
-	
-	
-	if(aufgerundet){
-		WriteText(`b[${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}   =   ${textAktuellerPunktAmGraph}   =   ${(-punktAmAusgewaehltenGraph.y)}   ==>   x=${(punktAmAusgewaehltenGraph.x)}   y=${(-punktAmAusgewaehltenGraph.y)}]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		canvasContext.font = fontSchriftInfoLeiste;
+		canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.textAlign = "left";
+
+		textAktuellerPunktAmGraph = textUnausgerechnet(textAktuellerPunktAmGraph,i,funktionenListe[i].inhaltKnotenVektor) + `   =   `; //todo gebrochenrational braucht diese Methode seperat
+		textAktuellerPunktAmGraph = textAusgerechnet(textAktuellerPunktAmGraph,i,funktionenListe[i].inhaltKnotenVektor);
+		
+		WriteText(`b[${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}   =   ${textAktuellerPunktAmGraph}   =   ${zahlRunden(-punktAmAusgewaehltenGraph.y)}   ==>   x=${zahlRunden(punktAmAusgewaehltenGraph.x)}   y=${zahlRunden(-punktAmAusgewaehltenGraph.y)}]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
 	}else{
-		WriteText(`b[${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}   =   ${textAktuellerPunktAmGraph}   =   ${(-punktAmAusgewaehltenGraph.y).toFixed(2)}   ==>   x=${(punktAmAusgewaehltenGraph.x).toFixed(2)}   y=${(-punktAmAusgewaehltenGraph.y).toFixed(2)}]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-	}
+		let textAktuellerPunktAmGraph = "";
+		textAktuellerPunktAmGraph = `${buchstabenArray[i]}(${zahlRunden(punktAmAusgewaehltenGraph.x)})   =   `;
+
+		canvasContext.font = fontSchriftInfoLeiste;
+		canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.textAlign = "left";
+		
+		let textAktuellerPunktAmGraphZaehlerU = "";
+		let textAktuellerPunktAmGraphNennerU = "";
+		let textAktuellerPunktAmGraphZaehlerA = "";
+		let textAktuellerPunktAmGraphNennerA = "";
+
+		textAktuellerPunktAmGraphZaehlerU = textUnausgerechnet(textAktuellerPunktAmGraphZaehlerU,i,funktionenListe[i].linkesChild.inhaltKnotenVektor); //todo gebrochenrational braucht diese Methode seperat
+		textAktuellerPunktAmGraphNennerU = textUnausgerechnet(textAktuellerPunktAmGraphNennerU,i,funktionenListe[i].rechtesChild.inhaltKnotenVektor); //todo gebrochenrational braucht diese Methode seperat
+		textAktuellerPunktAmGraphZaehlerA = textAusgerechnet(textAktuellerPunktAmGraphZaehlerA,i,funktionenListe[i].linkesChild.inhaltKnotenVektor);
+		textAktuellerPunktAmGraphNennerA = textAusgerechnet(textAktuellerPunktAmGraphNennerA,i,funktionenListe[i].rechtesChild.inhaltKnotenVektor);
+		let textPosition=0;
+		textPosition = 10 + WriteText(`${buchstabenArray[i]}(x) = `, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPosition += WriteText(`${funktionenListe[i].inhaltKnotenString}`, textPosition, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPosition += WriteText(`   =   `, textPosition, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		textPosition += WriteText(`${textAktuellerPunktAmGraphZaehlerU}/${textAktuellerPunktAmGraphNennerU}`, textPosition, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPosition += WriteText(`   =   `, textPosition, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		textPosition += WriteText(`${textAktuellerPunktAmGraphZaehlerA}/${textAktuellerPunktAmGraphNennerA}`, textPosition, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		textPosition += WriteText(`   =   ${zahlRunden(-punktAmAusgewaehltenGraph.y)}   ==>   x=${zahlRunden(punktAmAusgewaehltenGraph.x)}   y=${zahlRunden(-punktAmAusgewaehltenGraph.y)}`, textPosition, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+}
+
 }
 
 function reiter2Aktiv(i){
@@ -1196,14 +1114,1042 @@ function reiter64SatzVonVietaNullstellen(i){
 	}
 }
 
-
+// TODO test
 function reiter65NewtonVerfahrenNullstellen(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
 	
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+
+	WriteText(`Das Newton Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+}
+
+
+function reiter66RegulaFalsiNullstellen(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+
+	WriteText(`Das Regula Falsi Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
 }
 
 
 
-function reiter67GeradengleichungPolstellen(i){
+function reiter67GeradengleichungExtremstellen(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+
+	WriteText(`b[Die Extremstellen eines Polynoms sind die Nullstellen der ersten Ableitung]. Also muss das Polynom erst abgeleitet werden. b[${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	WriteText(`Danach wird die b[Ableitung gleich 0 gesetzt] und b[nach X aufgelöst]. Genau wie bei den Nullstellen nur mit der Ableitung.`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+	
+	if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length===2){
+		if((-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])<0){
+			if(Math.abs((-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])}x = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    -x = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}
+
+		}else{
+			if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])}x = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    x = ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}
+		}
+	}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length===3){
+		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 2ten Grades. Die Nullstellen können bei diesem Polynom mithilfe der Mitternachtsformel oder PQ-Formel berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+	}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length>3){
+		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist höher als 2ten Grades. Die Nullstellen können bei diesem Polynom nur näherungsweise mithilfe des Newton Verfahren oder Regula Falsi berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+	}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length===1){
+		if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]!=0){
+			WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade ist parallel zu X-Achse und besitzt keine Nullstelle.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]===0){
+			WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade sitzt genau auf der X-Achse und besitzt unendlich viele Nullstellen.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		}
+		
+	}
+}
+
+
+function reiter68MitternachtsformelExtremstellen(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	let hoeheWurzelZeichen1Schriftgroesse15 = 22;
+	let hoeheWurzelZeichen2Schriftgroesse15 = 18;
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+	WriteText(`Mit hilfe der b[Mitternachts- oder auch a-b-c Formel] können auch die b[Extremstellen] eines Polynoms berechnet werden. Dies funktioniert nur bei b[Polynomen 3-ten Grades]. Die b[Ableitung] des Polynoms muss also die Form b[ax^2+bx+c] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	WriteText(`b[Die Nullstellen einer Ableitung sind die Extremstellen der Stammfunktion]. Es muss also zuerst abgeleitet werden. b[Die Ableitung von ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString} lautet ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	
+	
+	if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].ersteAbleitung.linkesChild==null&&funktionenListe[i].ersteAbleitung.rechtesChild==null&&funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]!=0){
+		
+		let textPositionZweiteZeile = 10 + WriteText(`x`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += WriteText(`1,2`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
+		textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		let laengeBisWurzel = canvasContext.measureText("-b \xB1 \u221A").width + textPositionZweiteZeile;
+		textPositionZweiteZeile += WriteText(`-b \xB1 \u221A b²-4ac/2a`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+				
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		
+		textPositionZweiteZeile += 30 + WriteText(`y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}`, textPositionZweiteZeile+30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += 30 + WriteText(`a = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]} b = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]} c = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]}`, textPositionZweiteZeile + 30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+				
+		textPositionZweiteZeile += 30 + WriteText(`x`, textPositionZweiteZeile+30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += WriteText(`1,2`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
+		textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		laengeBisWurzel = canvasContext.measureText("-b \xB1 \u221A").width + textPositionZweiteZeile;
+		
+		if((4*funktionenListe[i].inhaltKnotenVektor[2]*funktionenListe[i].inhaltKnotenVektor[0])<0){
+			textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${Math.pow(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1],2)}-( ${4*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]})/2*${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}else{
+			textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${Math.pow(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1],2)}-${4*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]}/2*${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		
+		textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		laengeBisWurzel = canvasContext.measureText(`${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A`).width + textPositionZweiteZeile;
+		textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${(Math.pow(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1],2) - (4*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]))}/${2*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		let minusB = (-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]);
+		let BQuadrat = Math.pow(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1],2);
+		let VierAC = (4*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]);
+		let wurzelBQuadratMinus4AC = Math.sqrt(BQuadrat - VierAC);
+		let zweiMalA = 2*funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2];
+		
+		if(BQuadrat-VierAC>0){
+			
+			textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${minusB} \xB1 ${wurzelBQuadratMinus4AC.toFixed(2)}/${zweiMalA}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+			let x1 = (minusB + wurzelBQuadratMinus4AC) / zweiMalA;
+			let x2 = (minusB - wurzelBQuadratMinus4AC) / zweiMalA;
+
+			textPositionZweiteZeile += WriteText(` => b[x1 = ${x1.toFixed(2)}   x2 = ${x2.toFixed(2)}]`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+		}else{
+			textPositionZweiteZeile += WriteText(` => b[Wenn die Wurzel negativ wird, gibt es keine Lösung. Keine lösung bedeutet das Polynom hat keine Extremstellen.]`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}
+	}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length===2){	
+		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Die Ableitung des Polynoms ist ersten Grades. Die Extremstellen können mit bei diesem Polynom hilfe der Geradengleichung errechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length>3){
+		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Die Ableitung des Polynoms ist höher als 2ten Grades. Die Extremstellen können bei diesem Polynom nur näherungsweise mithilfe des Newton Verfahren oder Regula Falsi berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	}
+}
+
+function reiter69PQFormelExtremstellen(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+	WriteText(`Mit hilfe der b[PQ-Formel] können auch die b[Extremstellen] eines Polynoms berechnet werden. Dies funktioniert nur bei b[Polynomen 3-ten Grades]. Die b[Ableitung] des Polynoms muss die Form b[ax^2+bx+c] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	let textPositionZweiteZeile = 10 + WriteText(`Es muss also zuerst abgeleitet werden. b[Die Ableitung lautet ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+	
+	if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].ersteAbleitung.linkesChild==null&&funktionenListe[i].ersteAbleitung.rechtesChild==null&&funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]!=0){
+		
+		if(funktionenListe[i].inhaltKnotenVektor[2]!=1){
+			textPositionZweiteZeile += 30 + WriteText(`Der Koeffizient von x^2 muss 1 sein, dafür alles geteilt durch a. Allgemein also `, 30 + textPositionZweiteZeile,hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+			
+			textPositionZweiteZeile += 10 + WriteText(`ax²/a`, 10 +  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(` + `, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`px/a`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(` + `, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`q/a`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+			textPositionZweiteZeile += 10 + WriteText(` => `, textPositionZweiteZeile + 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2])}x^2/${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+			
+			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);			
+			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1])}x/${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])}/${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);		
+			textPositionZweiteZeile += WriteText(` => x^2`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);	
+			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+
+			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]>=0){
+				textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2])}x`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}else{
+				textPositionZweiteZeile += WriteText(`(${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2])}x)`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}
+			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]>=0){
+				textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}else{
+				textPositionZweiteZeile += WriteText(`(${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2])})`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}
+			
+		}
+		
+		let textPositionDritteZeile = 10 + WriteText("x", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("1,2", textPositionDritteZeile ,hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
+		textPositionDritteZeile += WriteText(" = - ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("p/2", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		canvasContext.font = '35px Calibri';
+		let laengeTextWurzel = canvasContext.measureText("\u221A").width+textPositionDritteZeile;
+		textPositionDritteZeile += WriteText("\u221A(", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');
+		textPositionDritteZeile += WriteText("p/2", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(")", textPositionDritteZeile , hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');
+		textPositionDritteZeile += WriteText("²", textPositionDritteZeile  , hoeheDritteZeile-5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" -q", textPositionDritteZeile  , hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+		let alteStichstaerke = canvasContext.lineWidth;
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.lineWidth = 2;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( textPositionDritteZeile , hoeheDritteZeile-25);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( laengeTextWurzel - 3, hoeheDritteZeile-15);
+		canvasContext.stroke();
+		
+		canvasContext.lineWidth = alteStichstaerke;
+		
+		textPositionDritteZeile += 30 + WriteText(`y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}`,textPositionDritteZeile + 30 , hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += 30 + WriteText(`a = ${zahlRunden(funktionenListe[i].inhaltKnotenVektor[2])} p = ${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1])} q = ${zahlRunden(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])}`,textPositionDritteZeile + 30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+
+		
+		
+		let p = funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2];
+		let q = funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2];
+		
+		
+		textPositionDritteZeile += 10 + WriteText("x", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("1,2", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
+		textPositionDritteZeile += WriteText(" = - ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		canvasContext.font = '35px Calibri';
+		laengeTextWurzel = canvasContext.measureText("\u221A").width+textPositionDritteZeile;
+		textPositionDritteZeile += WriteText("\u221A(", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');	
+		textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(")", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');
+		textPositionDritteZeile += WriteText("²",  textPositionDritteZeile, hoeheDritteZeile-5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);	
+		if(funktionenListe[i].inhaltKnotenVektor[0]>=0){
+			textPositionDritteZeile += WriteText(` -${zahlRunden(q)}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}else{
+			textPositionDritteZeile += WriteText(` -(${zahlRunden(q)})`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		}
+
+		
+		alteStichstaerke = canvasContext.lineWidth;
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.lineWidth = 2;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( textPositionDritteZeile, hoeheDritteZeile-25);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeTextWurzel, hoeheDritteZeile-25);
+		canvasContext.lineTo( laengeTextWurzel - 3, hoeheDritteZeile-15);
+		canvasContext.stroke();
+		
+		canvasContext.lineWidth = alteStichstaerke;
+		
+		
+		textPositionDritteZeile += 10 + WriteText(" = - ", 10 + textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("\u221A", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');	
+		laengeTextWurzel = textPositionDritteZeile;
+		textPositionDritteZeile += WriteText(`${zahlRunden(Math.pow(p/2,2))}`,textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		if(funktionenListe[i].inhaltKnotenVektor[0]>=0){
+			textPositionDritteZeile += WriteText(` -${zahlRunden(q)}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}else{
+			textPositionDritteZeile += WriteText(` +${(-zahlRunden(q))}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		}
+
+		
+		alteStichstaerke = canvasContext.lineWidth;
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.lineWidth = 2;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( textPositionDritteZeile, hoeheDritteZeile-25);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( laengeTextWurzel - 3, hoeheDritteZeile-15);
+		canvasContext.stroke();
+		
+		canvasContext.lineWidth = alteStichstaerke;
+		
+		
+		let unterWurzel = Math.pow(p/2,2)-q;
+		
+		textPositionDritteZeile += 10 + WriteText(" = - ", textPositionDritteZeile + 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("\u221A", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');	
+		laengeTextWurzel = textPositionDritteZeile;
+		textPositionDritteZeile += WriteText(`${zahlRunden(unterWurzel)}`,textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		
+		alteStichstaerke = canvasContext.lineWidth;
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.lineWidth = 2;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( textPositionDritteZeile, hoeheDritteZeile-25);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( laengeTextWurzel - 3, hoeheDritteZeile-15);
+		canvasContext.stroke();
+		
+		canvasContext.lineWidth = alteStichstaerke;
+		
+		if(unterWurzel>=0){
+			let wurzelAusgerechnet = Math.sqrt(Math.pow(p/2,2)-q);
+
+			textPositionDritteZeile += 10 + WriteText(" = - ", textPositionDritteZeile + 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+			textPositionDritteZeile += WriteText(`${zahlRunden(wurzelAusgerechnet)}`,textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+			let x1 = p/2+wurzelAusgerechnet;
+			let x2 = p/2-wurzelAusgerechnet;
+			
+			textPositionDritteZeile += 10 + WriteText(` =>b[ x1=${zahlRunden(x1)} x2=${zahlRunden(x2)}]`, textPositionDritteZeile+10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		}else{
+			textPositionDritteZeile += WriteText(" => b[Wenn die Wurzel negativ wird, gibt es keine Lösung. Keine lösung bedeutet das Polynom hat keine Extremstellen.]", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+		}
+	}else{
+		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		WriteText("b[Die angegebene Funktion hat leider nicht die passende Form...]", 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+	}
+}
+
+
+
+function reiter610SatzVonVietaExtremstellen(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-50;
+	let hoeheVierteZeile = canvas.height-15;
+	
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+	let textPositionErsteZeile = 10 + WriteText(`Mit hilfe des b[Satzes von Vieta], können auch die b[Extremstellen] eines Polynoms berechnet werden. Sie funktioniert nur bei b[Polynomen 3-ten Grades] und eignet sich nur für b[ganzzahlige Extremstellen]. Die b[Ableitung] des Polynoms muss also die Form b[x^2+px+q] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+
+	if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].ersteAbleitung.linkesChild==null&&funktionenListe[i].ersteAbleitung.rechtesChild==null&&funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]!=0){
+		let textPositionZweiteZeile = 10 + WriteText(`Die b[Ableitung] des Polynoms wird wie bei der b[PQ-Formel] zuerst in die b[Normalform] gebracht. Es muss also die Form b[ax^2+px+q] haben wobei b[a=1] sein muss. Das die b[Ableitung des eingegebenen Polynoms lautet: ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		let textPositionDritteZeile = 0;
+		if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
+			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}(x) = x^2${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)}${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}else{
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}(x) = x^2${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)}+${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a,  fontSchriftInfoLeiste);
+			}	
+		}else{
+			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}(x) = x^2+${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)}${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}else{
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}(x) = x^2+${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)}+${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}	
+		}
+		textPositionDritteZeile += 10 + WriteText(`Es muss nun b[p = -(x1+x2) und q = x1*x2] gelten. Um auf die b[Extemstellen] zu kommen muss b[eine Kombination von x1 und x2 gefunden werden für die beide Aussagen wahr sind.]`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, "bold " + fontSchriftInfoLeiste);
+		if(funktionenListe[i].extremstellen.length===0){
+			let textPositionVierteZeile = 10 + WriteText(`b[p=${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)} q=${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)} für x1 und x2 werden nun zufällig Zahlen eingesetzt bis eine Kombination passt: ==>]`,  10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionVierteZeile += WriteText(`b[Es konnte keine Kombination für x1 und für x2 gefunden werden. Verwenden Sie die Mitternachts- oder PQ-Formel.]`,  textPositionVierteZeile, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}else{
+			let textPositionVierteZeile = 10 + WriteText(`b[p=${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)} q=${(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]).toFixed(2)} für x1 und x2 werden nun zufällig Zahlen eingesetzt bis eine Kombination passt: ==>]`,  10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionVierteZeile += WriteText(`b[Wahr werden für dieses Polynom beide Aussagen nur wenn für x1=${funktionenListe[i].extremstellen[0]} und für x2=${funktionenListe[i].extremstellen[1]} einsetzt: ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]}=-(${funktionenListe[i].extremstellen[0]}+${funktionenListe[i].extremstellen[1]}) und ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]}=${funktionenListe[i].extremstellen[0]}*${funktionenListe[i].extremstellen[1]}]`,  textPositionVierteZeile, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}
+	}else{
+		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		WriteText("Die Ableitung des eingegebenen Polynom hat leider nicht die passende Form...", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+	}
+}
+
+
+function reiter611NewtonVerfahrenExtremstellen(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+
+	WriteText(`Das Newton Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+}
+
+
+function reiter612RegulaFalsiExtremstellen(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+
+	WriteText(`Das Regula Falsi Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+}
+
+
+function reiter613GeradengleichungWendepunkte(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+
+	WriteText(`b[Die Wendestellen eines Polynoms sind die Nullstellen der zweiten Ableitung]. Also muss das Polynom zuerst zwei mal abgeleitet werden. b[${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	WriteText(`Danach wird die b[Ableitung gleich 0 gesetzt] und b[nach X aufgelöst]. Genau wie bei den Nullstellen nur mit der zweiten Ableitung.`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+	
+	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length===2){
+		if((-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])<0){
+			if(Math.abs((-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])}x = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    -x = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}
+
+		}else{
+			if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])}x = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    x = ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}
+		}
+	}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length===3){
+		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 2ten Grades. Die Wendepunkte können bei diesem Polynom mithilfe der Mitternachtsformel oder PQ-Formel berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+	}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length>3){
+		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist höher als 2ten Grades. Die Wendepunkte können bei diesem Polynom nur näherungsweise mithilfe des Newton Verfahren oder Regula Falsi berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+	}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length===1){
+		if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]!=0){
+			WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade ist parallel zu X-Achse und besitzt keine Nullstelle.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]===0){
+			WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade sitzt genau auf der X-Achse und besitzt unendlich viele Nullstellen.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		}
+		
+	}
+}
+
+
+function reiter614MitternachtsformelWendepunkte(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	let hoeheWurzelZeichen1Schriftgroesse15 = 22;
+	let hoeheWurzelZeichen2Schriftgroesse15 = 18;
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+	WriteText(`Mit hilfe der b[Mitternachts- oder auch a-b-c Formel] können auch die b[Wendepunkte] eines Polynoms berechnet werden. Dies funktioniert nur bei b[Polynomen 4-ten Grades]. Die zweite b[Ableitung] des Polynoms muss also die Form b[ax^2+bx+c] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	WriteText(`b[Die Nullstellen der zweiten Ableitung sind die Wendestellen der Stammfunktion]. Es muss also zuerst zwei mal abgeleitet werden. b[Die zweite Ableitung von ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString} lautet ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	
+	
+	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].zweiteAbleitung.linkesChild==null&&funktionenListe[i].zweiteAbleitung.rechtesChild==null&&funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]!=0){
+		
+		let textPositionZweiteZeile = 10 + WriteText(`x`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += WriteText(`1,2`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
+		textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		let laengeBisWurzel = canvasContext.measureText("-b \xB1 \u221A").width + textPositionZweiteZeile;
+		textPositionZweiteZeile += WriteText(`-b \xB1 \u221A b²-4ac/2a`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+				
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		
+		textPositionZweiteZeile += 30 + WriteText(`y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}`, textPositionZweiteZeile+30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += 30 + WriteText(`a = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]} b = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]} c = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]}`, textPositionZweiteZeile + 30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+				
+		textPositionZweiteZeile += 30 + WriteText(`x`, textPositionZweiteZeile+30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += WriteText(`1,2`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
+		textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		laengeBisWurzel = canvasContext.measureText("-b \xB1 \u221A").width + textPositionZweiteZeile;
+		
+		if((4*funktionenListe[i].inhaltKnotenVektor[2]*funktionenListe[i].inhaltKnotenVektor[0])<0){
+			textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${Math.pow(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1],2)}-( ${4*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]})/2*${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}else{
+			textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${Math.pow(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1],2)}-${4*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]}/2*${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-5, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-5, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( laengeBisWurzel-5, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		
+		textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		laengeBisWurzel = canvasContext.measureText(`${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A`).width + textPositionZweiteZeile;
+		textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${(Math.pow(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1],2) - (4*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]))}/${2*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( laengeBisWurzel-1, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
+		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
+		canvasContext.stroke();
+		
+		let minusB = (-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]);
+		let BQuadrat = Math.pow(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1],2);
+		let VierAC = (4*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]);
+		let wurzelBQuadratMinus4AC = Math.sqrt(BQuadrat - VierAC);
+		let zweiMalA = 2*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2];
+		
+		if(BQuadrat-VierAC>0){
+			
+			textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${minusB} \xB1 ${zahlRunden(wurzelBQuadratMinus4AC)}/${zweiMalA}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+			let x1 = (minusB + wurzelBQuadratMinus4AC) / zweiMalA;
+			let x2 = (minusB - wurzelBQuadratMinus4AC) / zweiMalA;
+
+			textPositionZweiteZeile += WriteText(` => b[x1 = ${zahlRunden(x1)}   x2 = ${zahlRunden(x2)}]`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+		}else{
+			textPositionZweiteZeile += WriteText(` => b[Wenn die Wurzel negativ wird, gibt es keine Lösung. Keine lösung bedeutet das Polynom hat keine Extremstellen.]`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}
+	}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length===2){	
+		WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Die zweite Ableitung des Polynoms ist ersten Grades. Die Wendepunkte können mit bei diesem Polynom hilfe der Geradengleichung errechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length>3){
+		WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Die zweite Ableitung des Polynoms ist höher als 2ten Grades. Die Wendepunkte können bei diesem Polynom nur näherungsweise mithilfe des Newton Verfahren oder Regula Falsi berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	}
+}
+
+
+function reiter615PQFormelWendepunkte(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+	WriteText(`Mit hilfe der b[PQ-Formel] können auch die b[Wendepunkte] eines Polynoms berechnet werden. Dies funktioniert nur bei b[Polynomen 4-ten Grades]. Die zweite b[Ableitung] des Polynoms muss die Form b[ax^2+bx+c] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	let textPositionZweiteZeile = 10 + WriteText(`Es muss also zuerst zwei mal abgeleitet werden. b[Die zweite Ableitung lautet ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+	
+	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].zweiteAbleitung.linkesChild==null&&funktionenListe[i].zweiteAbleitung.rechtesChild==null&&funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]!=0){
+		
+		if(funktionenListe[i].inhaltKnotenVektor[2]!=1){
+			textPositionZweiteZeile += 30 + WriteText(`Der Koeffizient von x^2 muss 1 sein, dafür alles geteilt durch a. Allgemein also `, 30 + textPositionZweiteZeile,hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+			
+			textPositionZweiteZeile += 10 + WriteText(`ax²/a`, 10 +  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(` + `, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`px/a`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(` + `, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`q/a`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+			textPositionZweiteZeile += 10 + WriteText(` => `, textPositionZweiteZeile + 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}x^2/${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+			
+			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);			
+			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])}x/${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])}/${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);		
+			textPositionZweiteZeile += WriteText(` => x^2`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);	
+			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+
+			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]>=0){
+				textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}x`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}else{
+				textPositionZweiteZeile += WriteText(`(${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}x)`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}
+			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]>=0){
+				textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}else{
+				textPositionZweiteZeile += WriteText(`(${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])})`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}
+			
+		}
+		
+		let textPositionDritteZeile = 10 + WriteText("x", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("1,2", textPositionDritteZeile ,hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
+		textPositionDritteZeile += WriteText(" = - ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("p/2", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		canvasContext.font = '35px Calibri';
+		let laengeTextWurzel = canvasContext.measureText("\u221A").width+textPositionDritteZeile;
+		textPositionDritteZeile += WriteText("\u221A(", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');
+		textPositionDritteZeile += WriteText("p/2", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(")", textPositionDritteZeile , hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');
+		textPositionDritteZeile += WriteText("²", textPositionDritteZeile  , hoeheDritteZeile-5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" -q", textPositionDritteZeile  , hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+		let alteStichstaerke = canvasContext.lineWidth;
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.lineWidth = 2;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( textPositionDritteZeile , hoeheDritteZeile-25);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( laengeTextWurzel - 3, hoeheDritteZeile-15);
+		canvasContext.stroke();
+		
+		canvasContext.lineWidth = alteStichstaerke;
+		
+		textPositionDritteZeile += 30 + WriteText(`y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}`,textPositionDritteZeile + 30 , hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += 30 + WriteText(`a = ${zahlRunden(funktionenListe[i].inhaltKnotenVektor[2])} p = ${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} q = ${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])}`,textPositionDritteZeile + 30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		
+
+		
+		
+		let p = funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2];
+		let q = funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2];
+		
+		
+		textPositionDritteZeile += 10 + WriteText("x", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("1,2", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
+		textPositionDritteZeile += WriteText(" = - ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		canvasContext.font = '35px Calibri';
+		laengeTextWurzel = canvasContext.measureText("\u221A").width+textPositionDritteZeile;
+		textPositionDritteZeile += WriteText("\u221A(", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');	
+		textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(")", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');
+		textPositionDritteZeile += WriteText("²",  textPositionDritteZeile, hoeheDritteZeile-5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);	
+		if(funktionenListe[i].inhaltKnotenVektor[0]>=0){
+			textPositionDritteZeile += WriteText(` -${zahlRunden(q)}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}else{
+			textPositionDritteZeile += WriteText(` -(${zahlRunden(q)})`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		}
+
+		
+		alteStichstaerke = canvasContext.lineWidth;
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.lineWidth = 2;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( textPositionDritteZeile, hoeheDritteZeile-25);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeTextWurzel, hoeheDritteZeile-25);
+		canvasContext.lineTo( laengeTextWurzel - 3, hoeheDritteZeile-15);
+		canvasContext.stroke();
+		
+		canvasContext.lineWidth = alteStichstaerke;
+		
+		
+		textPositionDritteZeile += 10 + WriteText(" = - ", 10 + textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("\u221A", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');	
+		laengeTextWurzel = textPositionDritteZeile;
+		textPositionDritteZeile += WriteText(`${zahlRunden(Math.pow(p/2,2))}`,textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		if(funktionenListe[i].inhaltKnotenVektor[0]>=0){
+			textPositionDritteZeile += WriteText(` -${zahlRunden(q)}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}else{
+			textPositionDritteZeile += WriteText(` +${(-zahlRunden(q))}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		}
+
+		
+		alteStichstaerke = canvasContext.lineWidth;
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.lineWidth = 2;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( textPositionDritteZeile, hoeheDritteZeile-25);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( laengeTextWurzel - 3, hoeheDritteZeile-15);
+		canvasContext.stroke();
+		
+		canvasContext.lineWidth = alteStichstaerke;
+		
+		
+		let unterWurzel = Math.pow(p/2,2)-q;
+		
+		textPositionDritteZeile += 10 + WriteText(" = - ", textPositionDritteZeile + 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += WriteText("\u221A", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');	
+		laengeTextWurzel = textPositionDritteZeile;
+		textPositionDritteZeile += WriteText(`${zahlRunden(unterWurzel)}`,textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		
+		alteStichstaerke = canvasContext.lineWidth;
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.lineWidth = 2;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( textPositionDritteZeile, hoeheDritteZeile-25);
+		canvasContext.stroke();
+		
+		canvasContext.beginPath();
+		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+		canvasContext.moveTo( laengeTextWurzel , hoeheDritteZeile-25);
+		canvasContext.lineTo( laengeTextWurzel - 3, hoeheDritteZeile-15);
+		canvasContext.stroke();
+		
+		canvasContext.lineWidth = alteStichstaerke;
+		
+		if(unterWurzel>=0){
+			let wurzelAusgerechnet = Math.sqrt(Math.pow(p/2,2)-q);
+
+			textPositionDritteZeile += 10 + WriteText(" = - ", textPositionDritteZeile + 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionDritteZeile += WriteText(`${zahlRunden(p)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionDritteZeile += WriteText(" \xB1 ", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+			textPositionDritteZeile += WriteText(`${zahlRunden(wurzelAusgerechnet)}`,textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+			let x1 = p/2+wurzelAusgerechnet;
+			let x2 = p/2-wurzelAusgerechnet;
+			
+			textPositionDritteZeile += 10 + WriteText(` =>b[ x1=${zahlRunden(x1)} x2=${zahlRunden(x2)}]`, textPositionDritteZeile+10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+		}else{
+			textPositionDritteZeile += WriteText(" => b[Wenn die Wurzel negativ wird, gibt es keine Lösung. Keine lösung bedeutet das Polynom hat keine Extremstellen.]", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			
+		}
+	}else{
+		WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		WriteText("b[Die angegebene Funktion hat leider nicht die passende Form...]", 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+	}
+}
+
+
+function reiter616SatzVonVietaWendepunkte(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-50;
+	let hoeheVierteZeile = canvas.height-15;
+	
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+	let textPositionErsteZeile = 10 + WriteText(`Mit hilfe des b[Satzes von Vieta], können auch die b[Wendepunkte] eines Polynoms berechnet werden. Sie funktioniert nur bei b[Polynomen 4-ten Grades] und eignet sich nur für b[ganzzahlige Wendepunkte]. Die b[zweite Ableitung] des Polynoms muss also die Form b[x^2+px+q] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+
+	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].zweiteAbleitung.linkesChild==null&&funktionenListe[i].zweiteAbleitung.rechtesChild==null&&funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]!=0){
+		let textPositionZweiteZeile = 10 + WriteText(`Die b[zweite Ableitung] des Polynoms wird wie bei der b[PQ-Formel] zuerst in die b[Normalform] gebracht. Es muss also die Form b[ax^2+px+q] haben wobei b[a=1] sein muss. Das die b[zweite Ableitung des eingegebenen Polynoms lautet: ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		let textPositionDritteZeile = 0;
+		if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
+			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}else{
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}+${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a,  fontSchriftInfoLeiste);
+			}	
+		}else{
+			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2+${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}else{
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2+${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}+${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			}	
+		}
+		textPositionDritteZeile += 10 + WriteText(` Es muss nun b[p = -(x1+x2) und q = x1*x2] gelten. Um auf die b[Wendepunkte] zu kommen muss b[eine Kombination von x1 und x2 gefunden werden für die beide Aussagen wahr sind.]`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, "bold " + fontSchriftInfoLeiste);
+		if(funktionenListe[i].extremstellen.length===0){
+			let textPositionVierteZeile = 10 + WriteText(`b[p=${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])} q=${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])} für x1 und x2 werden nun zufällig Zahlen eingesetzt bis eine Kombination passt: ==>]`,  10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionVierteZeile += WriteText(`b[Es konnte keine Kombination für x1 und für x2 gefunden werden. Verwenden Sie die Mitternachts- oder PQ-Formel.]`,  textPositionVierteZeile, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}else{
+			let textPositionVierteZeile = 10 + WriteText(`b[p=${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])} q=${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])} für x1 und x2 werden nun zufällig Zahlen eingesetzt bis eine Kombination passt: ==>]`,  10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionVierteZeile += WriteText(`b[Wahr werden für dieses Polynom beide Aussagen nur wenn für x1=${zahlRunden(funktionenListe[i].wendepunkte[0])} und für x2=${zahlRunden(funktionenListe[i].extremstellen[1])} einsetzt: ${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}=-(${zahlRunden(funktionenListe[i].wendepunkte[0])}+${zahlRunden(funktionenListe[i].wendepunkte[1])}) und ${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}=${zahlRunden(funktionenListe[i].wendepunkte[0])}*${zahlRunden(funktionenListe[i].wendepunkte[1])}]`,  textPositionVierteZeile, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		}
+	}else{
+		WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		WriteText("Die zweite Ableitung des eingegebenen Polynom hat leider nicht die passende Form...", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+
+	}
+}
+
+
+function reiter617NewtonVerfahrenWendepunkte(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+
+	WriteText(`Das Newton Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+}
+
+
+function reiter618RegulaFalsiWendepunkte(i){
+	let hoeheErsteZeile = canvas.height-125;
+	let hoeheZweiteZeile = canvas.height-90;
+	let hoeheDritteZeile = canvas.height-55;
+	let hoeheVierteZeile = canvas.height-20;
+	
+
+	hoeheInfoLeiste=150;
+	DrawRectStatisch(0, canvas.height-hoeheInfoLeiste, canvas.width, hoeheInfoLeiste, 150, 150, 150,0.8);
+	zeichneReiter();
+	
+	canvasContext.font = fontSchriftInfoLeiste;
+	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
+	canvasContext.textAlign = "left";
+	
+
+	WriteText(`Das Regula Falsi Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+
+}
+
+
+
+function reiter619GeradengleichungPolstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
 	let hoeheDritteZeile = canvas.height-55;
@@ -1259,7 +2205,7 @@ function reiter67GeradengleichungPolstellen(i){
 }
 
 
-function reiter68MitternachtsformelPolstellen(i){
+function reiter620MitternachtsformelPolstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
 	let hoeheDritteZeile = canvas.height-55;
@@ -1391,7 +2337,7 @@ function reiter68MitternachtsformelPolstellen(i){
 	}
 }
 
-function reiter69PQFormelPolstellen(i){
+function reiter621PQFormelPolstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
 	let hoeheDritteZeile = canvas.height-55;
@@ -1607,7 +2553,7 @@ function reiter69PQFormelPolstellen(i){
 
 
 
-function reiter610SatzVonVietaPolstellen(i){
+function reiter622SatzVonVietaPolstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
 	let hoeheDritteZeile = canvas.height-50;
