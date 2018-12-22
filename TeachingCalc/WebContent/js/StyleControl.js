@@ -147,9 +147,9 @@ function onChangeFunktionenDropdown(){
 function displayButtons(funktionObjekt){ 
 	
 	
-	if(funktionenListe[funktionenListe.length-1].gekürzt.inhaltKnotenSymbol==="/"){
-		let polynomGradZaehler = funktionenListe[funktionenListe.length-1].gekürzt.linkesChild.inhaltKnotenVektor.length-1;
-		let polynomGradNenner = funktionenListe[funktionenListe.length-1].gekürzt.rechtesChild.inhaltKnotenVektor.length-1;
+	if(funktionObjekt.gekürzt.inhaltKnotenSymbol==="/"){
+		let polynomGradZaehler = funktionObjekt.gekürzt.linkesChild.inhaltKnotenVektor.length-1;
+		let polynomGradNenner = funktionObjekt.gekürzt.rechtesChild.inhaltKnotenVektor.length-1;
 		
 		[].forEach.call(document.getElementsByClassName("gebrochenRational"), function(el){
 			el.style.display = "block";
@@ -240,7 +240,7 @@ function displayButtons(funktionObjekt){
 
 		}
 	}else{
-		let polynomGrad = funktionenListe[funktionenListe.length-1].gekürzt.inhaltKnotenVektor.length-1;
+		let polynomGrad = funktionObjekt.gekürzt.inhaltKnotenVektor.length-1;
 		
 		[].forEach.call(document.getElementsByClassName("gebrochenRational"), function(el){
 			el.style.display = "none";
@@ -672,7 +672,7 @@ function onClickMitternachtsformelExtremstellen(){
 
 				let minusB = (-knotenVektorErsteAbleitung[1]);
 				let BQuadrat = Math.pow(knotenVektorErsteAbleitung[1],2);
-				let VierAC = (4*knotenVektorErsteAbleitung[2]*knotenVektor[0]);
+				let VierAC = (4*knotenVektorErsteAbleitung[2]*knotenVektorErsteAbleitung[0]);
 				let wurzelBQuadratMinus4AC = Math.sqrt(BQuadrat - VierAC);
 				let zweiMalA = 2*knotenVektorErsteAbleitung[2];
 			
@@ -887,15 +887,15 @@ function onClickRegulaFalsiExtremstellen(){
 			let nenner = 0;
 			
 			if (funktionenListe[i].inhaltKnotenSymbol === '/') {
-				zaehler = funktionenListe[i].linkesChild.inhaltKnotenVektor;
-				nenner = funktionenListe[i].rechtesChild.inhaltKnotenVektor;
+				zaehler = funktionenListe[i].ersteAbleitung.linkesChild.inhaltKnotenVektor;
+				nenner = funktionenListe[i].ersteAbleitung.rechtesChild.inhaltKnotenVektor;
 			}
 			else {
 				if (funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length === 0) {
-					nenner = funktionenListe[i].ersteAbleitung.linkesChild.inhaltKnotenVektor;
+					zaehler = funktionenListe[i].ersteAbleitung.linkesChild.inhaltKnotenVektor;
 				}
 				else {
-					nenner = funktionenListe[i].ersteAbleitung.inhaltKnotenVektor;
+					zaehler = funktionenListe[i].ersteAbleitung.inhaltKnotenVektor;
 				}
 			}
 			
@@ -904,14 +904,14 @@ function onClickRegulaFalsiExtremstellen(){
 			let rundenCounter = 0;
 			let uebergangGefunden = false;
 			for (let i = -30; i < 30; i += 0.1) {
-				y = f(i, nenner);
+				y = f(i, zaehler);
 				if (rundenCounter > 0) {
 					if (y < 0 && yOld > 0) {
-						extremstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+						extremstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, zaehler));
 						uebergangGefunden = true;
 					}
 					else if (y > 0 && yOld < 0) {
-						extremstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+						extremstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, zaehler));
 						uebergangGefunden = true;
 					}
 				}
@@ -922,7 +922,7 @@ function onClickRegulaFalsiExtremstellen(){
 			
 			if (uebergangGefunden == false) {
 				for (let i = -30; i < 30; i += 0.1) {
-					extremstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+					extremstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, zaehler));
 				}
 				yOld = y;
 				rundenCounter++;
@@ -962,9 +962,9 @@ function onClickRegulaFalsiExtremstellen(){
 
 
 function getVectorZweiteAbleitung(i){
-	let knotenVektor = funktionenListe[i].gekürzt.ersteAbleitung.inhaltKnotenVektor;
+	let knotenVektor = funktionenListe[i].gekürzt.zweiteAbleitung.inhaltKnotenVektor;
 	if(funktionenListe[i].inhaltKnotenSymbol==="/"){
-		knotenVektor = funktionenListe[i].gekürzt.ersteAbleitung.linkesChild.inhaltKnotenVektor;
+		knotenVektor = funktionenListe[i].gekürzt.zweiteAbleitung.linkesChild.inhaltKnotenVektor;
 	}
 	return knotenVektor;
 }
@@ -1211,15 +1211,15 @@ function onClickRegulaFalsiWendepunkte(){
 			let nenner = 0;
 			
 			if (funktionenListe[i].inhaltKnotenSymbol === '/') {
-				zaehler = funktionenListe[i].linkesChild.inhaltKnotenVektor;
-				nenner = funktionenListe[i].rechtesChild.inhaltKnotenVektor;
+				zaehler = funktionenListe[i].zweiteAbleitung.linkesChild.inhaltKnotenVektor;
+				nenner = funktionenListe[i].zweiteAbleitung.rechtesChild.inhaltKnotenVektor;
 			}
 			else {
 				if (funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length === 0) {
-					nenner = funktionenListe[i].zweiteAbleitung.linkesChild.inhaltKnotenVektor;
+					zaehler = funktionenListe[i].zweiteAbleitung.linkesChild.inhaltKnotenVektor;
 				}
 				else {
-					nenner = funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor;
+					zaehler = funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor;
 				}
 			}
 			
@@ -1231,11 +1231,11 @@ function onClickRegulaFalsiWendepunkte(){
 				y = f(i, nenner);
 				if (rundenCounter > 0) {
 					if (y < 0 && yOld > 0) {
-						wendepunkteTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+						wendepunkteTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, zaehler));
 						uebergangGefunden = true;
 					}
 					else if (y > 0 && yOld < 0) {
-						wendepunkteTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+						wendepunkteTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, zaehler));
 						uebergangGefunden = true;
 					}
 				}
@@ -1246,7 +1246,7 @@ function onClickRegulaFalsiWendepunkte(){
 			
 			if (uebergangGefunden == false) {
 				for (let i = -30; i < 30; i += 0.1) {
-					wendepunkteTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+					wendepunkteTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, zaehler));
 				}
 				yOld = y;
 				rundenCounter++;
@@ -1480,82 +1480,89 @@ function onClickRegulaFalsiPolstellen(){
 	zeichneReiter6 = true;
 	zeigeInhaltReiter6 = 12;
 	aktiverReiter = 6;
-	
+	let gefunden = false;
 	let polstellenTmp = [];
+	let funktion = null;
 	for(let i=0;i<funktionenListe.length;i++){
 		if((document.getElementById("funktionenDropdown").value === buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString)){
-			document.getElementById("PolstellenTextfeld").value = "";
-			funktionenListe[i].polstellen = [];
-			
-			let zaehler = 0;
-			let nenner = 0;
-			
-			if (funktionenListe[i].inhaltKnotenSymbol === '/') {
-				zaehler = funktionenListe[i].linkesChild.inhaltKnotenVektor;
-				nenner = funktionenListe[i].rechtesChild.inhaltKnotenVektor;
-			}
-			else {
-				if (funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length === 0) {
-					nenner = funktionenListe[i].ersteAbleitung.linkesChild.inhaltKnotenVektor;
-				}
-				else {
-					nenner = funktionenListe[i].ersteAbleitung.inhaltKnotenVektor;
-				}
-			}
-			
-			let y = 0;
-			let yOld = 0;
-			let rundenCounter = 0;
-			let uebergangGefunden = false;
-			for (let i = -30; i < 30; i += 0.1) {
-				y = f(i, nenner);
-				if (rundenCounter > 0) {
-					if (y < 0 && yOld > 0) {
-						polstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
-						uebergangGefunden = true;
-					}
-					else if (y > 0 && yOld < 0) {
-						polstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
-						uebergangGefunden = true;
-					}
-				}
-
-				yOld = y;
-				rundenCounter++;
-			}
-			
-			if (uebergangGefunden == false) {
-				for (let i = -30; i < 30; i += 0.1) {
-					polstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
-				}
-				yOld = y;
-				rundenCounter++;
-			}
-			
-			let tolleranzErreicht = false;
-			for(let j=0;j<polstellenTmp.length;j++){
-				tolleranzErreicht = false;
-				console.log(j+" "+ polstellenTmp[j]);
-				if(polstellenTmp[j]!=undefined){
-					let xtmp = polstellenTmp[j].x;
-					for(let k=0;k<funktionenListe[i].polstellen.length;k++){
-						if(Math.abs(funktionenListe[i].polstellen[k] - xtmp) < tolleranz){
-							tolleranzErreicht = true
-						}
-					}
-					if(!tolleranzErreicht){
-						funktionenListe[i].polstellen.push(polstellenTmp[j].x);
-					}
-				}
-			}
-			let text ="";
-			for(let j=0;j<funktionenListe[i].polstellen.length;j++){
-					text +=  "x" + (j+1) + "=" + zahlRunden(funktionenListe[i].polstellen[j]) + " ";
-			}
-			document.getElementById("PolstellenTextfeld").value = text;
-			
+			gefunden = true;
+			funktion = funktionenListe[i];
 		}
 	}
+	if(!gefunden){
+		funktion = funktionenVorschau;
+	}
+	
+	gefunden = true;
+	document.getElementById("PolstellenTextfeld").value = "";
+	funktion.polstellen = [];
+	
+	let zaehler = 0;
+	let nenner = 0;
+	
+	if (funktion.inhaltKnotenSymbol === '/') {
+		zaehler = funktion.linkesChild.inhaltKnotenVektor;
+		nenner = funktion.rechtesChild.inhaltKnotenVektor;
+	}
+	else {
+		if (funktion.ersteAbleitung.inhaltKnotenVektor.length === 0) {
+			nenner = funktion.ersteAbleitung.linkesChild.inhaltKnotenVektor;
+		}
+		else {
+			nenner = funktion.ersteAbleitung.inhaltKnotenVektor;
+		}
+	}
+	
+	let y = 0;
+	let yOld = 0;
+	let rundenCounter = 0;
+	let uebergangGefunden = false;
+	for (let i = -30; i < 30; i += 0.1) {
+		y = f(i, nenner);
+		if (rundenCounter > 0) {
+			if (y < 0 && yOld > 0) {
+				polstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+				uebergangGefunden = true;
+			}
+			else if (y > 0 && yOld < 0) {
+				polstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+				uebergangGefunden = true;
+			}
+		}
+
+		yOld = y;
+		rundenCounter++;
+	}
+	
+	if (uebergangGefunden == false) {
+		for (let i = -30; i < 30; i += 0.1) {
+			polstellenTmp.push(regulaFalsi_GebrochenRational( i,  i-0.1, nenner));
+		}
+		yOld = y;
+		rundenCounter++;
+	}
+	
+	let tolleranzErreicht = false;
+	for(let j=0;j<polstellenTmp.length;j++){
+		tolleranzErreicht = false;
+		console.log(j+" "+ polstellenTmp[j]);
+		if(polstellenTmp[j]!=undefined){
+			let xtmp = polstellenTmp[j].x;
+			for(let k=0;k<funktion.polstellen.length;k++){
+				if(Math.abs(funktion.polstellen[k] - xtmp) < tolleranz){
+					tolleranzErreicht = true
+				}
+			}
+			if(!tolleranzErreicht){
+				funktion.polstellen.push(polstellenTmp[j].x);
+			}
+		}
+	}
+	let text ="";
+	for(let j=0;j<funktion.polstellen.length;j++){
+			text +=  "x" + (j+1) + "=" + zahlRunden(funktion.polstellen[j]) + " ";
+	}
+	document.getElementById("PolstellenTextfeld").value = text;
 }
 
 function onChangeNullstellenAnzeigen(){

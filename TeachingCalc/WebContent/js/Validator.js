@@ -2,7 +2,7 @@
 function checkAufFalscheSymbole(str) { //0-9 +-*/^ () sind erlaubt bis jetzt
 	let i = 0;
 	while (str[i] != str[str.length]) {
-		if (str[i] != '^'&&str[i] != '*'&&str[i] != '/'&&str[i] != '+'&&str[i] != '-'&&str[i] != '('&&str[i] != ')' && !(parseInt(str[i])>=0 && parseInt(str[i])<10) && str[i] != 'x'&&str[i] != 'X') {
+		if (str[i] != '^'&&str[i] != '*'&&str[i] != '/'&&str[i] != '+'&&str[i] != '-'&&str[i] != '('&&str[i] != ')' && !(parseInt(str[i])>=0 && parseInt(str[i])<10) && str[i] != 'x'&&str[i] != 'X'&&str[i] != ',') {
 			return false;
 		}
 		i++;
@@ -34,7 +34,7 @@ function checkKlammernKorrekt(str) { //richtige anzahl und ob jede öffnende kla
 function checkDerSyntax(str) { //zum Beispiel x^*3
 	let i = 0;
 	while (str[i] != str[str.length]) {
-		if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '^' ) {
+		if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '^' || str[i] == ',') {
 			if (str[i+1] == '+' || str[i + 1] == '-' || str[i + 1] == '*' || str[i + 1] == '/' || str[i + 1] == '^' || str[i + 1] == ')') {
 				return false;
 			}

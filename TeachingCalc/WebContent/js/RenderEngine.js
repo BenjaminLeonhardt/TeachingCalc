@@ -261,6 +261,7 @@ canvas.addEventListener("mousedown", function(event) { //(0,(canvas.height/2)-45
 
 canvas.addEventListener('mouseleave', function() {
 	isDown=false;
+	animateLeftNavBarButton=false;
 });
 
 let punktAmAusgewaehltenGraph={
@@ -600,7 +601,7 @@ if(equationFormAlternativ!=null){
 				funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung);
 				funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung;
 				funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung);
-				funktionenListe[funktionenListe.length-1].stammfunktion = 
+//				funktionenListe[funktionenListe.length-1].stammfunktion = 
 				
 				displayButtons(funktionenListe[funktionenListe.length-1]);
 				berechneKurvenDiskusionsPunkte(funktionenListe[funktionenListe.length-1]);
@@ -1152,7 +1153,76 @@ function checkEingabe(){
 	}
 }
 
-
+let eingabeAlsVerketteteListe = null;
+function checkEingabeV2(){
+	let equation = "";
+	if(document.getElementById("equationFormAlternativ")!=null){
+		equation = document.getElementById("equationFormAlternativ").value;
+	}
+	if(!leererString(equation)){
+		if(equation !== equationOld){
+			equationOld=equation;
+			if(checkAufFalscheSymbole(equation)&&checkKlammernKorrekt(equation)&&checkDerSyntax(equation)&&checkObVollständigerAusdruck(equation)){
+				let rootSyntaxbaum = new FunktionAlsVektorSyntaxbaum();	
+				funktionenVorschau = rootSyntaxbaum;
+				
+				eingabeAlsVerketteteListe = convertiereStringZuVerketteteListe(equation);
+				erstelleSyntaxBaumV2(rootSyntaxbaum, equation);
+				
+//				splitEquationBuffer(rootSyntaxbaum, equation);
+				let funktionGekuerzt = funktionenVorschau; 
+				kuerzeSyntaxbaumGebrochenRational(funktionGekuerzt);
+				funktionenVorschau.gekürzt = funktionGekuerzt;
+				
+				funktionenVorschau.ersteAbleitung = funktionAbleitenGebrochenRational(funktionGekuerzt);
+				funktionenVorschau.zweiteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.ersteAbleitung);
+				funktionenVorschau.ersteAbleitung.ersteAbleitung = funktionenVorschau.zweiteAbleitung;
+				funktionenVorschau.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.zweiteAbleitung);
+				funktionenVorschau.ersteAbleitung.zweiteAbleitung = funktionenVorschau.dritteAbleitung;
+				funktionenVorschau.zweiteAbleitung.ersteAbleitung = funktionenVorschau.dritteAbleitung;
+				funktionenVorschau.ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.dritteAbleitung);
+				funktionenVorschau.zweiteAbleitung.zweiteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
+				funktionenVorschau.dritteAbleitung.ersteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
+				funktionenVorschau.zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
+				funktionenVorschau.dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
+				funktionenVorschau.dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
+//				funktionenVorschau.stammfunktion = 
+				
+				displayButtons(funktionenVorschau);
+				berechneKurvenDiskusionsPunkte(funktionenVorschau);
+				
+				for(let i=0;i<1000;i+=0.1){
+					let punkt = {
+							x:i,
+							y:getPunkt(i,funktionenVorschau.gekürzt)
+					}
+					rootSyntaxbaum.punkteRechtsVonNull.push(punkt);
+					let punktVergroessert = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+					}
+					rootSyntaxbaum.punkteRechtsVonNullVergroessert.push(punktVergroessert);
+				}
+				for(let i=0;i>-1000;i-=0.1){
+					let punkt = {
+							x:i,
+							y:getPunkt(i,funktionenVorschau.gekürzt)
+					}
+					rootSyntaxbaum.punkteLinksVonNull.push(punkt);
+					let punktVergroessert = {
+							x:i*vergroesserung,
+							y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+					}
+					rootSyntaxbaum.punkteLinksVonNullVergroessert.push(punktVergroessert);
+				}
+			}
+		}else{			
+			return;
+		}
+	}else{
+		funktionenVorschau = 0;
+	}
+}
 
 
 function zeichneFunktionsgraphen(){
@@ -1217,19 +1287,17 @@ function zeichneFunktionsgraphen(){
 						canvasContext.stroke();
 						canvasContext.beginPath();
 						canvasContext.strokeStyle = 'rgba(' + String(farbePolstellen.r) + ',' + String(farbePolstellen.g) + ',' + String(farbePolstellen.b) + ',' + String(farbePolstellen.a) + ')';
-						DrawLine(funktionenListe[i].polstellen[j], 0);	
-						DrawLine(funktionenListe[i].polstellen[j], -getPunkt(funktionenListe[i].polstellen[j],funktionenListe[i].gekürzt));	
+						canvasContext.moveTo(funktionenListe[i].polstellen[j]*vergroesserung+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+						canvasContext.lineTo(funktionenListe[i].polstellen[j]*vergroesserung+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+						canvasContext.lineTo(funktionenListe[i].polstellen[j]*vergroesserung+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
 						canvasContext.stroke();
-						DrawCircle(funktionenListe[i].polstellen[j], -getPunkt(funktionenListe[i].polstellen[j],funktionenListe[i].gekürzt), 0.1, farbePolstellen.r, farbePolstellen.g, farbePolstellen.b, farbePolstellen.a,true,false);
+						DrawCircle(funktionenListe[i].polstellen[j], 0, 0.1, farbePolstellen.r, farbePolstellen.g, farbePolstellen.b, farbePolstellen.a,true,false);
 					}
 				}if(funktionenListe[i].graphAnzeigen){
-//					canvasContext.beginPath();
-//					canvasContext.fillStyle = "rgba(70,70,255,1)";
 					DrawCircle(punktAmAusgewaehltenGraph.x,punktAmAusgewaehltenGraph.y, 0.2, 70, 70, 255, 1,true,false);
-//					canvasContext.fill();
 				}
 			}
-		}//(2^3+2*x-2)/(x-2)
+		}//(2^3+2*x-2)/(x-2)             (x^3-5*x-2)/(x^5+3*x+2)
 	}
 
 	for(let k=0;k<funktionenListe.length;k++){
@@ -1237,15 +1305,41 @@ function zeichneFunktionsgraphen(){
 			canvasContext.beginPath();
 			canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionen[k].r) + ',' + String(farbenArrayFunktionen[k].g) + ',' + String(farbenArrayFunktionen[k].b) + ',' + String(farbenArrayFunktionen[k].a) + ')';
 			let xOld=0;
-			for(let i=0;i<funktionenListe[k].punkteRechtsVonNullVergroessert.length;i++){				
+			for(let i=0;i<funktionenListe[k].punkteRechtsVonNullVergroessert.length;i++){	
+				let yTmp = (-funktionenListe[k].punkteRechtsVonNullVergroessert[i].y);
 				for(let j=0;j<funktionenListe[k].polstellen.length;j++){
+					
 					if(xOld<funktionenListe[k].polstellen[j]&&funktionenListe[k].punkteRechtsVonNull[i].x>funktionenListe[k].polstellen[j]){
 						canvasContext.stroke();
 						canvasContext.beginPath();
 					}
+					
+					if(i<funktionenListe[k].punkteRechtsVonNull.length-1){
+						if(funktionenListe[k].punkteRechtsVonNull[i].x<funktionenListe[k].polstellen[j] && funktionenListe[k].punkteRechtsVonNull[i+1].x>funktionenListe[k].polstellen[j]){
+							if((-funktionenListe[k].punkteRechtsVonNull[i].y)<0){
+								canvasContext.lineTo(funktionenListe[k].punkteRechtsVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
+							}
+							else if((-funktionenListe[k].punkteRechtsVonNull[i].y)>0){
+								canvasContext.lineTo(funktionenListe[k].punkteRechtsVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+							}
+							
+						}
+					}
+					
+					if(i>1){
+						if(funktionenListe[k].punkteRechtsVonNull[i-1].x<funktionenListe[k].polstellen[j] && funktionenListe[k].punkteRechtsVonNull[i].x>funktionenListe[k].polstellen[j]){
+							if((-funktionenListe[k].punkteRechtsVonNull[i].y)<0){
+								canvasContext.lineTo(funktionenListe[k].punkteRechtsVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
+							}
+							else if((-funktionenListe[k].punkteRechtsVonNull[i].y)>0){
+								canvasContext.lineTo(funktionenListe[k].punkteRechtsVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+							}
+						}
+					}
+					
 				}
 				
-				DrawLineOhneVergroeserung(funktionenListe[k].punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].punkteRechtsVonNullVergroessert[i].y));	
+				DrawLineOhneVergroeserung(funktionenListe[k].punkteRechtsVonNullVergroessert[i].x, yTmp, false);	
 				xOld=funktionenListe[k].punkteRechtsVonNull[i].x;
 			}
 			xOld=0;
@@ -1253,13 +1347,38 @@ function zeichneFunktionsgraphen(){
 			canvasContext.beginPath();
 			canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionen[k].r) + ',' + String(farbenArrayFunktionen[k].g) + ',' + String(farbenArrayFunktionen[k].b) + ',' + String(farbenArrayFunktionen[k].a) + ')';
 			for(let i=0;i<funktionenListe[k].punkteLinksVonNullVergroessert.length;i++){			
+				let yTmp = (-funktionenListe[k].punkteLinksVonNullVergroessert[i].y);
 				for(let j=0;j<funktionenListe[k].polstellen.length;j++){
 					if(xOld>funktionenListe[k].polstellen[j]&&funktionenListe[k].punkteLinksVonNull[i].x<funktionenListe[k].polstellen[j]){
 						canvasContext.stroke();
 						canvasContext.beginPath();
 					}
+					
+					if(i<funktionenListe[k].punkteLinksVonNull.length-2){
+						if(funktionenListe[k].punkteLinksVonNull[i].x>funktionenListe[k].polstellen[j] && funktionenListe[k].punkteLinksVonNull[i+1].x<funktionenListe[k].polstellen[j]){
+							if((-funktionenListe[k].punkteLinksVonNull[i].y)<0){
+								canvasContext.lineTo(funktionenListe[k].punkteLinksVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
+							}
+							else if((-funktionenListe[k].punkteLinksVonNull[i].y)>0){
+								canvasContext.lineTo(funktionenListe[k].punkteLinksVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+							}
+							
+						}
+					}
+					
+					if(i>1){
+						if(funktionenListe[k].punkteLinksVonNull[i-1].x>funktionenListe[k].polstellen[j] && funktionenListe[k].punkteLinksVonNull[i].x<funktionenListe[k].polstellen[j]){
+							if((-funktionenListe[k].punkteLinksVonNull[i].y)<0){
+								canvasContext.lineTo(funktionenListe[k].punkteLinksVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
+							}
+							else if((-funktionenListe[k].punkteLinksVonNull[i].y)>0){
+								canvasContext.lineTo(funktionenListe[k].punkteLinksVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+							}
+						}
+					}
+					
 				}
-				DrawLineOhneVergroeserung(funktionenListe[k].punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].punkteLinksVonNullVergroessert[i].y));	
+				DrawLineOhneVergroeserung(funktionenListe[k].punkteLinksVonNullVergroessert[i].x, yTmp, false);	
 				xOld=funktionenListe[k].punkteLinksVonNull[i].x;
 			}
 			canvasContext.stroke();
@@ -1270,13 +1389,13 @@ function zeichneFunktionsgraphen(){
 					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenErsteAbleitung[k].r) + ',' + String(farbenArrayFunktionenErsteAbleitung[k].g) + ',' + String(farbenArrayFunktionenErsteAbleitung[k].b) + ',' + String(farbenArrayFunktionenErsteAbleitung[k].a) + ')';
 					
 					for(let i=0;i<funktionenListe[k].ersteAbleitung.punkteRechtsVonNullVergroessert.length;i++){				
-						DrawLineOhneVergroeserung(funktionenListe[k].ersteAbleitung.punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].ersteAbleitung.punkteRechtsVonNullVergroessert[i].y));		
+						DrawLineOhneVergroeserung(funktionenListe[k].ersteAbleitung.punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].ersteAbleitung.punkteRechtsVonNullVergroessert[i].y), false);		
 					}
 					canvasContext.stroke();
 					canvasContext.beginPath();
 					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenErsteAbleitung[k].r) + ',' + String(farbenArrayFunktionenErsteAbleitung[k].g) + ',' + String(farbenArrayFunktionenErsteAbleitung[k].b) + ',' + String(farbenArrayFunktionenErsteAbleitung[k].a) + ')';
 					for(let i=0;i<funktionenListe[k].ersteAbleitung.punkteLinksVonNullVergroessert.length;i++){			
-						DrawLineOhneVergroeserung(funktionenListe[k].ersteAbleitung.punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].ersteAbleitung.punkteLinksVonNullVergroessert[i].y));			
+						DrawLineOhneVergroeserung(funktionenListe[k].ersteAbleitung.punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].ersteAbleitung.punkteLinksVonNullVergroessert[i].y), false);			
 					}
 					canvasContext.stroke();
 			
@@ -1286,13 +1405,13 @@ function zeichneFunktionsgraphen(){
 					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenZweiteAbleitung[k].r) + ',' + String(farbenArrayFunktionenZweiteAbleitung[k].g) + ',' + String(farbenArrayFunktionenZweiteAbleitung[k].b) + ',' + String(farbenArrayFunktionenZweiteAbleitung[k].a) + ')';
 					
 					for(let i=0;i<funktionenListe[k].zweiteAbleitung.punkteRechtsVonNullVergroessert.length;i++){				
-						DrawLineOhneVergroeserung(funktionenListe[k].zweiteAbleitung.punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].zweiteAbleitung.punkteRechtsVonNullVergroessert[i].y));		
+						DrawLineOhneVergroeserung(funktionenListe[k].zweiteAbleitung.punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].zweiteAbleitung.punkteRechtsVonNullVergroessert[i].y), false);		
 					}
 					canvasContext.stroke();
 					canvasContext.beginPath();
 					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenZweiteAbleitung[k].r) + ',' + String(farbenArrayFunktionenZweiteAbleitung[k].g) + ',' + String(farbenArrayFunktionenZweiteAbleitung[k].b) + ',' + String(farbenArrayFunktionenZweiteAbleitung[k].a) + ')';
 					for(let i=0;i<funktionenListe[k].zweiteAbleitung.punkteLinksVonNullVergroessert.length;i++){			
-						DrawLineOhneVergroeserung(funktionenListe[k].zweiteAbleitung.punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].zweiteAbleitung.punkteLinksVonNullVergroessert[i].y));			
+						DrawLineOhneVergroeserung(funktionenListe[k].zweiteAbleitung.punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].zweiteAbleitung.punkteLinksVonNullVergroessert[i].y), false);			
 					}
 					canvasContext.stroke();
 			
@@ -1302,13 +1421,13 @@ function zeichneFunktionsgraphen(){
 					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenDritteAbleitung[k].r) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].g) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].b) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].a) + ')';
 					
 					for(let i=0;i<funktionenListe[k].dritteAbleitung.punkteRechtsVonNullVergroessert.length;i++){				
-						DrawLineOhneVergroeserung(funktionenListe[k].dritteAbleitung.punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].dritteAbleitung.punkteRechtsVonNullVergroessert[i].y));		
+						DrawLineOhneVergroeserung(funktionenListe[k].dritteAbleitung.punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].dritteAbleitung.punkteRechtsVonNullVergroessert[i].y), false);		
 					}
 					canvasContext.stroke();
 					canvasContext.beginPath();
 					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenDritteAbleitung[k].r) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].g) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].b) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].a) + ')';
 					for(let i=0;i<funktionenListe[k].dritteAbleitung.punkteLinksVonNullVergroessert.length;i++){			
-						DrawLineOhneVergroeserung(funktionenListe[k].dritteAbleitung.punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].dritteAbleitung.punkteLinksVonNullVergroessert[i].y));			
+						DrawLineOhneVergroeserung(funktionenListe[k].dritteAbleitung.punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].dritteAbleitung.punkteLinksVonNullVergroessert[i].y),false);			
 					}
 					canvasContext.stroke();
 			
@@ -1322,17 +1441,82 @@ function zeichneFunktionsgraphen(){
 		canvasContext.beginPath();
 		canvasContext.strokeStyle = 'rgba(' + String(farbeVorschau.r) + ',' + String(farbeVorschau.g) + ',' + String(farbeVorschau.b) + ',' + String(farbeVorschau.a) + ')';
 		
-		
+		let xOld = 0;
 		for(let i=0;i<funktionenVorschau.punkteRechtsVonNullVergroessert.length;i++){				
-			DrawLineOhneVergroeserung(funktionenVorschau.punkteRechtsVonNullVergroessert[i].x, (-funktionenVorschau.punkteRechtsVonNullVergroessert[i].y));		
+			let yTmp = (-funktionenVorschau.punkteRechtsVonNullVergroessert[i].y);
+			for(let j=0;j<funktionenVorschau.polstellen.length;j++){
+				
+				if(xOld<funktionenVorschau.polstellen[j]&&funktionenVorschau.punkteRechtsVonNull[i].x>funktionenVorschau.polstellen[j]){
+					canvasContext.stroke();
+					canvasContext.beginPath();
+				}
+				
+				if(i<funktionenVorschau.punkteRechtsVonNull.length-1){
+					if(funktionenVorschau.punkteRechtsVonNull[i].x<funktionenVorschau.polstellen[j] && funktionenVorschau.punkteRechtsVonNull[i+1].x>funktionenVorschau.polstellen[j]){
+						if((-funktionenVorschau.punkteRechtsVonNull[i].y)<0){
+							canvasContext.lineTo(funktionenVorschau.punkteRechtsVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
+						}
+						else if((-funktionenVorschau.punkteRechtsVonNull[i].y)>0){
+							canvasContext.lineTo(funktionenVorschau.punkteRechtsVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+						}
+						
+					}
+				}
+				
+				if(i>1){
+					if(funktionenVorschau.punkteRechtsVonNull[i-1].x<funktionenVorschau.polstellen[j] && funktionenVorschau.punkteRechtsVonNull[i].x>funktionenVorschau.polstellen[j]){
+						if((-funktionenVorschau.punkteRechtsVonNull[i].y)<0){
+							canvasContext.lineTo(funktionenVorschau.punkteRechtsVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
+						}
+						else if((-funktionenVorschau.punkteRechtsVonNull[i].y)>0){
+							canvasContext.lineTo(funktionenVorschau.punkteRechtsVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+						}
+					}
+				}
+				
+			}
+			DrawLineOhneVergroeserung(funktionenVorschau.punkteRechtsVonNullVergroessert[i].x, yTmp, false);
+			xOld=funktionenVorschau.punkteRechtsVonNull[i].x;
 		}
 		canvasContext.stroke();
 		canvasContext.beginPath();
 		canvasContext.strokeStyle = 'rgba(' + String(farbeVorschau.r) + ',' + String(farbeVorschau.g) + ',' + String(farbeVorschau.b) + ',' + String(farbeVorschau.a) + ')';
 
-		
-		for(let i=0;i<funktionenVorschau.punkteLinksVonNullVergroessert.length;i++){		
-				DrawLineOhneVergroeserung(funktionenVorschau.punkteLinksVonNullVergroessert[i].x, (-funktionenVorschau.punkteLinksVonNullVergroessert[i].y));							
+		xOld=0;
+		for(let i=0;i<funktionenVorschau.punkteLinksVonNullVergroessert.length;i++){	
+			let yTmp = (-funktionenVorschau.punkteLinksVonNullVergroessert[i].y);
+			for(let j=0;j<funktionenVorschau.polstellen.length;j++){
+				if(xOld>funktionenVorschau.polstellen[j]&&funktionenVorschau.punkteLinksVonNull[i].x<funktionenVorschau.polstellen[j]){
+					canvasContext.stroke();
+					canvasContext.beginPath();
+				}
+				
+				if(i<funktionenVorschau.punkteLinksVonNull.length-2){
+					if(funktionenVorschau.punkteLinksVonNull[i].x>funktionenVorschau.polstellen[j] && funktionenVorschau.punkteLinksVonNull[i+1].x<funktionenVorschau.polstellen[j]){
+						if((-funktionenVorschau.punkteLinksVonNull[i].y)<0){
+							canvasContext.lineTo(funktionenVorschau.punkteLinksVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
+						}
+						else if((-funktionenVorschau.punkteLinksVonNull[i].y)>0){
+							canvasContext.lineTo(funktionenVorschau.punkteLinksVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+						}
+						
+					}
+				}
+				
+				if(i>1){
+					if(funktionenVorschau.punkteLinksVonNull[i-1].x>funktionenVorschau.polstellen[j] && funktionenVorschau.punkteLinksVonNull[i].x<funktionenVorschau.polstellen[j]){
+						if((-funktionenVorschau.punkteLinksVonNull[i].y)<0){
+							canvasContext.lineTo(funktionenVorschau.punkteLinksVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), -10);
+						}
+						else if((-funktionenVorschau.punkteLinksVonNull[i].y)>0){
+							canvasContext.lineTo(funktionenVorschau.punkteLinksVonNullVergroessert[i].x+verschiebungDurchBenutzer.x+(canvas.width / 2), 10 + canvas.height);
+						}
+					}
+				}
+				
+			}
+			DrawLineOhneVergroeserung(funktionenVorschau.punkteLinksVonNullVergroessert[i].x, yTmp, false);		
+			xOld=funktionenVorschau.punkteLinksVonNull[i].x;
 		}
 		canvasContext.stroke();
 	}
@@ -1407,7 +1591,8 @@ function animate() {
 	
 	
 
-	checkEingabe();
+//	checkEingabe();
+	checkEingabeV2();
 	zeichneFunktionsgraphen();
 	zeichneInfoLeiste();
 	zeichneLeftNavBarButton();//todo button animation läuft weiter wenn maus canvas verlassen hat

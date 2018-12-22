@@ -176,7 +176,7 @@ function DrawLine(x1, y1) {
 	canvasContext.lineTo(x1, y1);
 }
 
-function DrawLineOhneVergroeserung(x1, y1) {
+function DrawLineOhneVergroeserung(x1, y1, höheAbschneiden) {
 //	Rotieren(x1, y1);
 //	Rotieren(x2, y2);
 //	x1 *= vergroesserung;
@@ -189,15 +189,18 @@ function DrawLineOhneVergroeserung(x1, y1) {
 		return;
 	}
 
-	if(y1<0||y1>canvas.height){
-		if(y1<0){
-			y1=0;
-		}if(y1>canvas.height){
-			y1=canvas.height;
+	if(höheAbschneiden){
+		if(y1<0||y1>canvas.height){
+			if(y1<0){
+				y1=-10;
+			}if(y1>canvas.height){
+				y1=10+canvas.height;
+			}
+			canvasContext.moveTo(x1, y1);
+			return;
 		}
-		canvasContext.moveTo(x1, y1);
-		return;
 	}
+
 	
 	canvasContext.lineTo(x1, y1);
 }

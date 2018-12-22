@@ -134,6 +134,12 @@ function funktionAbleitenGebrochenRational(funktion) {
 		fStrichX.inhaltKnotenVektor = funktionAbleiten(funktion.inhaltKnotenVektor);
 		fStrichX.inhaltKnotenString = funktionVectorToString(fStrichX.inhaltKnotenVektor, false);
 		return fStrichX;
+	}else if ((funktion.inhaltKnotenSymbol === 'x'||funktion.inhaltKnotenSymbol === 'X')&&funktion.linkesChild==null&&funktion.rechtesChild==null){
+		let fStrichX = new FunktionAlsVektorSyntaxbaum();
+		fStrichX.inhaltKnotenSymbol = funktion.inhaltKnotenSymbol;
+		fStrichX.inhaltKnotenVektor = funktionAbleiten(funktion.inhaltKnotenVektor);
+		fStrichX.inhaltKnotenString = funktionVectorToString(fStrichX.inhaltKnotenVektor, false);
+		return fStrichX;
 	}
 }
 

@@ -330,6 +330,19 @@ function parseFuntionBuffer(neuerFunktionSyntaxbaum, functionAlsString) {
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Splittet Strings auf, um den elementen im Syntaxbaum den teilstring des Polynoms speichern zu können
 //z.B. (x^3+3)/(x^2-4)
 //           /
@@ -362,13 +375,12 @@ function stringSplitten( i, rechteGrenze, klammerLevel, functionAlsStringLokal, 
 function entferneUnnoetigeKlammern(functionAlsStringLokal) {
 	let rechteGrenze = functionAlsStringLokal.length;
 	let hatKlammern = true;
-
-
 	let klammerZaehlerAuf = 0;
 	let klammerZaehlerZu = 0;
 	let klammerLevel = 0;
 	let indexErsteKlammerAuf = -1;
 	let indexErsteKlammerZu = -1;
+	let klammerZuGefundenUndNichtAmEnde = false;
 	
 	klammerCheck(functionAlsStringLokal, false);
 
@@ -386,29 +398,26 @@ function entferneUnnoetigeKlammern(functionAlsStringLokal) {
 		if (hatKlammern) {
 			for (let i = 0; i < rechteGrenze; i++) {
 				if (functionAlsStringLokal[i] == '(') {
-					if (indexErsteKlammerAuf == -1) { // todo (x^3+2)/(x^2+4) passt
+					if (indexErsteKlammerAuf == -1) { // TODO (x^3+2)/(x^2+4) passt
 						indexErsteKlammerAuf = i;	// ((x^3+2)+4*x^3) 
 					}								// (x^3+2+(4*x^3))
 					klammerZaehlerAuf++;			// (x^3+2+4*x^2) passt
 					klammerLevel++;					// x^3*(2*x^3)+4
 				}									// x^3*((x^3+2)+4*x^3) 
 				if (functionAlsStringLokal[i] == ')') {	// ((x^3+2)+4*x^3)*3*x
-					if (indexErsteKlammerZu == -1) {//(x^2+3)/(x^3-2)/(x^4+2)... (produkt regel, summenregel)
-						indexErsteKlammerZu = i;
+					if(i!=functionAlsStringLokal.length-1&&klammerLevel===1){
+						klammerZuGefundenUndNichtAmEnde = true;
 					}
+					
+					//if (indexLetzteKlammerZu == -1) {//(x^2+3)/(x^3-2)/(x^4+2)... (produkt regel, summenregel)
+					indexLetzteKlammerZu = i;		//(((x^20+30*x)))passt
+					//}
 					klammerZaehlerZu++;
 					klammerLevel--;
 				}
-				/*if (klammerZaehlerAuf == klammerZaehlerZu && klammerLevel == 0 && klammerZaehlerAuf == 1 && klammerZaehlerZu == 1) {
-					int g = 0;
-					for (int j = indexErsteKlammerAuf+1; j < indexErsteKlammerZu; j++) {
-						functionAlsStringOhneKlammern[g++] = functionAlsStringLokal[j];
-					}
-					functionAlsStringOhneKlammern[g++] = 0;
-					break;
-				}*/
-				if (klammerZaehlerAuf == klammerZaehlerZu && klammerLevel == 0 && indexErsteKlammerAuf == 0 && indexErsteKlammerZu == rechteGrenze - 1) {
-					functionAlsStringOhneKlammern = functionAlsStringLokal.substring(indexErsteKlammerAuf + 1,indexErsteKlammerZu);
+
+				if (klammerZaehlerAuf == klammerZaehlerZu && klammerLevel == 0 && indexErsteKlammerAuf == 0 && indexLetzteKlammerZu == rechteGrenze - 1 && !klammerZuGefundenUndNichtAmEnde) {
+					functionAlsStringOhneKlammern = functionAlsStringLokal.substring(indexErsteKlammerAuf + 1,indexLetzteKlammerZu);
 					hatteUnnoetigeKlammern = true;
 				}
 
@@ -418,28 +427,15 @@ function entferneUnnoetigeKlammern(functionAlsStringLokal) {
 			return functionAlsStringLokal;
 		}
 	}
-	/*for (int i = 0; i < rechteGrenze; i++) { 
-		if (functionAlsString[i] == '(') {
-			if (indexErsteKlammerAuf - 1) { // (x^3+2)/(x^2+4) passt
-				indexErsteKlammerAuf = i;	// ((x^3+2)+4*x^3) 
-			}								// (x^3+2+(4*x^3))
-			klammerZaehlerAuf++;			// (x^3+2+4*x^2) passt
-			klammerLevel++;					// x^3*(2*x^3)+4
-		}									// x^3*((x^3+2)+4*x^3) 
-		if (functionAlsString[i] == ')') {	// ((x^3+2)+4*x^3)*3*x
-			if (indexErsteKlammerZu - 1) {
-				indexErsteKlammerZu = i;
-			}
-			klammerZaehlerZu++;
-			klammerLevel--;
-		}
-		if (klammerZaehlerAuf == klammerZaehlerZu && klammerLevel == 0 && klammerZaehlerAuf == 1 && klammerZaehlerZu == 1) {
-			int g = 0;
-			for (int j = indexErsteKlammerAuf; j < indexErsteKlammerZu; j++) {
-				functionAlsStringOhneKlammern[g++] = functionAlsStringLokal[j];
-			}
-		}
-	}*/
+
+// (x^3+2)/(x^2+4) passt
+// ((x^3+2)+4*x^3) 
+// (x^3+2+(4*x^3))
+// (x^3+2+4*x^2) passt
+// x^3*(2*x^3)+4
+// x^3*((x^3+2)+4*x^3) 
+// ((x^3+2)+4*x^3)*3*x
+
 	if (hatteUnnoetigeKlammern) {
 		return functionAlsStringOhneKlammern;
 	} else {
@@ -1072,6 +1068,791 @@ function ausSyntaxbaumVektorErstellen(aktuellerKnoten,  functionAlsVectorLokal) 
 				}	
 			}
 			functionAlsVectorLokal[0] -= parseInt(aktuellerKnoten.rechtesChild.inhaltKnoten);
+			functionAlsVectorLokal[1] += 1;
+		}
+	}
+	return functionAlsVectorLokal;
+}
+
+
+function convertiereStringZuVerketteteListe(string){
+	let liste = [];
+	for(let i=0;i<string.length;i++){
+		if(string[i]==="x"||string[i]==="X"||string[i]==="^"||string[i]==="+"||string[i]==="-"||string[i]==="*"||string[i]==="/"||string[i]==="("||string[i]===")"){
+			let neuesElement  = new StringAlsVerketteteListeObjekt();	
+			neuesElement.inhalt = string[i];
+			neuesElement.indexVon = i;
+			neuesElement.indexBis = i;
+			if(liste.length!=0){
+				neuesElement.prev = liste[liste.length-1];
+				liste[liste.length-1].next = neuesElement;
+			}
+			liste.push(neuesElement);
+		
+		}else if(!isNaN(parseInt(string[i]))){
+			let j=0;		
+			let kommaZahl = false;
+			while(!isNaN(parseInt(string[i+j]))){
+				j++;
+				if(string[i+j]==="."||string[i+j]===","){
+					j++;
+					kommaZahl=true;
+				}
+			}
+			let tmpString = string.substring(i,i+j);
+			tmpString = tmpString.replace(/,/g,".");
+			if(tmpString[tmpString.length-1]==="."){
+				tmpString+="0";
+			}
+		
+			let neuesElement  = new StringAlsVerketteteListeObjekt();	
+			neuesElement.indexVon = i;
+			neuesElement.indexBis = i+j-1;
+			if(kommaZahl){
+				neuesElement.inhalt = parseFloat(tmpString);
+			}else{
+				neuesElement.inhalt = parseInt(tmpString);
+			}
+			
+			if(liste.length!=0){
+				neuesElement.prev = liste[liste.length-1];
+				liste[liste.length-1].next = neuesElement;
+			}
+			liste.push(neuesElement);
+			i=i+j-1;
+		}else if((string[i]==="l"&&string[i+1]==="n"&&string[i+2]==="(")){
+			let tmpString = string.substring(i,i+2);
+		
+			let neuesElement  = new StringAlsVerketteteListeObjekt();	
+			neuesElement.indexVon = i;
+			neuesElement.indexBis = i+2;
+			neuesElement.inhalt = parseInt(tmpString);
+			if(liste.length!=0){
+				neuesElement.prev = liste[liste.length-1];
+				liste[liste.length-1].next = neuesElement;
+			}
+			liste.push(neuesElement);
+			i=i+2;
+		}else if((string[i]==="s"&&string[i+1]==="i"&&string[i+2]==="n"&&string[i+3]==="(")||(string[i]==="c"&&string[i+1]==="o"&&string[i+2]==="s"&&string[i+3]==="(")||(string[i]==="t"&&string[i+1]==="a"&&string[i+2]==="n"&&string[i+3]==="(")){
+			let tmpString = string.substring(i,i+3);
+		
+			let neuesElement  = new StringAlsVerketteteListeObjekt();	
+			neuesElement.indexVon = i;
+			neuesElement.indexBis = i+3;
+			neuesElement.inhalt = parseInt(tmpString);
+			if(liste.length!=0){
+				neuesElement.prev = liste[liste.length-1];
+				liste[liste.length-1].next = neuesElement;
+			}
+			liste.push(neuesElement);
+			i=i+3;
+		}else if(string[i]==="s"&&string[i+1]==="q"&&string[i+2]==="r"&&string[i+3]==="t"&&string[i+4]==="("){
+			let tmpString = string.substring(i,i+4);
+		
+			let neuesElement  = new StringAlsVerketteteListeObjekt();	
+			neuesElement.indexVon = i;
+			neuesElement.indexBis = i+4;
+			neuesElement.inhalt = parseInt(tmpString);
+			if(liste.length!=0){
+				neuesElement.prev = liste[liste.length-1];
+				liste[liste.length-1].next = neuesElement;
+			}
+			liste.push(neuesElement);
+			i=i+4;
+		}
+	}
+	return liste;
+}
+
+
+
+function erstelleSyntaxBaumV2(neuerFunktionSyntaxbaumGebrochenRational, funktionAlsString){
+	let stringOld = "";
+	let stringTmp = funktionAlsString;
+	let klammernEntfernt = true;
+	while(klammernEntfernt){ //"rekursiv" klammern entfernen, also so oft wie halt klammern drin sind 
+		stringOld = entferneUnnoetigeKlammern(stringTmp);
+		if(stringOld!=stringTmp){
+			stringTmp=stringOld;
+		}else if(stringOld===stringTmp){
+			klammernEntfernt=false;
+		}
+	}
+	functionAlsString = stringTmp;
+	let functionAlsListe = convertiereStringZuVerketteteListe(functionAlsString);
+	
+	let gefunden = false;
+	let vorzeichenLevel = 0;
+	let rechteGrenze = functionAlsString.length;
+	let klammerZaehlerAuf = 0;
+	let klammerZaehlerZu = 0;
+	let klammerLevel = 0;
+	let hatKlammern = false;
+	
+	hatKlammern = klammerCheck(functionAlsString, true);
+	
+	while (!gefunden) {
+		if (rechteGrenze === 0) {
+			neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = functionAlsString[0];
+		}
+		let aktuellesListenElement = null;
+		for (let i = 0; i < rechteGrenze; i++) { // ^ , vorzeichen, * /, + -
+			aktuellesListenElement = aktuellesListenElementSuchen(i,functionAlsListe);
+			if(aktuellesListenElement!=null){
+				i=aktuellesListenElement.indexBis;
+			}
+			if (functionAlsString[i] === '(') {
+				klammerZaehlerAuf++;
+				klammerLevel++;
+			}
+			if (functionAlsString[i] === ')') {
+				klammerZaehlerZu++;
+				klammerLevel--;
+			}
+			if ((klammerZaehlerAuf === klammerZaehlerZu) && klammerLevel === 0) {
+				if (vorzeichenLevel === 0) {
+					if (functionAlsString[i] === '+' || functionAlsString[i] === '-') {
+						if (i === 0) {
+
+						}
+						else if (functionAlsString[i - 1] === '+' || functionAlsString[i - 1] === '-' || functionAlsString[i - 1] === '*' || functionAlsString[i - 1] === '/') {
+
+						}
+						else {
+							gefunden = true;
+							
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+							
+							if (hatKlammern) {
+								let substringLinks="";
+								let substringRechts="";
+								
+								substringLinks = functionAlsString.substring(klammerLevel === 0 ? 0 : 1,i);
+								substringRechts = functionAlsString.substring(i + 1, klammerLevel === 0 ? rechteGrenze : rechteGrenze - 1);
+
+								linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+								rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+							}
+							else {
+								let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
+								neuerFunktionSyntaxbaum = parseFuntionBufferV2(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+								let vectorKnoten=[];
+								vectorKnoten = ausSyntaxbaumVektorErstellenV2(neuerFunktionSyntaxbaum, vectorKnoten);
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenVektor=vectorKnoten;
+							}
+							i = rechteGrenze;
+
+						}
+					}
+				}
+				else if (vorzeichenLevel === 1) {
+					if (functionAlsString[i] === '*' || functionAlsString[i] === '/') {
+						gefunden = true;
+						
+
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+
+						if (hatKlammern) {
+						
+							let substringLinks="";
+							let substringRechts="";
+
+							
+							substringLinks = functionAlsString.substring(functionAlsString[0] === '(' ? 1 : 0, (functionAlsString[i-1] === ')' ? i - 1 : i));
+							substringRechts = functionAlsString.substring(functionAlsString[i + 1] === '(' ? i + 2 : i + 1, functionAlsString[rechteGrenze-1] === ')' ? rechteGrenze - 1 : rechteGrenze);
+
+							linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks); //wenn 2 klammern gefunden, vorzeichenlevel wieder auf 0 für in der klammer
+							rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+						}
+						else {
+							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
+							neuerFunktionSyntaxbaum = parseFuntionBufferV2(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+							let vectorKnoten=[];
+							vectorKnoten = ausSyntaxbaumVektorErstellenV2(neuerFunktionSyntaxbaum, vectorKnoten);
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenVektor=vectorKnoten;
+						}
+						i = rechteGrenze;
+					}
+				}
+				else if (vorzeichenLevel === 2) {
+					if (functionAlsString[i] === '^') {
+						gefunden = true;
+						
+
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+
+						if (hatKlammern) {
+							let substringLinks = "";
+							let substringRechts = "";
+							
+							substringLinks = functionAlsString.substring(klammerLevel === 0 ? 0 : 1,i);
+							substringRechts = functionAlsString.substring(i + 1,klammerLevel === 0 ? rechteGrenze : rechteGrenze - 1);
+
+							linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+							rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+						}else {
+							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
+							neuerFunktionSyntaxbaum = parseFuntionBufferV2(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+							let vectorKnoten=[];
+							vectorKnoten = ausSyntaxbaumVektorErstellenV2(neuerFunktionSyntaxbaum, vectorKnoten);
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenVektor=vectorKnoten;
+						}
+						i = rechteGrenze;
+					}
+				}
+				else if (vorzeichenLevel === 3) {
+					
+					//if ((parseInt(functionAlsString[i]) >= 0 && parseInt(functionAlsString[i]) <= 9) || functionAlsString[i] === 'x' || functionAlsString[i] === 'X') {
+					if (!isNaN(aktuellesListenElement.inhalt) || functionAlsString[i] === 'x' || functionAlsString[i] === 'X') {
+						gefunden = true;
+						
+
+						//neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = functionAlsString[i];
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+						let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
+						neuerFunktionSyntaxbaum = parseFuntionBufferV2(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+						let vectorKnoten=[];
+						vectorKnoten = ausSyntaxbaumVektorErstellenV2(neuerFunktionSyntaxbaum, vectorKnoten);
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenVektor=vectorKnoten;
+					}
+				}
+				if (vorzeichenLevel > 3) {
+					return;
+				}
+			}
+		}
+		vorzeichenLevel++;
+	}
+	
+}
+
+
+function linkerPartV2(index, vorzeichenLevel, linkeGrenze, rechteGrenze, aktuellerKnoten, functionAlsStringLokal, functionAlsListe) {
+	if (index === 0) {
+		return null;
+	}
+	let gefunden = false;
+	while (!gefunden) {
+		let aktuellesListenElement=null;
+		for (let i = rechteGrenze - 1; i >= linkeGrenze; i--) {
+			aktuellesListenElement = aktuellesListenElementSuchen(i,functionAlsListe);
+			if(aktuellesListenElement!=null){
+				i=aktuellesListenElement.indexVon;//x^3+2,5*x-2,5
+			}
+			if (vorzeichenLevel === 0) {
+				if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
+					if (i === 0) {
+
+					}
+					else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
+
+					}
+					else {
+						gefunden = true;
+						let neuerLinkerKnoten = new FunktionSyntaxbaum();
+						neuerLinkerKnoten.parent=aktuellerKnoten;
+						neuerLinkerKnoten.inhaltKnoten=aktuellesListenElement.inhalt;
+						neuerLinkerKnoten.index=i;
+						aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+						
+						neuerLinkerKnoten.linkesChild = linkerPartV2(i, vorzeichenLevel, linkeGrenze, aktuellerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal, functionAlsListe);
+						neuerLinkerKnoten.rechtesChild = rechterPartV2(i, vorzeichenLevel, aktuellerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal, functionAlsListe);
+						i = 0;
+						return neuerLinkerKnoten;
+					}
+				}
+			}
+			else if (vorzeichenLevel === 1) {
+				if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
+					gefunden = true;
+					let neuerLinkerKnoten = new FunktionSyntaxbaum();
+					neuerLinkerKnoten.parent=aktuellerKnoten;
+					neuerLinkerKnoten.inhaltKnoten=aktuellesListenElement.inhalt;
+					neuerLinkerKnoten.index=i;
+					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+					
+					neuerLinkerKnoten.linkesChild = linkerPartV2(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal, functionAlsListe);
+					neuerLinkerKnoten.rechtesChild = rechterPartV2(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal, functionAlsListe);
+					i = 0;
+					return neuerLinkerKnoten;
+				}
+			}
+			else if (vorzeichenLevel === 2) {
+				if (functionAlsStringLokal[i] === '^') {
+					gefunden = true;
+					let neuerLinkerKnoten = new FunktionSyntaxbaum();
+					neuerLinkerKnoten.parent=aktuellerKnoten;
+					neuerLinkerKnoten.inhaltKnoten=aktuellesListenElement.inhalt;
+					neuerLinkerKnoten.index=i;
+					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+					
+					neuerLinkerKnoten.linkesChild = linkerPartV2(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal, functionAlsListe);
+					neuerLinkerKnoten.rechtesChild = rechterPartV2(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal, functionAlsListe);
+					i = 0;
+					return neuerLinkerKnoten;
+				}
+			}
+			else if (vorzeichenLevel === 3) {
+				//if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+				if (!isNaN(aktuellesListenElement.inhalt) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+					gefunden = true;
+					let neuerLinkerKnoten = new FunktionSyntaxbaum();
+					neuerLinkerKnoten.parent=aktuellerKnoten;
+					if(!isNaN(aktuellesListenElement.inhalt)){
+						
+						neuerLinkerKnoten.inhaltKnoten=aktuellesListenElement.inhalt;
+						neuerLinkerKnoten.index=i;
+						if(linkeGrenze<aktuellesListenElement.indexBis){
+							i=aktuellesListenElement.indexBis;
+							neuerLinkerKnoten.index=i;
+							linkeGrenze = aktuellesListenElement.indexBis;
+						}
+						
+					}else{
+						i=aktuellesListenElement.indexBis;
+						neuerLinkerKnoten.index=i;
+						neuerLinkerKnoten.inhaltKnoten=aktuellesListenElement.inhalt;
+					}
+
+					
+					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+					
+					neuerLinkerKnoten.linkesChild = linkerPartV2(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal, functionAlsListe);
+					neuerLinkerKnoten.rechtesChild = rechterPartV2(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal, functionAlsListe);
+					i = 0;
+					return neuerLinkerKnoten;
+				}
+			}
+		}
+		if (vorzeichenLevel > 3) {
+			return null;
+		}
+		vorzeichenLevel++;
+	}
+}
+
+//Parst den rechten Part einer ganzrationalen Funktion. Die Blätter eines gebrochenrationalen Polynoms können immer auf ein ganzrationales Polynom reduziert werden
+function rechterPartV2(index, vorzeichenLevel, linkeGrenze, rechteGrenze, aktuellerKnoten, functionAlsStringLokal, functionAlsListe) {
+	if (index === functionAlsStringLokal.length - 1) {
+		return null;
+	}
+	let gefunden = false;
+	while (!gefunden) {
+		let aktuellesListenElement=null;
+		for (let i = linkeGrenze; i <= rechteGrenze; i++) {
+			aktuellesListenElement = aktuellesListenElementSuchen(i,functionAlsListe);
+			if(aktuellesListenElement!=null){
+				i=aktuellesListenElement.indexBis;
+			}
+			if (vorzeichenLevel === 0) {
+				if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
+					if (i === 0) {
+
+					}
+					else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
+
+					}
+					else {
+						gefunden = true;
+						let neuerRechterKnoten = new FunktionSyntaxbaum();
+						neuerRechterKnoten.parent=aktuellerKnoten;
+						neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
+						neuerRechterKnoten.index=i;
+						aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+						
+						neuerRechterKnoten.linkesChild = linkerPartV2(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal, functionAlsListe);
+						neuerRechterKnoten.rechtesChild = rechterPartV2(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal, functionAlsListe);
+						i = functionAlsStringLokal.length;
+						return neuerRechterKnoten;
+					}
+				}
+			}
+			else if (vorzeichenLevel === 1) {
+				if (functionAlsStringLokal[i] === '^') {
+					gefunden = true;
+					let neuerRechterKnoten = new FunktionSyntaxbaum();
+					neuerRechterKnoten.parent=aktuellerKnoten;
+					neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
+					neuerRechterKnoten.index=i;
+					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+					
+					neuerRechterKnoten.linkesChild = linkerPartV2(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal, functionAlsListe);
+					neuerRechterKnoten.rechtesChild = rechterPartV2(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal, functionAlsListe);
+					i = functionAlsStringLokal.length;
+					return neuerRechterKnoten;
+				}
+			}
+			else if (vorzeichenLevel === 2) {
+				if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
+					gefunden = true;
+					let neuerRechterKnoten = new FunktionSyntaxbaum();
+					neuerRechterKnoten.parent=aktuellerKnoten;
+					neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
+					neuerRechterKnoten.index=i;
+					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+					
+					neuerRechterKnoten.linkesChild = linkerPartV2(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal, functionAlsListe);
+					neuerRechterKnoten.rechtesChild = rechterPartV2(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal, functionAlsListe);
+					i = functionAlsStringLokal.length;
+					return neuerRechterKnoten;
+				}
+			}
+			else if (vorzeichenLevel === 3) {
+				//if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+				if (!isNaN(aktuellesListenElement.inhalt) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+					gefunden = true;
+					let neuerRechterKnoten = new FunktionSyntaxbaum();
+					neuerRechterKnoten.parent=aktuellerKnoten;
+					if(!isNaN(aktuellesListenElement.inhalt)){
+						neuerRechterKnoten.inhaltKnoten=aktuellesListenElement.inhalt;
+						i=aktuellesListenElement.indexBis;
+						neuerRechterKnoten.index=i;
+						if(linkeGrenze<aktuellesListenElement.indexBis){
+							linkeGrenze = aktuellesListenElement.indexBis;
+						}
+																	
+					}else{
+						i=aktuellesListenElement.indexBis;
+						neuerRechterKnoten.index=i;
+						neuerRechterKnoten.inhaltKnoten=aktuellesListenElement.inhalt;
+					}
+					
+					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+					
+					neuerRechterKnoten.linkesChild = linkerPartV2(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal, functionAlsListe);
+					neuerRechterKnoten.rechtesChild = rechterPartV2(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal, functionAlsListe);
+					i = functionAlsStringLokal.length;
+					return neuerRechterKnoten;
+				}
+			}
+		}
+		if (vorzeichenLevel > 3) {
+			return null;
+		}
+		vorzeichenLevel++;
+	}
+}
+
+function aktuellesListenElementSuchen(i,functionAlsListe){
+	let aktuellesListenElement = null;
+	for(let j=0;j<eingabeAlsVerketteteListe.length;j++){
+		if(eingabeAlsVerketteteListe[j].indexVon<=i&& eingabeAlsVerketteteListe[j].indexBis>=i){
+			aktuellesListenElement = eingabeAlsVerketteteListe[j];
+			j=functionAlsListe.length;
+		}
+	}
+	return aktuellesListenElement;
+}
+
+//Parst ganzrationale Funktionen zu einem Syntaxbaum aus dem ein Polynom als Vektor erstellt werden kann
+function parseFuntionBufferV2(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe) {
+	let gefunden = false;
+	let vorzeichenLevel = 0;
+	let rechteGrenze = functionAlsString.length;
+	let hatKlammern = false;
+
+	for (let i = 0; i < functionAlsString.length; i++) {
+		if (functionAlsString[i] === '(') {
+			hatKlammern = true;
+		}
+	}
+	while (!gefunden) {
+		if (rechteGrenze === 0) {
+			neuerFunktionSyntaxbaum.inhaltKnoten = aktuellesListenElement;
+			neuerFunktionSyntaxbaum.index=0;
+			
+		}
+		aktuellesListenElement=null;
+		for (let i = 0; i < rechteGrenze; i++) { // ^ , vorzeichen, * /, + -
+			aktuellesListenElement = aktuellesListenElementSuchen(i,functionAlsListe);
+			if(aktuellesListenElement!=null){
+				i=aktuellesListenElement.indexBis;
+			}
+			if (vorzeichenLevel === 0) {
+				if (functionAlsString[i] === '+' || functionAlsString[i] === '-') {
+					if (i === 0) {
+
+					}
+					else if (functionAlsString[i - 1] === '+' || functionAlsString[i - 1] === '-' || functionAlsString[i - 1] === '*' || functionAlsString[i - 1] === '/') {
+
+					}
+					else {
+						gefunden = true;
+						neuerFunktionSyntaxbaum.inhaltKnoten = aktuellesListenElement.inhalt;
+						neuerFunktionSyntaxbaum.index=i;
+						neuerFunktionSyntaxbaum.linkesChild = linkerPartV2(i, 0, 0, i, neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+						neuerFunktionSyntaxbaum.rechtesChild = rechterPartV2(i, 0, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+						i = rechteGrenze;
+						return neuerFunktionSyntaxbaum;
+					}
+				}
+			}
+			else if (vorzeichenLevel === 1) {
+				if (functionAlsString[i] === '*' || functionAlsString[i] === '/') {
+					gefunden = true;
+					neuerFunktionSyntaxbaum.inhaltKnoten = aktuellesListenElement.inhalt;
+					neuerFunktionSyntaxbaum.index=i;
+					neuerFunktionSyntaxbaum.linkesChild = linkerPartV2(i, 1, 0, i, neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+					neuerFunktionSyntaxbaum.rechtesChild = rechterPartV2(i, 1, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+					i = rechteGrenze;
+					return neuerFunktionSyntaxbaum;
+				}
+			}
+			else if (vorzeichenLevel === 2) {
+				if (functionAlsString[i] === '^') {
+					gefunden = true;
+					neuerFunktionSyntaxbaum.inhaltKnoten = aktuellesListenElement.inhalt;
+					neuerFunktionSyntaxbaum.index=i;
+					neuerFunktionSyntaxbaum.linkesChild = linkerPartV2(i, 2, 0, i, neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+					neuerFunktionSyntaxbaum.rechtesChild = rechterPartV2(i, 2, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+					i = rechteGrenze;
+					return neuerFunktionSyntaxbaum;
+				}
+			}
+			else if (vorzeichenLevel === 3) {
+				if (!isNaN(aktuellesListenElement.inhalt) || functionAlsString[i] === 'x' || functionAlsString[i] === 'X') {
+					gefunden = true;
+					neuerFunktionSyntaxbaum.inhaltKnoten = aktuellesListenElement.inhalt;
+					neuerFunktionSyntaxbaum.index=i;
+					neuerFunktionSyntaxbaum.linkesChild = linkerPartV2(i, 2, 0, i, neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+					neuerFunktionSyntaxbaum.rechtesChild = rechterPartV2(i, 2, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+					i = rechteGrenze;
+					return neuerFunktionSyntaxbaum;
+				}
+			}
+		}
+		if (vorzeichenLevel > 3) {
+			return;
+		}
+		vorzeichenLevel++;
+	}
+}
+
+
+
+function ausSyntaxbaumVektorErstellenV2(aktuellerKnoten,  functionAlsVectorLokal) {
+	if (aktuellerKnoten.linkesChild === null && aktuellerKnoten.rechtesChild === null) {
+		if (aktuellerKnoten.inhaltKnoten === 'x' || aktuellerKnoten.inhaltKnoten === 'X') {
+			if (functionAlsVectorLokal.length < 2) {
+				while(functionAlsVectorLokal.length < 2){
+					functionAlsVectorLokal.push(0)
+				}				
+			}
+			functionAlsVectorLokal[1] += 1;
+		}
+		else if (!isNaN(aktuellerKnoten.inhaltKnoten)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.inhaltKnoten;
+		}
+	}
+	if (aktuellerKnoten.linkesChild !== null) {
+		if (aktuellerKnoten.linkesChild.linkesChild !== null) {
+			ausSyntaxbaumVektorErstellenV2(aktuellerKnoten.linkesChild, functionAlsVectorLokal);
+		}
+	}
+	if (aktuellerKnoten.rechtesChild !== null) {
+		if (aktuellerKnoten.rechtesChild.rechtesChild !== null&&(aktuellerKnoten.inhaltKnoten === '+' || aktuellerKnoten.inhaltKnoten === '^' || aktuellerKnoten.inhaltKnoten === '*' )) {
+			ausSyntaxbaumVektorErstellenV2(aktuellerKnoten.rechtesChild, functionAlsVectorLokal);
+		}
+	
+		if (aktuellerKnoten.rechtesChild.rechtesChild !== null && aktuellerKnoten.inhaltKnoten === '-' ) {
+			ausSyntaxbaumVektorErstellenV2(aktuellerKnoten.rechtesChild, functionAlsVectorLokal);
+		}
+	}
+	if (aktuellerKnoten.inhaltKnoten === '^') {
+		if ((aktuellerKnoten.linkesChild.inhaltKnoten === 'x' || aktuellerKnoten.linkesChild.inhaltKnoten === 'X') && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten) ) {
+			let hochZahl = aktuellerKnoten.rechtesChild.inhaltKnoten;
+			if (functionAlsVectorLokal.length < hochZahl + 1) {
+				while(functionAlsVectorLokal.length < hochZahl + 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			let multiplyer = 1.0;
+			if (aktuellerKnoten.parent !== null) {
+				if (aktuellerKnoten.parent.inhaltKnoten === '*' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					multiplyer = aktuellerKnoten.parent.linkesChild.inhaltKnoten;
+				}
+			}
+			let vorzeichen = false;
+			let next = aktuellerKnoten;
+			while (next.parent !== null) {
+				/*if ((next.parent.inhalt === '+'|| next.parent.inhalt === '-') && next.parent.linkesChild === next) {
+					next = next.parent;
+				}
+				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
+					next = next.parent;
+				}*/
+				
+				if ((next.parent.inhaltKnoten === '+' || next.parent.inhaltKnoten === '-') && next.parent.rechtesChild === next) {
+					if (next.parent.inhaltKnoten === '+') {
+						vorzeichen = false;
+						break;
+					}
+					else if (next.parent.inhaltKnoten === '-') {
+						vorzeichen = true;
+						break;
+					}
+				}
+				else {
+					next = next.parent;
+				}
+			}
+			//if (aktuellerKnoten.parent.rechtesChild.inhalt >= '1' && aktuellerKnoten.parent.rechtesChild.inhalt >= '9' && aktuellerKnoten.parent.parent.inhalt === '-') {				
+			if(vorzeichen){
+				functionAlsVectorLokal[hochZahl] -= multiplyer;
+			}
+			else {
+				functionAlsVectorLokal[hochZahl] += multiplyer;
+			}			
+		}
+		
+		
+		else if (!isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten)  && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten) ) {
+			let konstante = Math.pow(aktuellerKnoten.linkesChild.inhaltKnoten, aktuellerKnoten.rechtesChild.inhaltKnoten);
+			let hochZahl = 0;
+			if (functionAlsVectorLokal.length < hochZahl + 1) {
+				functionAlsVectorLokal.push(0);
+			}
+			let multiplyer = 1.0;
+			if (aktuellerKnoten.parent !== null) {
+				if (aktuellerKnoten.parent.inhaltKnoten === '*' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					multiplyer = aktuellerKnoten.parent.linkesChild.inhaltKnoten;
+				}
+			}
+			let vorzeichen = false;
+			let next = aktuellerKnoten;
+			while (next.parent !== null) {
+				/*if ((next.parent.inhalt === '+'|| next.parent.inhalt === '-') && next.parent.linkesChild === next) {
+					next = next.parent;
+				}
+				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
+					next = next.parent;
+				}*/
+				
+				if ((next.parent.inhaltKnoten === '+' || next.parent.inhaltKnoten === '-') && next.parent.rechtesChild === next) {
+					if (next.parent.inhaltKnoten === '+') {
+						vorzeichen = false;
+						break;
+					}
+					else if (next.parent.inhaltKnoten === '-') {
+						vorzeichen = true;
+						break;
+					}
+				}
+				else {
+					next = next.parent;
+				}
+			}
+			//if (aktuellerKnoten.parent.rechtesChild.inhalt >= '1' && aktuellerKnoten.parent.rechtesChild.inhalt >= '9' && aktuellerKnoten.parent.parent.inhalt === '-') {				
+			if(vorzeichen){
+				functionAlsVectorLokal[hochZahl] -= multiplyer*konstante;
+			}
+			else {
+				functionAlsVectorLokal[hochZahl] += multiplyer*konstante;
+			}			
+		}
+	}
+
+	if (aktuellerKnoten.inhaltKnoten === '*') {
+		if ((aktuellerKnoten.rechtesChild.inhaltKnoten === 'x' || aktuellerKnoten.rechtesChild.inhaltKnoten === 'X') && !isNaN(aktuellerKnoten.linkesChild.inhaltKnoten)) {
+
+			if (functionAlsVectorLokal.length < 2) {
+				while(functionAlsVectorLokal.length < 2){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			if (aktuellerKnoten.parent !== null) {
+				let minusGerechnet = false;
+				if (aktuellerKnoten.parent.parent !== null) {
+					if (!isNaN(aktuellerKnoten.parent.rechtesChild.inhaltKnoten) && aktuellerKnoten.parent.parent.inhaltKnoten === '-') {
+						functionAlsVectorLokal[1] -= aktuellerKnoten.linkesChild.inhaltKnoten;
+						minusGerechnet=true;
+					}
+					if (!isNaN(aktuellerKnoten.parent.rechtesChild.inhaltKnoten) && aktuellerKnoten.parent.parent.inhaltKnoten === '+') { //hier könnte noch was falsch sein
+						functionAlsVectorLokal[1] += aktuellerKnoten.linkesChild.inhaltKnoten;
+					}
+				}
+			
+				if (aktuellerKnoten.parent.inhaltKnoten === '+' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					functionAlsVectorLokal[1] += aktuellerKnoten.linkesChild.inhaltKnoten;
+				}else if (aktuellerKnoten.parent.inhaltKnoten === '-' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					functionAlsVectorLokal[1] -= aktuellerKnoten.linkesChild.inhaltKnoten;
+				}else if(!minusGerechnet){
+					functionAlsVectorLokal[1] += aktuellerKnoten.linkesChild.inhaltKnoten;
+				}
+			}
+			else {
+				functionAlsVectorLokal[1] += aktuellerKnoten.linkesChild.inhaltKnoten;
+			}			
+		}
+	}
+	if (aktuellerKnoten.inhaltKnoten === '+') {
+		if (aktuellerKnoten.linkesChild.inhaltKnoten === '^' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.rechtesChild.inhaltKnoten;
+		}
+		if (aktuellerKnoten.linkesChild.inhaltKnoten === '*' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.rechtesChild.inhaltKnoten;
+		}
+		if (aktuellerKnoten.linkesChild.inhaltKnoten === 'x' || aktuellerKnoten.linkesChild.inhaltKnoten === 'X' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten)) {
+			if (functionAlsVectorLokal.length < 2) {
+				while(functionAlsVectorLokal.length < 2){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.rechtesChild.inhaltKnoten;
+			functionAlsVectorLokal[1] += 1;
+		}
+		if (!isNaN(aktuellerKnoten.linkesChild.inhaltKnoten) && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.linkesChild.inhaltKnoten + aktuellerKnoten.rechtesChild.inhaltKnoten;
+		}
+	}
+	else if (aktuellerKnoten.inhaltKnoten === '-') {
+		if (aktuellerKnoten.linkesChild.inhaltKnoten === '^' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] -= aktuellerKnoten.rechtesChild.inhaltKnoten;
+		}
+		if (aktuellerKnoten.linkesChild.inhaltKnoten === '*' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] -= aktuellerKnoten.rechtesChild.inhaltKnoten;
+		}
+		if (aktuellerKnoten.linkesChild.inhaltKnoten === 'x' || aktuellerKnoten.linkesChild.inhaltKnoten === 'X' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnoten)) {
+			if (functionAlsVectorLokal.length < 2) {
+				while(functionAlsVectorLokal.length < 2){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] -= aktuellerKnoten.rechtesChild.inhaltKnoten;
 			functionAlsVectorLokal[1] += 1;
 		}
 	}
