@@ -6,6 +6,7 @@ class FunktionAlsVektorSyntaxbaum {
 		this.rechtesChild = null;
 		this.unaeresChild = null;
 		this.inhaltKnotenSymbol = "";
+		this.inhaltKnotenPolynom = new Polynom();
 		this.inhaltKnotenString = "";
 		this.inhaltKnotenVektor = [];
 		this.index=0;
@@ -34,5 +35,6 @@ class FunktionAlsVektorSyntaxbaum {
 		this.wendepunkteAnzeigen = false;
 		this.polstellenAnzeigen = false;
 		this.stammfunktionAnzeigen = false;
+		this.matheFunktionSyntaxbaum = null;
 	}; 
 };

@@ -298,15 +298,15 @@ canvas.addEventListener('mousemove', function(event) {
 				aufgerundet = false;
 			}
 			//punktAmAusgewaehltenGraph.x = mausPositionX;//parseFloat(mausPositionX.toFixed(1));
-			punktAmAusgewaehltenGraph.y = -getPunkt(punktAmAusgewaehltenGraph.x,funktionenListe[i].gekürzt);//parseFloat(-getPunkt(punktAmAusgewaehltenGraph.x,funktionenListe[i].gekürzt).toFixed(2));
+			punktAmAusgewaehltenGraph.y = -getPunktV3(punktAmAusgewaehltenGraph.x,funktionenListe[i].gekürzt,0);//parseFloat(-getPunkt(punktAmAusgewaehltenGraph.x,funktionenListe[i].gekürzt).toFixed(2));
 			
-			steigungTangente = getPunkt(punktAmAusgewaehltenGraph.x,funktionenListe[i].ersteAbleitung);
+			steigungTangente = getPunktV3(punktAmAusgewaehltenGraph.x,funktionenListe[i].ersteAbleitung,0);
 			zeichneTangenteAmPunkt(punktAmAusgewaehltenGraph.y, steigungTangente);
 			
-			yf = getPunkt(punktAmAusgewaehltenGraph.x, funktionenListe[i].gekürzt);
+			yf = getPunktV3(punktAmAusgewaehltenGraph.x, funktionenListe[i].gekürzt,0);
 			if(Math.abs(yf)<2500){
-				yfStrich = getPunkt(punktAmAusgewaehltenGraph.x, funktionenListe[i].ersteAbleitung);
-				yfZweiStrich = getPunkt(punktAmAusgewaehltenGraph.x, funktionenListe[i].zweiteAbleitung);
+				yfStrich = getPunktV3(punktAmAusgewaehltenGraph.x, funktionenListe[i].ersteAbleitung,0);
+				yfZweiStrich = getPunktV3(punktAmAusgewaehltenGraph.x, funktionenListe[i].zweiteAbleitung,0);
 				let yfStrichQuadrat = Math.pow(yfStrich, 2);
 				let einsPlusYStrichQuadrat = 1 + yfStrichQuadrat;
 	
@@ -486,19 +486,22 @@ if(equationForm!=null){
 				let funktionGekuerzt = funktionenVorschau; 
 				kuerzeSyntaxbaumGebrochenRational(funktionGekuerzt);
 				funktionenListe[funktionenListe.length-1].gekürzt = funktionGekuerzt;
+				funktionenListe[funktionenListe.length-1].gekürzt.inhaltKnotenText = syntaxBaumZuText(funktionenListe[funktionenListe.length-1].gekürzt);
+				
 				addToFunctionDropdownList(funktionenVorschau);
-				funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenGebrochenRational(funktionGekuerzt);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].ersteAbleitung);
+				
+				funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenGebrochenRationalV3(funktionGekuerzt);
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenListe[funktionenListe.length-1].ersteAbleitung);
 				funktionenListe[funktionenListe.length-1].ersteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung;
-				funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenListe[funktionenListe.length-1].zweiteAbleitung);
 				funktionenListe[funktionenListe.length-1].ersteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
 				funktionenListe[funktionenListe.length-1].zweiteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenListe[funktionenListe.length-1].dritteAbleitung);
 				funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
 				funktionenListe[funktionenListe.length-1].dritteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung);
 				funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung);
 				
 				for(let i=0;i<1000;i+=0.1){
 					let punkterste = {
@@ -584,27 +587,35 @@ if(equationFormAlternativ!=null){
 		let key = event.keyCode;
 		if(key === 13){
 			if(funktionenVorschau!=0){
+				
 				funktionenListe.push(funktionenVorschau);
-				let funktionGekuerzt = funktionenVorschau; 
-				kuerzeSyntaxbaumGebrochenRational(funktionGekuerzt);
-				funktionenListe[funktionenListe.length-1].gekürzt = funktionGekuerzt;
 				addToFunctionDropdownList(funktionenVorschau);
-				funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenGebrochenRational(funktionGekuerzt);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].ersteAbleitung);
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung;
-				funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung);
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.ersteAbleitung = funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung);
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung);
+				
+				let funktionGekuerzt = funktionenVorschau; 
+				kuerzeSyntaxbaumGebrochenRationalV3(funktionGekuerzt);
+				funktionenListe[funktionenListe.length-1].gekürzt = funktionGekuerzt;
+				funktionenListe[funktionenListe.length-1].gekürzt.inhaltKnotenText = syntaxBaumZuText(funktionenListe[funktionenListe.length-1].gekürzt);
+				
+				funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenGebrochenRationalV3(funktionGekuerzt);
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.ersteAbleitung);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.ersteAbleitung = funktionenVorschau.zweiteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.zweiteAbleitung = funktionenVorschau.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.ersteAbleitung = funktionenVorschau.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung);
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.ersteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
+				funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
+				
+
+				
+				
 //				funktionenListe[funktionenListe.length-1].stammfunktion = 
 				
 				displayButtons(funktionenListe[funktionenListe.length-1]);
-				berechneKurvenDiskusionsPunkte(funktionenListe[funktionenListe.length-1]);
+				//berechneKurvenDiskusionsPunkte(funktionenListe[funktionenListe.length-1]);
 				
 				let abstandPunktZuPunkt = 0.1;
 				funktionenListe[funktionenListe.length-1].punkteRechtsVonNull = [];
@@ -624,12 +635,12 @@ if(equationFormAlternativ!=null){
 					
 					let punkt = {
 							x:i,
-							y:getPunkt(i,funktionenVorschau.gekürzt)
+							y:getPunktV3(i,funktionenVorschau.gekürzt,0)
 					}
 					funktionenListe[funktionenListe.length-1].punkteRechtsVonNull.push(punkt);
 					let punktVergroessert = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+							y:getPunktV3(i,funktionenVorschau.gekürzt,0)*vergroesserung
 					}
 					funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert.push(punktVergroessert);
 				}
@@ -650,12 +661,12 @@ if(equationFormAlternativ!=null){
 					}
 					let punkt = {
 							x:i,
-							y:getPunkt(i,funktionenVorschau.gekürzt)
+							y:getPunktV3(i,funktionenVorschau.gekürzt,0)
 					}
 					funktionenListe[funktionenListe.length-1].punkteLinksVonNull.push(punkt);
 					let punktVergroessert = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+							y:getPunktV3(i,funktionenVorschau.gekürzt,0)*vergroesserung
 					}
 					funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert.push(punktVergroessert);
 				}
@@ -663,30 +674,30 @@ if(equationFormAlternativ!=null){
 				for(let i=0;i<1000;i+=0.1){
 					let punkterste = {
 							x:i,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)
 					}
 					let punktzweite = {
 							x:i,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)
 					}
 					let punktdritte = {
 							x:i,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)
 					}
 					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
 					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
 					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
 					let punktVergroessertErste = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)*vergroesserung
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)*vergroesserung
 					}
 					let punktVergroessertZweite = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)*vergroesserung
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)*vergroesserung
 					}
 					let punktVergroessertDritte = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)*vergroesserung
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)*vergroesserung
 					}
 					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
 					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
@@ -697,15 +708,15 @@ if(equationFormAlternativ!=null){
 					
 					let punkterste = {
 							x:i,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)
 					}
 					let punktzweite = {
 							x:i,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)
 					}
 					let punktdritte = {
 							x:i,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)
 					}
 					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
 					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
@@ -713,15 +724,15 @@ if(equationFormAlternativ!=null){
 			
 					let punktVergroessErterste = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].ersteAbleitung)*vergroesserung
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)*vergroesserung
 					}
 					let punktVergroessertZweite = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung)*vergroesserung
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)*vergroesserung
 					}
 					let punktVergroessertDritte = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenListe[funktionenListe.length-1].dritteAbleitung)*vergroesserung
+							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)*vergroesserung
 					}
 					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
 					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
@@ -900,7 +911,7 @@ function zeichneKoordinatenkreuz() {
 	canvasContext.font = '20px Calibri';
 	canvasContext.fillStyle = 'rgba(200,200,200,1)';
 	canvasContext.textAlign = "center";
-	canvasContext.fillText("y", (canvas.width/2)+verschiebungDurchBenutzer.x+60, 30);
+	canvasContext.fillText("y", (canvas.width/2)+verschiebungDurchBenutzer.x-30, 30);
 	
 	canvasContext.beginPath();
 //	DrawLine(0, -(canvas.height/2), 0, canvas.height/2, 200, 200, 200, 1);
@@ -913,7 +924,7 @@ function zeichneKoordinatenkreuz() {
 	canvasContext.font = '20px Calibri';
 	canvasContext.fillStyle = 'rgba(200,200,200,1)';
 	canvasContext.textAlign = "center";
-	canvasContext.fillText("x", (canvas.width)-30, ((canvas.height/2)+verschiebungDurchBenutzer.y+60) );
+	canvasContext.fillText("x", (canvas.width)-30, ((canvas.height/2)+verschiebungDurchBenutzer.y-30) );
 
 	//Zeichnen der einheitsstriche
 	let aufZehnerRundenX=Math.floor((verschiebungDurchBenutzer.x/steps));		//durch das subtrahieren der verschiebungen wander der strich nicht mehr, daher wird nur umgekehrt modulo vom start und endwert der for schleife abgezogen
@@ -1162,56 +1173,59 @@ function checkEingabeV2(){
 	if(!leererString(equation)){
 		if(equation !== equationOld){
 			equationOld=equation;
-			if(checkAufFalscheSymbole(equation)&&checkKlammernKorrekt(equation)&&checkDerSyntax(equation)&&checkObVollständigerAusdruck(equation)){
+			if(checkAufFalscheSymbole(equation)&&checkKlammernKorrekt(equation)&&checkDerSyntax(equation)&&checkObVollständigerAusdruck(equation)&&checkObKorrekteKommaZahl(equation)){
 				let rootSyntaxbaum = new FunktionAlsVektorSyntaxbaum();	
 				funktionenVorschau = rootSyntaxbaum;
 				
 				eingabeAlsVerketteteListe = convertiereStringZuVerketteteListe(equation);
-				erstelleSyntaxBaumV2(rootSyntaxbaum, equation);
+				erstelleSyntaxBaumV3(rootSyntaxbaum, equation);
 				
-//				splitEquationBuffer(rootSyntaxbaum, equation);
 				let funktionGekuerzt = funktionenVorschau; 
-				kuerzeSyntaxbaumGebrochenRational(funktionGekuerzt);
+				kuerzeSyntaxbaumGebrochenRationalV3(funktionGekuerzt);
 				funktionenVorschau.gekürzt = funktionGekuerzt;
 				
-				funktionenVorschau.ersteAbleitung = funktionAbleitenGebrochenRational(funktionGekuerzt);
-				funktionenVorschau.zweiteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.ersteAbleitung);
+				funktionenVorschau.ersteAbleitung = funktionAbleitenGebrochenRationalV3(funktionGekuerzt);
+				funktionenVorschau.zweiteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.ersteAbleitung);
 				funktionenVorschau.ersteAbleitung.ersteAbleitung = funktionenVorschau.zweiteAbleitung;
-				funktionenVorschau.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.zweiteAbleitung);
+				funktionenVorschau.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung);
 				funktionenVorschau.ersteAbleitung.zweiteAbleitung = funktionenVorschau.dritteAbleitung;
 				funktionenVorschau.zweiteAbleitung.ersteAbleitung = funktionenVorschau.dritteAbleitung;
-				funktionenVorschau.ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.dritteAbleitung);
+				funktionenVorschau.ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung);
 				funktionenVorschau.zweiteAbleitung.zweiteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
 				funktionenVorschau.dritteAbleitung.ersteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
-				funktionenVorschau.zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
+				funktionenVorschau.zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
 				funktionenVorschau.dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
-				funktionenVorschau.dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRational(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
+				funktionenVorschau.dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
 //				funktionenVorschau.stammfunktion = 
 				
-				displayButtons(funktionenVorschau);
-				berechneKurvenDiskusionsPunkte(funktionenVorschau);
+//				displayButtons(funktionenVorschau);
+//				berechneKurvenDiskusionsPunkteV3(funktionenVorschau);
 				
 				for(let i=0;i<1000;i+=0.1){
 					let punkt = {
 							x:i,
-							y:getPunkt(i,funktionenVorschau.gekürzt)
+//							y:getPunktV3(i,funktionenVorschau.gekürzt)
+							y:getPunktV3(i,funktionenVorschau,0)
 					}
 					rootSyntaxbaum.punkteRechtsVonNull.push(punkt);
 					let punktVergroessert = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+//							y:getPunktV3(i,funktionenVorschau.gekürzt)*vergroesserung
+							y:getPunktV3(i,funktionenVorschau,0)*vergroesserung
 					}
 					rootSyntaxbaum.punkteRechtsVonNullVergroessert.push(punktVergroessert);
 				}
 				for(let i=0;i>-1000;i-=0.1){
 					let punkt = {
 							x:i,
-							y:getPunkt(i,funktionenVorschau.gekürzt)
+//							y:getPunktV3(i,funktionenVorschau.gekürzt)
+							y:getPunktV3(i,funktionenVorschau,0)
 					}
 					rootSyntaxbaum.punkteLinksVonNull.push(punkt);
 					let punktVergroessert = {
 							x:i*vergroesserung,
-							y:getPunkt(i,funktionenVorschau.gekürzt)*vergroesserung
+							y:getPunktV3(i,funktionenVorschau,0)*vergroesserung
+//							y:getPunktV3(i,funktionenVorschau.gekürzt)*vergroesserung
 					}
 					rootSyntaxbaum.punkteLinksVonNullVergroessert.push(punktVergroessert);
 				}

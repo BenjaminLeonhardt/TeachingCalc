@@ -96,6 +96,17 @@ button{
 	margin-top: 5px;
 }
 
+#equationFormAlternativ{
+	color: #000000;
+	font-size: 25px;
+	width: 500px;
+}
+
+#eingabefeld{
+	color: #ffffff;
+	font-size: 25px;
+}
+
 #NullstellenTextfeld{
 	color: #000000;
 	margin-top: 5px;

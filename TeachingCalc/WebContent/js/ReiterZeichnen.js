@@ -720,6 +720,33 @@ function reiter62MitternachtsformelNullstellen(i){
 	
 	WriteText(`Mit hilfe der b[Mitternachts- oder auch a-b-c Formel] können die b[Nullstellen] eines Polynoms berechnet werden. Sie funktioniert nur bei b[Polynomen 2-ten Grades]. Das Polynom muss also die Form b[ax^2+bx+c] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 	
+	let polynomMitHoch2 = new Polynom();
+	let polynomMitHoch1 = new Polynom();
+	let polynomMitHoch0 = new Polynom();
+	
+	let aktuellerKnoten = funktionenListe[i];
+	while(aktuellerKnoten.rechtesChild!=null){
+		if(aktuellerKnoten.linkesChild!=null){
+			if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom!=null){
+				if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===2){
+					polynomMitHoch2 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
+				}else if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===1){
+					polynomMitHoch1 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
+				}else if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===0){
+					polynomMitHoch0 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
+				}
+			}			
+		}
+		if(aktuellerKnoten.rechtesChild!=null){
+			if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===2){
+				polynomMitHoch2 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
+			}else if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===1){
+				polynomMitHoch1 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
+			}else if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===0){
+				polynomMitHoch0 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
+			}
+		}
+	}
 	
 	if(funktionenListe[i].inhaltKnotenVektor.length==3&&funktionenListe[i].linkesChild==null&&funktionenListe[i].rechtesChild==null&&funktionenListe[i].inhaltKnotenVektor[2]!=0){
 		
@@ -804,6 +831,9 @@ function reiter62MitternachtsformelNullstellen(i){
 		canvasContext.moveTo( textPositionDritteZeile, hoeheDritteZeile-hoeheWurzelZeichen1Schriftgroesse15);
 		canvasContext.lineTo( textPositionDritteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
 		canvasContext.stroke();
+		
+
+		
 		
 		let minusB = (-funktionenListe[i].inhaltKnotenVektor[1]);
 		let BQuadrat = Math.pow(funktionenListe[i].inhaltKnotenVektor[1],2);

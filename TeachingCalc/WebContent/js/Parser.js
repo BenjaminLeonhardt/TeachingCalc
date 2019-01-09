@@ -21,314 +21,314 @@ function klammerCheck( functionAlsStringLokal, schonEntfernt) {
 	return false;
 }
 
-//todo algorithmus ausgiebieg auf fehler/richtigkeit überprüfen
+/*todo algorithmus ausgiebieg auf fehler/richtigkeit überprüfen
 //todo funktionen wie log() sqrt() pow() implementieren
 //todo algorithmus vervollständigen. könnte evtl komplett ersetzt werden durch den Shunting-yard-Algorithmus. Ableiten ist damit allerdings nicht möglich, da nur mit dem string gearbeitet wird
 //todo 2*x+1 geht nicht
 
 //Parst den linken Part einer ganzrationalen Funktion. Die Blätter eines gebrochenrationalen Polynoms können immer auf ein ganzrationales Polynom reduziert werden
-function linkerPart(index, vorzeichenLevel, linkeGrenze, rechteGrenze, aktuellerKnoten, functionAlsStringLokal) {
-	if (index === 0) {
-		return null;
-	}
-	let gefunden = false;
-	while (!gefunden) {
-		for (let i = rechteGrenze - 1; i >= linkeGrenze; i--) {
-			if (vorzeichenLevel === 0) {
-				if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
-					if (i === 0) {
-
-					}
-					else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
-
-					}
-					else {
-						gefunden = true;
-						let neuerLinkerKnoten = new FunktionSyntaxbaum();
-						neuerLinkerKnoten.parent=aktuellerKnoten;
-						neuerLinkerKnoten.inhaltKnoten=functionAlsStringLokal[i];
-						neuerLinkerKnoten.index=i;
-						aktuellerKnoten.linkesChild=neuerLinkerKnoten;
-						
-//						FunktionSyntaxbaum* neuerLinkerKnoten = new FunktionSyntaxbaum();
-//						neuerLinkerKnoten.setParent(aktuellerKnoten);
-//						neuerLinkerKnoten.setInhalt(functionAlsStringLokal[i]);
-//						neuerLinkerKnoten.setIndex(i);
-//						aktuellerKnoten.setLinkesChild(neuerLinkerKnoten);
-						neuerLinkerKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, aktuellerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal);
-						neuerLinkerKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, aktuellerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal);
-						return neuerLinkerKnoten;
-					}
-				}
-			}
-			else if (vorzeichenLevel === 1) {
-				if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
-					gefunden = true;
-					let neuerLinkerKnoten = new FunktionSyntaxbaum();
-					neuerLinkerKnoten.parent=aktuellerKnoten;
-					neuerLinkerKnoten.inhaltKnoten=functionAlsStringLokal[i];
-					neuerLinkerKnoten.index=i;
-					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
-					
-//					FunktionSyntaxbaum* neuerLinkerKnoten = new FunktionSyntaxbaum();
-//					neuerLinkerKnoten.setParent(aktuellerKnoten);
-//					neuerLinkerKnoten.setInhalt(functionAlsStringLokal[i]);
-//					neuerLinkerKnoten.setIndex(i);
-//					aktuellerKnoten.setLinkesChild(neuerLinkerKnoten);
-					neuerLinkerKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal);
-					neuerLinkerKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal);
-					i = 0;
-					return neuerLinkerKnoten;
-				}
-			}
-			else if (vorzeichenLevel === 2) {
-				if (functionAlsStringLokal[i] === '^') {
-					gefunden = true;
-					let neuerLinkerKnoten = new FunktionSyntaxbaum();
-					neuerLinkerKnoten.parent=aktuellerKnoten;
-					neuerLinkerKnoten.inhaltKnoten=functionAlsStringLokal[i];
-					neuerLinkerKnoten.index=i;
-					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
-					
+//function linkerPart(index, vorzeichenLevel, linkeGrenze, rechteGrenze, aktuellerKnoten, functionAlsStringLokal) {
+//	if (index === 0) {
+//		return null;
+//	}
+//	let gefunden = false;
+//	while (!gefunden) {
+//		for (let i = rechteGrenze - 1; i >= linkeGrenze; i--) {
+//			if (vorzeichenLevel === 0) {
+//				if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
+//					if (i === 0) {
+//
+//					}
+//					else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
+//
+//					}
+//					else {
+//						gefunden = true;
+//						let neuerLinkerKnoten = new FunktionSyntaxbaum();
+//						neuerLinkerKnoten.parent=aktuellerKnoten;
+//						neuerLinkerKnoten.inhaltKnotenSymbol=functionAlsStringLokal[i];
+//						neuerLinkerKnoten.index=i;
+//						aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+//						
+////						FunktionSyntaxbaum* neuerLinkerKnoten = new FunktionSyntaxbaum();
+////						neuerLinkerKnoten.setParent(aktuellerKnoten);
+////						neuerLinkerKnoten.setInhalt(functionAlsStringLokal[i]);
+////						neuerLinkerKnoten.setIndex(i);
+////						aktuellerKnoten.setLinkesChild(neuerLinkerKnoten);
+//						neuerLinkerKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, aktuellerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal);
+//						neuerLinkerKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, aktuellerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal);
+//						return neuerLinkerKnoten;
+//					}
+//				}
+//			}
+//			else if (vorzeichenLevel === 1) {
+//				if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
+//					gefunden = true;
 //					let neuerLinkerKnoten = new FunktionSyntaxbaum();
-//					neuerLinkerKnoten.setParent(aktuellerKnoten);
-//					neuerLinkerKnoten.setInhalt(functionAlsStringLokal[i]);
-//					neuerLinkerKnoten.setIndex(i);
-//					aktuellerKnoten.setLinkesChild(neuerLinkerKnoten);
-					neuerLinkerKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal);
-					neuerLinkerKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal);
-					i = 0;
-					return neuerLinkerKnoten;
-				}
-			}
-			else if (vorzeichenLevel === 3) {
-				if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
-					gefunden = true;
-					let neuerLinkerKnoten = new FunktionSyntaxbaum();
-					neuerLinkerKnoten.parent=aktuellerKnoten;
-					neuerLinkerKnoten.inhaltKnoten=functionAlsStringLokal[i];
-					neuerLinkerKnoten.index=i;
-					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
-					
-//					FunktionSyntaxbaum* neuerLinkerKnoten = new FunktionSyntaxbaum();
-//					neuerLinkerKnoten.setParent(aktuellerKnoten);
-//					neuerLinkerKnoten.setInhalt(functionAlsStringLokal[i]);
-//					neuerLinkerKnoten.setIndex(i);
-//					aktuellerKnoten.setLinkesChild(neuerLinkerKnoten);
-					neuerLinkerKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal);
-					neuerLinkerKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal);
-					i = 0;
-					return neuerLinkerKnoten;
-				}
-			}
-		}
-		if (vorzeichenLevel > 3) {
-			return null;
-		}
-		vorzeichenLevel++;
-	}
-}
-
-//Parst den rechten Part einer ganzrationalen Funktion. Die Blätter eines gebrochenrationalen Polynoms können immer auf ein ganzrationales Polynom reduziert werden
-function rechterPart(index, vorzeichenLevel, linkeGrenze, rechteGrenze, aktuellerKnoten, functionAlsStringLokal) {
-	if (index === functionAlsStringLokal.length - 1) {
-		return null;
-	}
-	let gefunden = false;
-	while (!gefunden) {
-		for (let i = linkeGrenze; i <= rechteGrenze; i++) {
-			if (vorzeichenLevel === 0) {
-				if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
-					if (i === 0) {
-
-					}
-					else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
-
-					}
-					else {
-						gefunden = true;
-						let neuerRechterKnoten = new FunktionSyntaxbaum();
-						neuerRechterKnoten.parent=aktuellerKnoten;
-						neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
-						neuerRechterKnoten.index=i;
-						aktuellerKnoten.rechtesChild=neuerRechterKnoten;
-						
-//						FunktionSyntaxbaum *neuerRechterKnoten = new FunktionSyntaxbaum();
-//						neuerRechterKnoten.setParent(aktuellerKnoten);
-//						neuerRechterKnoten.setInhalt(functionAlsStringLokal[i]);
-//						neuerRechterKnoten.setIndex(i);
-//						aktuellerKnoten.setRechtesChild(neuerRechterKnoten);
-						neuerRechterKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal);
-						neuerRechterKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal);
-						return neuerRechterKnoten;
-					}
-				}
-			}
-			else if (vorzeichenLevel === 1) {
-				if (functionAlsStringLokal[i] === '^') {
-					gefunden = true;
-					let neuerRechterKnoten = new FunktionSyntaxbaum();
-					neuerRechterKnoten.parent=aktuellerKnoten;
-					neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
-					neuerRechterKnoten.index=i;
-					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
-					
-//					FunktionSyntaxbaum* neuerRechterKnoten = new FunktionSyntaxbaum();
-//					neuerRechterKnoten.setParent(aktuellerKnoten);
-//					neuerRechterKnoten.setInhalt(functionAlsStringLokal[i]);
-//					neuerRechterKnoten.setIndex(i);
-//					aktuellerKnoten.setRechtesChild(neuerRechterKnoten);
-					neuerRechterKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal);
-					neuerRechterKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal);
-					i = functionAlsStringLokal.length;
-					return neuerRechterKnoten;
-				}
-			}
-			else if (vorzeichenLevel === 2) {
-				if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
-					gefunden = true;
-					let neuerRechterKnoten = new FunktionSyntaxbaum();
-					neuerRechterKnoten.parent=aktuellerKnoten;
-					neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
-					neuerRechterKnoten.index=i;
-					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
-					
-//					FunktionSyntaxbaum* neuerRechterKnoten = new FunktionSyntaxbaum();
-//					neuerRechterKnoten.setParent(aktuellerKnoten);
-//					neuerRechterKnoten.setInhalt(functionAlsStringLokal[i]);
-//					neuerRechterKnoten.setIndex(i);
-//					aktuellerKnoten.setRechtesChild(neuerRechterKnoten);
-					neuerRechterKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal);
-					neuerRechterKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal);
-					i = functionAlsStringLokal.length;
-					return neuerRechterKnoten;
-				}
-			}
-			else if (vorzeichenLevel === 3) {
-				if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
-					gefunden = true;
-					let neuerRechterKnoten = new FunktionSyntaxbaum();
-					neuerRechterKnoten.parent=aktuellerKnoten;
-					neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
-					neuerRechterKnoten.index=i;
-					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
-					
-					
-//					FunktionSyntaxbaum* neuerRechterKnoten = new FunktionSyntaxbaum();
-//					neuerRechterKnoten.setParent(aktuellerKnoten);
-//					neuerRechterKnoten.setInhalt(functionAlsStringLokal[i]);
-//					neuerRechterKnoten.setIndex(i);
-//					aktuellerKnoten.setRechtesChild(neuerRechterKnoten);
-					neuerRechterKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal);
-					neuerRechterKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal);
-					i = functionAlsStringLokal.length;
-					return neuerRechterKnoten;
-				}
-			}
-		}
-		if (vorzeichenLevel > 3) {
-			return null;
-		}
-		vorzeichenLevel++;
-	}
-}
+//					neuerLinkerKnoten.parent=aktuellerKnoten;
+//					neuerLinkerKnoten.inhaltKnoten=functionAlsStringLokal[i];
+//					neuerLinkerKnoten.index=i;
+//					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+//					
+////					FunktionSyntaxbaum* neuerLinkerKnoten = new FunktionSyntaxbaum();
+////					neuerLinkerKnoten.setParent(aktuellerKnoten);
+////					neuerLinkerKnoten.setInhalt(functionAlsStringLokal[i]);
+////					neuerLinkerKnoten.setIndex(i);
+////					aktuellerKnoten.setLinkesChild(neuerLinkerKnoten);
+//					neuerLinkerKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal);
+//					neuerLinkerKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal);
+//					i = 0;
+//					return neuerLinkerKnoten;
+//				}
+//			}
+//			else if (vorzeichenLevel === 2) {
+//				if (functionAlsStringLokal[i] === '^') {
+//					gefunden = true;
+//					let neuerLinkerKnoten = new FunktionSyntaxbaum();
+//					neuerLinkerKnoten.parent=aktuellerKnoten;
+//					neuerLinkerKnoten.inhaltKnoten=functionAlsStringLokal[i];
+//					neuerLinkerKnoten.index=i;
+//					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+//					
+////					let neuerLinkerKnoten = new FunktionSyntaxbaum();
+////					neuerLinkerKnoten.setParent(aktuellerKnoten);
+////					neuerLinkerKnoten.setInhalt(functionAlsStringLokal[i]);
+////					neuerLinkerKnoten.setIndex(i);
+////					aktuellerKnoten.setLinkesChild(neuerLinkerKnoten);
+//					neuerLinkerKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal);
+//					neuerLinkerKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal);
+//					i = 0;
+//					return neuerLinkerKnoten;
+//				}
+//			}
+//			else if (vorzeichenLevel === 3) {
+//				if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+//					gefunden = true;
+//					let neuerLinkerKnoten = new FunktionSyntaxbaum();
+//					neuerLinkerKnoten.parent=aktuellerKnoten;
+//					neuerLinkerKnoten.inhaltKnoten=functionAlsStringLokal[i];
+//					neuerLinkerKnoten.index=i;
+//					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+//					
+////					FunktionSyntaxbaum* neuerLinkerKnoten = new FunktionSyntaxbaum();
+////					neuerLinkerKnoten.setParent(aktuellerKnoten);
+////					neuerLinkerKnoten.setInhalt(functionAlsStringLokal[i]);
+////					neuerLinkerKnoten.setIndex(i);
+////					aktuellerKnoten.setLinkesChild(neuerLinkerKnoten);
+//					neuerLinkerKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerLinkerKnoten.index, neuerLinkerKnoten, functionAlsStringLokal);
+//					neuerLinkerKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerLinkerKnoten.index + 1, rechteGrenze, neuerLinkerKnoten, functionAlsStringLokal);
+//					i = 0;
+//					return neuerLinkerKnoten;
+//				}
+//			}
+//		}
+//		if (vorzeichenLevel > 3) {
+//			return null;
+//		}
+//		vorzeichenLevel++;
+//	}
+//}
+//
+////Parst den rechten Part einer ganzrationalen Funktion. Die Blätter eines gebrochenrationalen Polynoms können immer auf ein ganzrationales Polynom reduziert werden
+//function rechterPart(index, vorzeichenLevel, linkeGrenze, rechteGrenze, aktuellerKnoten, functionAlsStringLokal) {
+//	if (index === functionAlsStringLokal.length - 1) {
+//		return null;
+//	}
+//	let gefunden = false;
+//	while (!gefunden) {
+//		for (let i = linkeGrenze; i <= rechteGrenze; i++) {
+//			if (vorzeichenLevel === 0) {
+//				if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
+//					if (i === 0) {
+//
+//					}
+//					else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
+//
+//					}
+//					else {
+//						gefunden = true;
+//						let neuerRechterKnoten = new FunktionSyntaxbaum();
+//						neuerRechterKnoten.parent=aktuellerKnoten;
+//						neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
+//						neuerRechterKnoten.index=i;
+//						aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+//						
+////						FunktionSyntaxbaum *neuerRechterKnoten = new FunktionSyntaxbaum();
+////						neuerRechterKnoten.setParent(aktuellerKnoten);
+////						neuerRechterKnoten.setInhalt(functionAlsStringLokal[i]);
+////						neuerRechterKnoten.setIndex(i);
+////						aktuellerKnoten.setRechtesChild(neuerRechterKnoten);
+//						neuerRechterKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal);
+//						neuerRechterKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal);
+//						return neuerRechterKnoten;
+//					}
+//				}
+//			}
+//			else if (vorzeichenLevel === 1) {
+//				if (functionAlsStringLokal[i] === '^') {
+//					gefunden = true;
+//					let neuerRechterKnoten = new FunktionSyntaxbaum();
+//					neuerRechterKnoten.parent=aktuellerKnoten;
+//					neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
+//					neuerRechterKnoten.index=i;
+//					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+//					
+////					FunktionSyntaxbaum* neuerRechterKnoten = new FunktionSyntaxbaum();
+////					neuerRechterKnoten.setParent(aktuellerKnoten);
+////					neuerRechterKnoten.setInhalt(functionAlsStringLokal[i]);
+////					neuerRechterKnoten.setIndex(i);
+////					aktuellerKnoten.setRechtesChild(neuerRechterKnoten);
+//					neuerRechterKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal);
+//					neuerRechterKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal);
+//					i = functionAlsStringLokal.length;
+//					return neuerRechterKnoten;
+//				}
+//			}
+//			else if (vorzeichenLevel === 2) {
+//				if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
+//					gefunden = true;
+//					let neuerRechterKnoten = new FunktionSyntaxbaum();
+//					neuerRechterKnoten.parent=aktuellerKnoten;
+//					neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
+//					neuerRechterKnoten.index=i;
+//					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+//					
+////					FunktionSyntaxbaum* neuerRechterKnoten = new FunktionSyntaxbaum();
+////					neuerRechterKnoten.setParent(aktuellerKnoten);
+////					neuerRechterKnoten.setInhalt(functionAlsStringLokal[i]);
+////					neuerRechterKnoten.setIndex(i);
+////					aktuellerKnoten.setRechtesChild(neuerRechterKnoten);
+//					neuerRechterKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal);
+//					neuerRechterKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal);
+//					i = functionAlsStringLokal.length;
+//					return neuerRechterKnoten;
+//				}
+//			}
+//			else if (vorzeichenLevel === 3) {
+//				if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+//					gefunden = true;
+//					let neuerRechterKnoten = new FunktionSyntaxbaum();
+//					neuerRechterKnoten.parent=aktuellerKnoten;
+//					neuerRechterKnoten.inhaltKnoten=functionAlsStringLokal[i];
+//					neuerRechterKnoten.index=i;
+//					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+//					
+//					
+////					FunktionSyntaxbaum* neuerRechterKnoten = new FunktionSyntaxbaum();
+////					neuerRechterKnoten.setParent(aktuellerKnoten);
+////					neuerRechterKnoten.setInhalt(functionAlsStringLokal[i]);
+////					neuerRechterKnoten.setIndex(i);
+////					aktuellerKnoten.setRechtesChild(neuerRechterKnoten);
+//					neuerRechterKnoten.linkesChild = linkerPart(i, vorzeichenLevel, linkeGrenze, neuerRechterKnoten.index, neuerRechterKnoten, functionAlsStringLokal);
+//					neuerRechterKnoten.rechtesChild = rechterPart(i, vorzeichenLevel, neuerRechterKnoten.index + 1, rechteGrenze, neuerRechterKnoten, functionAlsStringLokal);
+//					i = functionAlsStringLokal.length;
+//					return neuerRechterKnoten;
+//				}
+//			}
+//		}
+//		if (vorzeichenLevel > 3) {
+//			return null;
+//		}
+//		vorzeichenLevel++;
+//	}
+//}
 
 //Parst ganzrationale Funktionen zu einem Syntaxbaum aus dem ein Polynom als Vektor erstellt werden kann
-function parseFuntionBuffer(neuerFunktionSyntaxbaum, functionAlsString) {
-	let gefunden = false;
-	let vorzeichenLevel = 0;
-	let rechteGrenze = functionAlsString.length;
-	let hatKlammern = false;
-
-	for (let i = 0; i < functionAlsString.length; i++) {
-		if (functionAlsString[i] === '(') {
-			hatKlammern = true;
-		}
-	}
-	while (!gefunden) {
-		if (rechteGrenze === 0) {
-			neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[0];
-			neuerFunktionSyntaxbaum.index=0;
-			
-//			neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
-//			neuerFunktionSyntaxbaum.setInhalt(functionAlsString[0]);
-//			neuerFunktionSyntaxbaum.setLinkesChild(null);
-//			neuerFunktionSyntaxbaum.setRechtesChild(null);
-//			neuerFunktionSyntaxbaum.setIndex(0);
-			
-		}
-		for (let i = 0; i < rechteGrenze; i++) { // ^ , vorzeichen, * /, + -
-			if (vorzeichenLevel === 0) {
-				if (functionAlsString[i] === '+' || functionAlsString[i] === '-') {
-					if (i === 0) {
-
-					}
-					else if (functionAlsString[i - 1] === '+' || functionAlsString[i - 1] === '-' || functionAlsString[i - 1] === '*' || functionAlsString[i - 1] === '/') {
-
-					}
-					else {
-						gefunden = true;
-						neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[i];
-						neuerFunktionSyntaxbaum.index=i;
-//						neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
-//						neuerFunktionSyntaxbaum.setInhalt(functionAlsString[i]);
-//						neuerFunktionSyntaxbaum.setIndex(i);
-						neuerFunktionSyntaxbaum.linkesChild = linkerPart(i, 0, 0, i, neuerFunktionSyntaxbaum, functionAlsString);
-						neuerFunktionSyntaxbaum.rechtesChild = rechterPart(i, 0, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString);
-						i = rechteGrenze;
-						return neuerFunktionSyntaxbaum;
-					}
-				}
-			}
-			else if (vorzeichenLevel === 1) {
-				if (functionAlsString[i] === '*' || functionAlsString[i] === '/') {
-					gefunden = true;
-					neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[i];
-					neuerFunktionSyntaxbaum.index=i;
-//					neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
-//					neuerFunktionSyntaxbaum.setInhalt(functionAlsString[i]);
-//					neuerFunktionSyntaxbaum.setIndex(i);
-					neuerFunktionSyntaxbaum.linkesChild = linkerPart(i, 1, 0, i, neuerFunktionSyntaxbaum, functionAlsString);
-					neuerFunktionSyntaxbaum.rechtesChild = rechterPart(i, 1, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString);
-					i = rechteGrenze;
-					return neuerFunktionSyntaxbaum;
-				}
-			}
-			else if (vorzeichenLevel === 2) {
-				if (functionAlsString[i] === '^') {
-					gefunden = true;
-					neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[i];
-					neuerFunktionSyntaxbaum.index=i;
-//					neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
-//					neuerFunktionSyntaxbaum.setInhalt(functionAlsString[i]);
-//					neuerFunktionSyntaxbaum.setIndex(i);
-					neuerFunktionSyntaxbaum.linkesChild = linkerPart(i, 2, 0, i, neuerFunktionSyntaxbaum, functionAlsString);
-					neuerFunktionSyntaxbaum.rechtesChild = rechterPart(i, 2, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString);
-					i = rechteGrenze;
-					return neuerFunktionSyntaxbaum;
-				}
-			}
-			else if (vorzeichenLevel === 3) {
-				if ((parseInt(functionAlsString[i]) >= 0 && parseInt(functionAlsString[i]) <= 9) || functionAlsString[i] === 'x' || functionAlsString[i] === 'X') {
-					gefunden = true;
-					neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[i];
-					neuerFunktionSyntaxbaum.index=i;
-//					neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
-//					neuerFunktionSyntaxbaum.setInhalt(functionAlsString[i]);
-//					neuerFunktionSyntaxbaum.setIndex(i);
-					neuerFunktionSyntaxbaum.linkesChild = linkerPart(i, 2, 0, i, neuerFunktionSyntaxbaum, functionAlsString);
-					neuerFunktionSyntaxbaum.rechtesChild = rechterPart(i, 2, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString);
-					i = rechteGrenze;
-					return neuerFunktionSyntaxbaum;
-				}
-			}
-		}
-		if (vorzeichenLevel > 3) {
-			return;
-		}
-		vorzeichenLevel++;
-	}
-}
+//function parseFuntionBuffer(neuerFunktionSyntaxbaum, functionAlsString) {
+//	let gefunden = false;
+//	let vorzeichenLevel = 0;
+//	let rechteGrenze = functionAlsString.length;
+//	let hatKlammern = false;
+//
+//	for (let i = 0; i < functionAlsString.length; i++) {
+//		if (functionAlsString[i] === '(') {
+//			hatKlammern = true;
+//		}
+//	}
+//	while (!gefunden) {
+//		if (rechteGrenze === 0) {
+//			neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[0];
+//			neuerFunktionSyntaxbaum.index=0;
+//			
+////			neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
+////			neuerFunktionSyntaxbaum.setInhalt(functionAlsString[0]);
+////			neuerFunktionSyntaxbaum.setLinkesChild(null);
+////			neuerFunktionSyntaxbaum.setRechtesChild(null);
+////			neuerFunktionSyntaxbaum.setIndex(0);
+//			
+//		}
+//		for (let i = 0; i < rechteGrenze; i++) { // ^ , vorzeichen, * /, + -
+//			if (vorzeichenLevel === 0) {
+//				if (functionAlsString[i] === '+' || functionAlsString[i] === '-') {
+//					if (i === 0) {
+//
+//					}
+//					else if (functionAlsString[i - 1] === '+' || functionAlsString[i - 1] === '-' || functionAlsString[i - 1] === '*' || functionAlsString[i - 1] === '/') {
+//
+//					}
+//					else {
+//						gefunden = true;
+//						neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[i];
+//						neuerFunktionSyntaxbaum.index=i;
+////						neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
+////						neuerFunktionSyntaxbaum.setInhalt(functionAlsString[i]);
+////						neuerFunktionSyntaxbaum.setIndex(i);
+//						neuerFunktionSyntaxbaum.linkesChild = linkerPart(i, 0, 0, i, neuerFunktionSyntaxbaum, functionAlsString);
+//						neuerFunktionSyntaxbaum.rechtesChild = rechterPart(i, 0, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString);
+//						i = rechteGrenze;
+//						return neuerFunktionSyntaxbaum;
+//					}
+//				}
+//			}
+//			else if (vorzeichenLevel === 1) {
+//				if (functionAlsString[i] === '*' || functionAlsString[i] === '/') {
+//					gefunden = true;
+//					neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[i];
+//					neuerFunktionSyntaxbaum.index=i;
+////					neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
+////					neuerFunktionSyntaxbaum.setInhalt(functionAlsString[i]);
+////					neuerFunktionSyntaxbaum.setIndex(i);
+//					neuerFunktionSyntaxbaum.linkesChild = linkerPart(i, 1, 0, i, neuerFunktionSyntaxbaum, functionAlsString);
+//					neuerFunktionSyntaxbaum.rechtesChild = rechterPart(i, 1, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString);
+//					i = rechteGrenze;
+//					return neuerFunktionSyntaxbaum;
+//				}
+//			}
+//			else if (vorzeichenLevel === 2) {
+//				if (functionAlsString[i] === '^') {
+//					gefunden = true;
+//					neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[i];
+//					neuerFunktionSyntaxbaum.index=i;
+////					neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
+////					neuerFunktionSyntaxbaum.setInhalt(functionAlsString[i]);
+////					neuerFunktionSyntaxbaum.setIndex(i);
+//					neuerFunktionSyntaxbaum.linkesChild = linkerPart(i, 2, 0, i, neuerFunktionSyntaxbaum, functionAlsString);
+//					neuerFunktionSyntaxbaum.rechtesChild = rechterPart(i, 2, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString);
+//					i = rechteGrenze;
+//					return neuerFunktionSyntaxbaum;
+//				}
+//			}
+//			else if (vorzeichenLevel === 3) {
+//				if ((parseInt(functionAlsString[i]) >= 0 && parseInt(functionAlsString[i]) <= 9) || functionAlsString[i] === 'x' || functionAlsString[i] === 'X') {
+//					gefunden = true;
+//					neuerFunktionSyntaxbaum.inhaltKnoten = functionAlsString[i];
+//					neuerFunktionSyntaxbaum.index=i;
+////					neuerFunktionSyntaxbaum.setRoot(&neuerFunktionSyntaxbaum);
+////					neuerFunktionSyntaxbaum.setInhalt(functionAlsString[i]);
+////					neuerFunktionSyntaxbaum.setIndex(i);
+//					neuerFunktionSyntaxbaum.linkesChild = linkerPart(i, 2, 0, i, neuerFunktionSyntaxbaum, functionAlsString);
+//					neuerFunktionSyntaxbaum.rechtesChild = rechterPart(i, 2, i + 1, rechteGrenze, neuerFunktionSyntaxbaum, functionAlsString);
+//					i = rechteGrenze;
+//					return neuerFunktionSyntaxbaum;
+//				}
+//			}
+//		}
+//		if (vorzeichenLevel > 3) {
+//			return;
+//		}
+//		vorzeichenLevel++;
+//	}
+//}*/
 
 
 
@@ -367,8 +367,8 @@ function stringSplitten( i, rechteGrenze, klammerLevel, functionAlsStringLokal, 
 //	substringRechts[g] = 0;
 	substringLinks = entferneUnnoetigeKlammern(substringLinks);
 	substringRechts = entferneUnnoetigeKlammern(substringRechts);
-	linkerPartGebrochenRational(i, 0, neuerKnoten, substringLinks);
-	rechterPartGebrochenRational(i, 0, neuerKnoten, substringRechts);
+	linkerPartGebrochenRationalV3(i, 0, neuerKnoten, substringLinks);
+	rechterPartGebrochenRationalV3(i, 0, neuerKnoten, substringRechts);
 }
 
 
@@ -467,9 +467,201 @@ function knotenAnhaengen( links, aktuellerKnoten, functionAlsStringLokal, i) {
 	}
 	return neuerKnoten;
 }
+//
+////Parst den linken Teil eines gebrochenrationalen polynoms 
+//function linkerPartGebrochenRationalV3( index, vorzeichenLevel, aktuellerKnoten, functionAlsStringLokal) {
+//	if (index === 0) {
+//		return;
+//	}
+//	let rechteGrenze = functionAlsStringLokal.length;
+//
+//	let hatKlammern = false;
+//	hatKlammern = klammerCheck(functionAlsStringLokal, true);
+//	
+//	let klammerZaehlerAuf = 0;
+//	let klammerZaehlerZu = 0;
+//	let klammerLevel = 0;
+//	let gefunden = false;
+//	while (!gefunden) {
+//		let klammerZaehlerAuf = 0;
+//		let klammerZaehlerZu = 0;
+//		let klammerLevel = 0;
+//		for (let i = 0; i < rechteGrenze; i++) {
+//			if (functionAlsStringLokal[i] === '(') {
+//				klammerZaehlerAuf++;
+//				klammerLevel++;
+//			}
+//			if (functionAlsStringLokal[i] === ')') {
+//				klammerZaehlerZu++;
+//				klammerLevel--;
+//			}
+//			if (((klammerZaehlerAuf === 1 && klammerZaehlerZu === 0) && klammerLevel === 1 && functionAlsStringLokal[0] === '(') || ((klammerZaehlerAuf === 0 && klammerZaehlerZu === 0) && klammerLevel === 0)) {
+//				if (vorzeichenLevel === 0) {
+//					if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
+//						if (i === 0) {
+//
+//						}
+//						else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
+//
+//						}
+//						else {
+//							gefunden = true;
+//							let neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
+////							FunktionAlsVektorSyntaxbaum* neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
+//							if (hatKlammern) {
+//								stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerLinkerKnoten);
+//							}
+//							else {
+//								vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
+//							}
+//							return;
+//						}
+//					}
+//				}
+//				else if (vorzeichenLevel === 1) {
+//					if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
+//						gefunden = true;
+//						let neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
+////						FunktionAlsVektorSyntaxbaum* neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
+//						if (hatKlammern) {
+//							stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerLinkerKnoten);
+//						}
+//						else {
+//							vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
+//						}
+//						return;
+//					}
+//				}
+//				else if (vorzeichenLevel === 2) {
+//					if (functionAlsStringLokal[i] === '^') {
+//						gefunden = true;
+//						let neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
+////						FunktionAlsVektorSyntaxbaum* neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
+//						if (hatKlammern) {
+//							stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerLinkerKnoten);
+//						}
+//						else {
+//							vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
+//						}
+//						return;
+//					}
+//				}
+//				else if (vorzeichenLevel === 3) {
+//					if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+//						gefunden = true;
+//						let neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
+////						FunktionAlsVektorSyntaxbaum* neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
+//						vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
+//						return;
+//					}
+//				}
+//			}
+//		}
+//		if (vorzeichenLevel > 3) {
+//			return;
+//		}
+//		vorzeichenLevel++;
+//	}
+//}
+//
+////Parst den rechten Teil eines gebrochenrationalen polynoms 
+//function rechterPartGebrochenRationalV3(index, vorzeichenLevel, aktuellerKnoten, functionAlsStringLokal) {
+//	if (index === 0) {
+//		return;
+//	}
+//	let gefunden = false;
+//	let klammerZaehlerAuf = 0;
+//	let klammerZaehlerZu = 0;
+//	let klammerLevel = 0;
+//	let rechteGrenze = functionAlsStringLokal.length;
+//	let hatKlammern = false;
+//	hatKlammern = klammerCheck(functionAlsStringLokal, true);
+//	
+//	
+//	while (!gefunden) {
+//		let klammerZaehlerAuf = 0;
+//		let klammerZaehlerZu = 0;
+//		let klammerLevel = 0;
+//		for (let i = 0; i < rechteGrenze; i++) {
+//			if (functionAlsStringLokal[i] === '(') {
+//				klammerZaehlerAuf++;
+//				klammerLevel++;
+//			}
+//			if (functionAlsStringLokal[i] === ')') {
+//				klammerZaehlerZu++;
+//				klammerLevel--;
+//			}
+//			if (((klammerZaehlerAuf === 1 && klammerZaehlerZu === 0) && klammerLevel === 1 && functionAlsStringLokal[0] === '(') || ((klammerZaehlerAuf === 0 && klammerZaehlerZu === 0) && klammerLevel === 0)) {
+//				if (vorzeichenLevel === 0) {
+//					if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
+//						if (i === 0) {
+//
+//						}
+//						else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
+//
+//						}
+//						else {
+//							gefunden = true;
+//							let neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
+////							FunktionAlsVektorSyntaxbaum* neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
+//							if (hatKlammern) {
+//								stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerRechterKnoten);
+//							}
+//							else {
+//								vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+//							}
+//							return null;
+//						}
+//					}
+//				}
+//				else if (vorzeichenLevel === 1) {
+//					if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
+//						gefunden = true;
+//						let neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
+////						FunktionAlsVektorSyntaxbaum* neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
+//						if (hatKlammern) {
+//							stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerRechterKnoten);
+//						}
+//						else {
+//							vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+//						}
+//						return null;
+//					}
+//				}
+//				else if (vorzeichenLevel === 2) {
+//					if (functionAlsStringLokal[i] === '^') {
+//						gefunden = true;
+//						let neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
+////						FunktionAlsVektorSyntaxbaum* neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
+//						if (hatKlammern) {
+//							stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerRechterKnoten);
+//						}
+//						else {
+//							vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+//						}
+//						return null;
+//					}
+//				}
+//				else if (vorzeichenLevel === 3) {
+//					if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+//						gefunden = true;
+//						let neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
+////						FunktionAlsVektorSyntaxbaum* neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
+//						vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+//						return null;
+//					}
+//				}
+//			}
+//		}
+//		if (vorzeichenLevel > 3) {
+//			return null;
+//		}
+//		vorzeichenLevel++;
+//	}
+//}
 
 //Parst den linken Teil eines gebrochenrationalen polynoms 
-function linkerPartGebrochenRational( index, vorzeichenLevel, aktuellerKnoten, functionAlsStringLokal) {
+function linkerPartGebrochenRationalV3( index, vorzeichenLevel, aktuellerKnoten, functionAlsStringLokal) {
 	if (index === 0) {
 		return;
 	}
@@ -512,7 +704,8 @@ function linkerPartGebrochenRational( index, vorzeichenLevel, aktuellerKnoten, f
 								stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerLinkerKnoten);
 							}
 							else {
-								vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
+								erstelleSyntaxBaumV3(neuerLinkerKnoten,functionAlsStringLokal);
+//								vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
 							}
 							return;
 						}
@@ -527,7 +720,8 @@ function linkerPartGebrochenRational( index, vorzeichenLevel, aktuellerKnoten, f
 							stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerLinkerKnoten);
 						}
 						else {
-							vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
+							erstelleSyntaxBaumV3(neuerLinkerKnoten,functionAlsStringLokal);
+//							vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
 						}
 						return;
 					}
@@ -541,7 +735,8 @@ function linkerPartGebrochenRational( index, vorzeichenLevel, aktuellerKnoten, f
 							stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerLinkerKnoten);
 						}
 						else {
-							vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
+							erstelleSyntaxBaumV3(neuerLinkerKnoten,functionAlsStringLokal);
+//							vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
 						}
 						return;
 					}
@@ -551,7 +746,8 @@ function linkerPartGebrochenRational( index, vorzeichenLevel, aktuellerKnoten, f
 						gefunden = true;
 						let neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
 //						FunktionAlsVektorSyntaxbaum* neuerLinkerKnoten = knotenAnhaengen(true, aktuellerKnoten, functionAlsStringLokal, i);
-						vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
+						erstelleSyntaxBaumV3(neuerLinkerKnoten,functionAlsStringLokal);
+//						vectorAnhaengen(functionAlsStringLokal, neuerLinkerKnoten);
 						return;
 					}
 				}
@@ -565,7 +761,7 @@ function linkerPartGebrochenRational( index, vorzeichenLevel, aktuellerKnoten, f
 }
 
 //Parst den rechten Teil eines gebrochenrationalen polynoms 
-function rechterPartGebrochenRational(index, vorzeichenLevel, aktuellerKnoten, functionAlsStringLokal) {
+function rechterPartGebrochenRationalV3(index, vorzeichenLevel, aktuellerKnoten, functionAlsStringLokal) {
 	if (index === 0) {
 		return;
 	}
@@ -608,7 +804,8 @@ function rechterPartGebrochenRational(index, vorzeichenLevel, aktuellerKnoten, f
 								stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerRechterKnoten);
 							}
 							else {
-								vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+								erstelleSyntaxBaumV3(neuerRechterKnoten,functionAlsStringLokal);
+//								vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
 							}
 							return null;
 						}
@@ -623,7 +820,8 @@ function rechterPartGebrochenRational(index, vorzeichenLevel, aktuellerKnoten, f
 							stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerRechterKnoten);
 						}
 						else {
-							vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+							erstelleSyntaxBaumV3(neuerRechterKnoten,functionAlsStringLokal);
+//							vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
 						}
 						return null;
 					}
@@ -637,7 +835,8 @@ function rechterPartGebrochenRational(index, vorzeichenLevel, aktuellerKnoten, f
 							stringSplitten(i, rechteGrenze, klammerLevel, functionAlsStringLokal, neuerRechterKnoten);
 						}
 						else {
-							vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+							erstelleSyntaxBaumV3(neuerRechterKnoten,functionAlsStringLokal);
+//							vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
 						}
 						return null;
 					}
@@ -647,7 +846,8 @@ function rechterPartGebrochenRational(index, vorzeichenLevel, aktuellerKnoten, f
 						gefunden = true;
 						let neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
 //						FunktionAlsVektorSyntaxbaum* neuerRechterKnoten = knotenAnhaengen(false, aktuellerKnoten, functionAlsStringLokal, i);
-						vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+//						vectorAnhaengen(functionAlsStringLokal, neuerRechterKnoten);
+						erstelleSyntaxBaumV3(neuerRechterKnoten,functionAlsStringLokal);
 						return null;
 					}
 				}
@@ -726,8 +926,8 @@ function splitEquationBuffer(neuerFunktionSyntaxbaumGebrochenRational, functionA
 //									substringRechts[g] = functionAlsString[j];
 //								}
 //								substringRechts[g] = 0;
-								linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
-								rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+								linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+								rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
 							}
 							else {
 								let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
@@ -765,8 +965,8 @@ function splitEquationBuffer(neuerFunktionSyntaxbaumGebrochenRational, functionA
 //							for (let j = functionAlsString[i + 1] === '(' ? i + 2 : i + 1; j < bis; j++, g++) {
 //								substringRechts[g] = functionAlsString[j];
 //							}substringRechts[g] = 0;
-							linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks); //wenn 2 klammern gefunden, vorzeichenlevel wieder auf 0 für in der klammer
-							rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+							linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks); //wenn 2 klammern gefunden, vorzeichenlevel wieder auf 0 für in der klammer
+							rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
 						}
 						else {
 							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
@@ -801,8 +1001,8 @@ function splitEquationBuffer(neuerFunktionSyntaxbaumGebrochenRational, functionA
 //							for (let j = i + 1; j < bis; j++, g++) {
 //								substringRechts[g] = functionAlsString[j];
 //							}substringRechts[g] = 0;
-							linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
-							rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+							linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+							rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
 						}else {
 							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
 							neuerFunktionSyntaxbaum = parseFuntionBuffer(neuerFunktionSyntaxbaum, functionAlsString);
@@ -837,8 +1037,8 @@ function splitEquationBuffer(neuerFunktionSyntaxbaumGebrochenRational, functionA
 						for (letj = i + 1; j < bis; j++, g++) {
 							substringRechts[g] = functionAlsString[j];
 						}substringRechts[g] = 0;
-						linkerPartGebrochenRational(i, 0, &neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
-						rechterPartGebrochenRational(i, 0, &neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+						linkerPartGebrochenRationalV3(i, 0, &neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+						rechterPartGebrochenRationalV3(i, 0, &neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
 						i = rechteGrenze;*/
 					}
 				}
@@ -851,7 +1051,7 @@ function splitEquationBuffer(neuerFunktionSyntaxbaumGebrochenRational, functionA
 	}
 };
 
-//erstellt vektoren aus einem Syntaxbaum
+/*//erstellt vektoren aus einem Syntaxbaum
 //z.B.: x^3+2*x^2+3*x+4
 //      4,3,2,1 -> der index des vektorelements entspricht dabei der hochzahl vektor[0] == x^0  vektor[1] == x^1 usw
 // die darin gespeicherte zahl entspricht dem multiplyer wenn vector[2] 3 ist heißt das 3*x^2
@@ -910,7 +1110,7 @@ function ausSyntaxbaumVektorErstellen(aktuellerKnoten,  functionAlsVectorLokal) 
 				}
 				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
 					next = next.parent;
-				}*/
+				}
 				
 				if ((next.parent.inhaltKnoten === '+' || next.parent.inhaltKnoten === '-') && next.parent.rechtesChild === next) {
 					if (next.parent.inhaltKnoten === '+') {
@@ -956,7 +1156,7 @@ function ausSyntaxbaumVektorErstellen(aktuellerKnoten,  functionAlsVectorLokal) 
 				}
 				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
 					next = next.parent;
-				}*/
+				}
 				
 				if ((next.parent.inhaltKnoten === '+' || next.parent.inhaltKnoten === '-') && next.parent.rechtesChild === next) {
 					if (next.parent.inhaltKnoten === '+') {
@@ -1072,13 +1272,14 @@ function ausSyntaxbaumVektorErstellen(aktuellerKnoten,  functionAlsVectorLokal) 
 		}
 	}
 	return functionAlsVectorLokal;
-}
+}*/
 
 
 function convertiereStringZuVerketteteListe(string){
 	let liste = [];
 	for(let i=0;i<string.length;i++){
-		if(string[i]==="x"||string[i]==="X"||string[i]==="^"||string[i]==="+"||string[i]==="-"||string[i]==="*"||string[i]==="/"||string[i]==="("||string[i]===")"){
+		if(string[i]==="x"||string[i]==="X"||string[i]==="^"||string[i]==="+"||string[i]==="-"||string[i]==="*"
+			||string[i]==="/"||string[i]==="("||string[i]===")"){
 			let neuesElement  = new StringAlsVerketteteListeObjekt();	
 			neuesElement.inhalt = string[i];
 			neuesElement.indexVon = i;
@@ -1089,6 +1290,24 @@ function convertiereStringZuVerketteteListe(string){
 			}
 			liste.push(neuesElement);
 		
+		}else if(((string[i]==="s"&&string[i+1]==="i"&&string[i+2]==="n")||(string[i]==="c"&&string[i+1]==="o"&&string[i+2]==="s")||(string[i]==="t"&&string[i+1]==="a"&&string[i+2]==="n")||(string[i]==="l"&&string[i+1]==="o"&&string[i+2]==="g"))&&string[i+3]==="("){
+			let laengeMathematischeFunktion = 0;
+			for(let j=i;j<string.length;j++){
+				laengeMathematischeFunktion++;
+				if(string[j]===")"){
+					j=string.length;
+				}
+			}
+			let neuesElement  = new StringAlsVerketteteListeObjekt();	
+			neuesElement.inhalt = string.substring(i,laengeMathematischeFunktion);
+			neuesElement.indexVon = i;
+			neuesElement.indexBis = i+laengeMathematischeFunktion;
+			if(liste.length!=0){
+				neuesElement.prev = liste[liste.length-1];
+				liste[liste.length-1].next = neuesElement;
+			}
+			liste.push(neuesElement);
+			i=i+laengeMathematischeFunktion+1;
 		}else if(!isNaN(parseInt(string[i]))){
 			let j=0;		
 			let kommaZahl = false;
@@ -1133,20 +1352,22 @@ function convertiereStringZuVerketteteListe(string){
 			}
 			liste.push(neuesElement);
 			i=i+2;
-		}else if((string[i]==="s"&&string[i+1]==="i"&&string[i+2]==="n"&&string[i+3]==="(")||(string[i]==="c"&&string[i+1]==="o"&&string[i+2]==="s"&&string[i+3]==="(")||(string[i]==="t"&&string[i+1]==="a"&&string[i+2]==="n"&&string[i+3]==="(")){
-			let tmpString = string.substring(i,i+3);
-		
-			let neuesElement  = new StringAlsVerketteteListeObjekt();	
-			neuesElement.indexVon = i;
-			neuesElement.indexBis = i+3;
-			neuesElement.inhalt = parseInt(tmpString);
-			if(liste.length!=0){
-				neuesElement.prev = liste[liste.length-1];
-				liste[liste.length-1].next = neuesElement;
-			}
-			liste.push(neuesElement);
-			i=i+3;
-		}else if(string[i]==="s"&&string[i+1]==="q"&&string[i+2]==="r"&&string[i+3]==="t"&&string[i+4]==="("){
+		}
+//		else if((string[i]==="s"&&string[i+1]==="i"&&string[i+2]==="n"&&string[i+3]==="(")||(string[i]==="c"&&string[i+1]==="o"&&string[i+2]==="s"&&string[i+3]==="(")||(string[i]==="t"&&string[i+1]==="a"&&string[i+2]==="n"&&string[i+3]==="(")){
+//			let tmpString = string.substring(i,i+3);
+//		
+//			let neuesElement  = new StringAlsVerketteteListeObjekt();	
+//			neuesElement.indexVon = i;
+//			neuesElement.indexBis = i+3;
+//			neuesElement.inhalt = parseInt(tmpString);
+//			if(liste.length!=0){
+//				neuesElement.prev = liste[liste.length-1];
+//				liste[liste.length-1].next = neuesElement;
+//			}
+//			liste.push(neuesElement);
+//			i=i+3;
+//		}
+		else if(string[i]==="s"&&string[i+1]==="q"&&string[i+2]==="r"&&string[i+3]==="t"&&string[i+4]==="("){
 			let tmpString = string.substring(i,i+4);
 		
 			let neuesElement  = new StringAlsVerketteteListeObjekt();	
@@ -1166,7 +1387,19 @@ function convertiereStringZuVerketteteListe(string){
 
 
 
-function erstelleSyntaxBaumV2(neuerFunktionSyntaxbaumGebrochenRational, funktionAlsString){
+function aktuellesListenElementSuchen(i,functionAlsListe){
+	let aktuellesListenElement = null;
+	for(let j=0;j<functionAlsListe.length;j++){
+		if(functionAlsListe[j].indexVon<=i&& functionAlsListe[j].indexBis>=i){
+			aktuellesListenElement = functionAlsListe[j];
+			j=functionAlsListe.length;
+		}
+	}
+	return aktuellesListenElement;
+}
+
+
+/*function erstelleSyntaxBaumV2(neuerFunktionSyntaxbaumGebrochenRational, funktionAlsString){
 	let stringOld = "";
 	let stringTmp = funktionAlsString;
 	let klammernEntfernt = true;
@@ -1231,8 +1464,8 @@ function erstelleSyntaxBaumV2(neuerFunktionSyntaxbaumGebrochenRational, funktion
 								substringLinks = functionAlsString.substring(klammerLevel === 0 ? 0 : 1,i);
 								substringRechts = functionAlsString.substring(i + 1, klammerLevel === 0 ? rechteGrenze : rechteGrenze - 1);
 
-								linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
-								rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+								linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+								rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
 							}
 							else {
 								let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
@@ -1263,8 +1496,8 @@ function erstelleSyntaxBaumV2(neuerFunktionSyntaxbaumGebrochenRational, funktion
 							substringLinks = functionAlsString.substring(functionAlsString[0] === '(' ? 1 : 0, (functionAlsString[i-1] === ')' ? i - 1 : i));
 							substringRechts = functionAlsString.substring(functionAlsString[i + 1] === '(' ? i + 2 : i + 1, functionAlsString[rechteGrenze-1] === ')' ? rechteGrenze - 1 : rechteGrenze);
 
-							linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks); //wenn 2 klammern gefunden, vorzeichenlevel wieder auf 0 für in der klammer
-							rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+							linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks); //wenn 2 klammern gefunden, vorzeichenlevel wieder auf 0 für in der klammer
+							rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
 						}
 						else {
 							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
@@ -1291,8 +1524,8 @@ function erstelleSyntaxBaumV2(neuerFunktionSyntaxbaumGebrochenRational, funktion
 							substringLinks = functionAlsString.substring(klammerLevel === 0 ? 0 : 1,i);
 							substringRechts = functionAlsString.substring(i + 1,klammerLevel === 0 ? rechteGrenze : rechteGrenze - 1);
 
-							linkerPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
-							rechterPartGebrochenRational(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+							linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+							rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
 						}else {
 							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
 							neuerFunktionSyntaxbaum = parseFuntionBufferV2(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
@@ -1537,16 +1770,6 @@ function rechterPartV2(index, vorzeichenLevel, linkeGrenze, rechteGrenze, aktuel
 	}
 }
 
-function aktuellesListenElementSuchen(i,functionAlsListe){
-	let aktuellesListenElement = null;
-	for(let j=0;j<eingabeAlsVerketteteListe.length;j++){
-		if(eingabeAlsVerketteteListe[j].indexVon<=i&& eingabeAlsVerketteteListe[j].indexBis>=i){
-			aktuellesListenElement = eingabeAlsVerketteteListe[j];
-			j=functionAlsListe.length;
-		}
-	}
-	return aktuellesListenElement;
-}
 
 //Parst ganzrationale Funktionen zu einem Syntaxbaum aus dem ein Polynom als Vektor erstellt werden kann
 function parseFuntionBufferV2(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe) {
@@ -1684,12 +1907,6 @@ function ausSyntaxbaumVektorErstellenV2(aktuellerKnoten,  functionAlsVectorLokal
 			let vorzeichen = false;
 			let next = aktuellerKnoten;
 			while (next.parent !== null) {
-				/*if ((next.parent.inhalt === '+'|| next.parent.inhalt === '-') && next.parent.linkesChild === next) {
-					next = next.parent;
-				}
-				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
-					next = next.parent;
-				}*/
 				
 				if ((next.parent.inhaltKnoten === '+' || next.parent.inhaltKnoten === '-') && next.parent.rechtesChild === next) {
 					if (next.parent.inhaltKnoten === '+') {
@@ -1730,12 +1947,7 @@ function ausSyntaxbaumVektorErstellenV2(aktuellerKnoten,  functionAlsVectorLokal
 			let vorzeichen = false;
 			let next = aktuellerKnoten;
 			while (next.parent !== null) {
-				/*if ((next.parent.inhalt === '+'|| next.parent.inhalt === '-') && next.parent.linkesChild === next) {
-					next = next.parent;
-				}
-				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
-					next = next.parent;
-				}*/
+
 				
 				if ((next.parent.inhaltKnoten === '+' || next.parent.inhaltKnoten === '-') && next.parent.rechtesChild === next) {
 					if (next.parent.inhaltKnoten === '+') {
@@ -1858,3 +2070,767 @@ function ausSyntaxbaumVektorErstellenV2(aktuellerKnoten,  functionAlsVectorLokal
 	}
 	return functionAlsVectorLokal;
 }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function erstelleSyntaxBaumV3(neuerFunktionSyntaxbaumGebrochenRational, funktionAlsString){
+	let stringOld = "";
+	let stringTmp = funktionAlsString;
+	let klammernEntfernt = true;
+	while(klammernEntfernt){ //"rekursiv" klammern entfernen, also so oft wie halt klammern drin sind 
+		stringOld = entferneUnnoetigeKlammern(stringTmp);
+		if(stringOld!=stringTmp){
+			stringTmp=stringOld;
+		}else if(stringOld===stringTmp){
+			klammernEntfernt=false;
+		}
+	}
+	functionAlsString = stringTmp;
+	let functionAlsListe = convertiereStringZuVerketteteListe(functionAlsString);
+	
+	let gefunden = false;
+	let vorzeichenLevel = 0;
+	let rechteGrenze = functionAlsString.length;
+	let klammerZaehlerAuf = 0;
+	let klammerZaehlerZu = 0;
+	let klammerLevel = 0;
+	let hatKlammern = false;
+	
+	hatKlammern = klammerCheck(functionAlsString, true);
+	
+	while (!gefunden) {
+		if (rechteGrenze === 0) {
+			neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = functionAlsString[0];
+		}
+		let aktuellesListenElement = null;
+		for (let i = 0; i < rechteGrenze; i++) { // ^ , vorzeichen, * /, + -
+			aktuellesListenElement = aktuellesListenElementSuchen(i,functionAlsListe);
+			if(aktuellesListenElement!=null){
+				i=aktuellesListenElement.indexBis;
+			}
+			if (functionAlsString[i] === '(') {
+				klammerZaehlerAuf++;
+				klammerLevel++;
+			}
+			if (functionAlsString[i] === ')') {
+				klammerZaehlerZu++;
+				klammerLevel--;
+			}
+			if ((klammerZaehlerAuf === klammerZaehlerZu) && klammerLevel === 0) {
+				if (vorzeichenLevel === 0) {
+					if (functionAlsString[i] === '+' || functionAlsString[i] === '-') {
+						if (i === 0) {
+
+						}
+						else if (functionAlsString[i - 1] === '+' || functionAlsString[i - 1] === '-' || functionAlsString[i - 1] === '*' || functionAlsString[i - 1] === '/') {
+
+						}
+						else {
+							gefunden = true;
+							
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+							
+							if (hatKlammern) {
+								let substringLinks="";
+								let substringRechts="";
+								
+								substringLinks = functionAlsString.substring(klammerLevel === 0 ? 0 : 1,i);
+								substringRechts = functionAlsString.substring(i + 1, klammerLevel === 0 ? rechteGrenze : rechteGrenze - 1);
+
+								linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+								rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+							}
+							else {
+
+								neuerFunktionSyntaxbaumGebrochenRational = parseFuntionBufferV3(neuerFunktionSyntaxbaumGebrochenRational, functionAlsString, functionAlsListe);
+								
+							}
+							i = rechteGrenze;
+
+						}
+					}
+				}else if (vorzeichenLevel === 1) {
+					if (functionAlsString[i] === '*' || functionAlsString[i] === '/') {
+						gefunden = true;
+						
+
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+
+						if (hatKlammern) {
+						
+							let substringLinks="";
+							let substringRechts="";
+
+							
+							substringLinks = functionAlsString.substring(functionAlsString[0] === '(' ? 1 : 0, (functionAlsString[i-1] === ')' ? i - 1 : i));
+							substringRechts = functionAlsString.substring(functionAlsString[i + 1] === '(' ? i + 2 : i + 1, functionAlsString[rechteGrenze-1] === ')' ? rechteGrenze - 1 : rechteGrenze);
+
+							linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks); //wenn 2 klammern gefunden, vorzeichenlevel wieder auf 0 für in der klammer
+							rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+						}
+						else {
+							if(aktuellesListenElement.next.next.inhalt==="^"){
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.prev.inhalt;
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.next.inhalt;
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.potenz = aktuellesListenElement.next.next.next.inhalt;
+							}
+							
+							
+
+							
+//							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
+//							neuerFunktionSyntaxbaum = parseFuntionBufferV3(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+//							let vectorKnoten=[];
+//							vectorKnoten = ausSyntaxbaumVektorErstellenV3(neuerFunktionSyntaxbaum, vectorKnoten);
+//							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenVektor=vectorKnoten;
+						}
+						i = rechteGrenze;
+					}
+				}
+				else if (vorzeichenLevel === 2) {
+					if (functionAlsString[i] === '^') {
+						gefunden = true;
+						
+
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+						neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+
+						if (hatKlammern) {
+							let substringLinks = "";
+							let substringRechts = "";
+							
+							substringLinks = functionAlsString.substring(klammerLevel === 0 ? 0 : 1,i);
+							substringRechts = functionAlsString.substring(i + 1,klammerLevel === 0 ? rechteGrenze : rechteGrenze - 1);
+
+							linkerPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringLinks);
+							rechterPartGebrochenRationalV3(i, 0, neuerFunktionSyntaxbaumGebrochenRational, substringRechts);
+						}else {
+							
+
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = "^";
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.prev.inhalt;
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.potenz = aktuellesListenElement.next.inhalt;
+							
+//							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
+//							neuerFunktionSyntaxbaum = parseFuntionBufferV3(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+//							let vectorKnoten=[];
+//							vectorKnoten = ausSyntaxbaumVektorErstellenV3(neuerFunktionSyntaxbaum, vectorKnoten);
+//							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenVektor=vectorKnoten;
+						}
+						i = rechteGrenze;
+					}
+				}
+				
+				
+				else if (vorzeichenLevel === 3) {
+					
+					//if ((parseInt(functionAlsString[i]) >= 0 && parseInt(functionAlsString[i]) <= 9) || functionAlsString[i] === 'x' || functionAlsString[i] === 'X') {
+					if (!isNaN(aktuellesListenElement.inhalt) || functionAlsString[i] === 'x' || functionAlsString[i] === 'X' || ((aktuellesListenElement.inhalt[0]==="s")&&(aktuellesListenElement.inhalt[1]==="i")&&(aktuellesListenElement.inhalt[2]==="n"))) {
+						gefunden = true;
+						
+						if((aktuellesListenElement.inhalt[0]==="s")&&(aktuellesListenElement.inhalt[1]==="i")&&(aktuellesListenElement.inhalt[2]==="n")){
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;		
+							let inhaltKlammern = aktuellesListenElement.inhalt.substring(4,aktuellesListenElement.inhalt.length-1);														
+							neuerFunktionSyntaxbaumGebrochenRational.matheFunktionSyntaxbaum = new FunktionAlsVektorSyntaxbaum();
+							erstelleSyntaxBaumV3(neuerFunktionSyntaxbaumGebrochenRational.matheFunktionSyntaxbaum, inhaltKlammern);
+											
+						}else{
+							
+							//neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = functionAlsString[i];
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
+							neuerFunktionSyntaxbaum = parseFuntionBufferV3(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
+							let vectorKnoten=[];
+							vectorKnoten = ausSyntaxbaumVektorErstellenV3(neuerFunktionSyntaxbaum, vectorKnoten);
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenVektor=vectorKnoten;
+						}
+						
+					}
+				}
+				if (vorzeichenLevel > 3) {
+					return;
+				}
+			}
+		}
+		vorzeichenLevel++;
+	}
+	
+}
+
+
+function linkerPartV3(aktuellerKnoten, functionAlsStringLokal) {
+	if (functionAlsStringLokal.length === 0) {
+		return null;
+	}
+	let functionAlsListeLokal = convertiereStringZuVerketteteListe(functionAlsStringLokal);
+	let gefunden = false;
+	let vorzeichenLevel = 0;
+	let rechteGrenze = functionAlsStringLokal.length;
+	while (!gefunden) {
+		let aktuellesListenElement=null;
+		for (let i = 0; i < functionAlsStringLokal.length; i++) {
+			aktuellesListenElement = aktuellesListenElementSuchen(i,functionAlsListeLokal);
+			if(aktuellesListenElement!=null){
+				i=aktuellesListenElement.indexBis;//x^3+2,5*x-2,5
+			}
+			if (vorzeichenLevel === 0) {
+				if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
+					if (i === 0) {
+
+					}
+					else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
+
+					}
+					else {
+						gefunden = true;
+						let neuerLinkerKnoten = new FunktionAlsVektorSyntaxbaum();
+						neuerLinkerKnoten.parent=aktuellerKnoten;
+						neuerLinkerKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+						neuerLinkerKnoten.index=i;
+						aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+						
+						neuerLinkerKnoten.linkesChild = linkerPartV3(neuerLinkerKnoten, functionAlsStringLokal.substring(0,i));
+						neuerLinkerKnoten.rechtesChild = rechterPartV3( neuerLinkerKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));
+						i = functionAlsStringLokal.length;
+						return neuerLinkerKnoten;
+					}
+				}
+			}else if (vorzeichenLevel === 1) {
+				if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
+					gefunden = true;
+					let neuerLinkerKnoten = new FunktionAlsVektorSyntaxbaum();
+					neuerLinkerKnoten.parent=aktuellerKnoten;
+					neuerLinkerKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+					neuerLinkerKnoten.index=i;
+					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+					if((aktuellesListenElement.next.inhalt==="x"||aktuellesListenElement.next.inhalt==="X")&&aktuellesListenElement.next.next===null){
+						neuerLinkerKnoten.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.prev.inhalt;
+						neuerLinkerKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.next.inhalt;
+						neuerLinkerKnoten.inhaltKnotenPolynom.potenz = 1;
+						i = functionAlsStringLokal.length;
+					}else if(aktuellesListenElement.next.next.inhalt==="^"){
+						neuerLinkerKnoten.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.prev.inhalt;
+						neuerLinkerKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.next.inhalt;
+						neuerLinkerKnoten.inhaltKnotenPolynom.potenz = aktuellesListenElement.next.next.next.inhalt;
+						i = functionAlsStringLokal.length;
+					}else{
+						neuerLinkerKnoten.linkesChild = linkerPartV3(neuerLinkerKnoten, functionAlsStringLokal.substring(0,i));
+						neuerLinkerKnoten.rechtesChild = rechterPartV3( neuerLinkerKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));
+						i = functionAlsStringLokal.length;
+
+					}
+					return neuerLinkerKnoten;
+				}
+			}
+			else if (vorzeichenLevel === 2) {
+				if (functionAlsStringLokal[i] === '^') {
+					gefunden = true;
+					let neuerLinkerKnoten = new FunktionAlsVektorSyntaxbaum();
+					neuerLinkerKnoten.parent=aktuellerKnoten;
+					neuerLinkerKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+					neuerLinkerKnoten.index=i;
+					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+					
+					neuerLinkerKnoten.linkesChild = linkerPartV3(neuerLinkerKnoten, functionAlsStringLokal.substring(0,i));
+					neuerLinkerKnoten.rechtesChild = rechterPartV3( neuerLinkerKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));
+					i = functionAlsStringLokal.length;
+					return neuerLinkerKnoten;
+				}
+			}
+			
+			
+			else if (vorzeichenLevel === 3) {
+				//if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+				if (!isNaN(aktuellesListenElement.inhalt) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+					gefunden = true;
+					let neuerLinkerKnoten = new FunktionAlsVektorSyntaxbaum();
+					neuerLinkerKnoten.parent=aktuellerKnoten;
+					if(!isNaN(aktuellesListenElement.inhalt)){
+						
+						neuerLinkerKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+						neuerLinkerKnoten.index=i;
+						i=aktuellesListenElement.indexBis;
+//						if(linkeGrenze<aktuellesListenElement.indexBis){
+//							i=aktuellesListenElement.indexBis;
+//							neuerLinkerKnoten.index=i;
+//							linkeGrenze = aktuellesListenElement.indexBis;
+//						}
+						
+					}else{
+						i=aktuellesListenElement.indexBis;
+						neuerLinkerKnoten.index=i;
+						neuerLinkerKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+					}
+
+					
+					aktuellerKnoten.linkesChild=neuerLinkerKnoten;
+					
+					neuerLinkerKnoten.linkesChild = linkerPartV3(neuerLinkerKnoten, functionAlsStringLokal.substring(0,i));
+					neuerLinkerKnoten.rechtesChild = rechterPartV3( neuerLinkerKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));
+					i = functionAlsStringLokal.length;
+					return neuerLinkerKnoten;
+				}
+			}
+		}
+		if (vorzeichenLevel > 3) {
+			return null;
+		}
+		vorzeichenLevel++;
+	}
+}
+
+//Parst den rechten Part einer ganzrationalen Funktion. Die Blätter eines gebrochenrationalen Polynoms können immer auf ein ganzrationales Polynom reduziert werden
+//function rechterPartV3(index, vorzeichenLevel, linkeGrenze, rechteGrenze, aktuellerKnoten, functionAlsStringLokal, functionAlsListe) {
+function rechterPartV3(aktuellerKnoten, functionAlsStringLokal) {
+	if (0 === functionAlsStringLokal.length) {
+		return null;
+	}
+	let functionAlsListeLokal = convertiereStringZuVerketteteListe(functionAlsStringLokal);
+	let vorzeichenLevel = 0;
+	let gefunden = false;
+	let rechteGrenze = functionAlsStringLokal.length;
+	while (!gefunden) {
+		let aktuellesListenElement=null;
+		for (let i = 0; i <= functionAlsStringLokal.length; i++) {
+			aktuellesListenElement = aktuellesListenElementSuchen(i,functionAlsListeLokal);
+			if(aktuellesListenElement!=null){
+				i=aktuellesListenElement.indexBis;
+			}
+			if (vorzeichenLevel === 0) {
+				if (functionAlsStringLokal[i] === '+' || functionAlsStringLokal[i] === '-') {
+					if (i === 0) {
+
+					}
+					else if (functionAlsStringLokal[i - 1] === '+' || functionAlsStringLokal[i - 1] === '-' || functionAlsStringLokal[i - 1] === '*' || functionAlsStringLokal[i - 1] === '/') {
+
+					}
+					else {
+						gefunden = true;
+						let neuerRechterKnoten = new FunktionAlsVektorSyntaxbaum();
+						neuerRechterKnoten.parent=aktuellerKnoten;
+						neuerRechterKnoten.inhaltKnotenSymbol=functionAlsStringLokal[i];
+						neuerRechterKnoten.index=i;
+						aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+					
+						neuerRechterKnoten.linkesChild = linkerPartV3(neuerRechterKnoten, functionAlsStringLokal.substring(0,i));
+						neuerRechterKnoten.rechtesChild = rechterPartV3(neuerRechterKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));
+						
+						i = functionAlsStringLokal.length;
+						return neuerRechterKnoten;
+					}
+				}
+			}else if (vorzeichenLevel === 1) {
+				if (functionAlsStringLokal[i] === '*' || functionAlsStringLokal[i] === '/') {
+					gefunden = true;
+					let neuerRechterKnoten = new FunktionAlsVektorSyntaxbaum();
+					neuerRechterKnoten.parent=aktuellerKnoten;
+					neuerRechterKnoten.inhaltKnotenSymbol=functionAlsStringLokal[i];
+					neuerRechterKnoten.index=i;
+					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+					
+					if(aktuellesListenElement.next.next.inhalt==="^"){
+						neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.prev.inhalt;
+						neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.next.inhalt;
+						neuerRechterKnoten.inhaltKnotenPolynom.potenz = aktuellesListenElement.next.next.next.inhalt;
+					}else{		
+						neuerRechterKnoten.linkesChild = linkerPartV3(neuerRechterKnoten, functionAlsStringLokal.substring(0,i));
+						neuerRechterKnoten.rechtesChild = rechterPartV3(neuerRechterKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));					
+					}				
+					i = functionAlsStringLokal.length;
+					return neuerRechterKnoten;
+				}
+			}
+			else if (vorzeichenLevel === 2) {
+				if (functionAlsStringLokal[i] === '^') {
+					gefunden = true;
+					let neuerRechterKnoten = new FunktionAlsVektorSyntaxbaum();
+					neuerRechterKnoten.parent=aktuellerKnoten;
+					neuerRechterKnoten.inhaltKnotenSymbol=functionAlsStringLokal[i];
+					neuerRechterKnoten.index=i;
+					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+					
+					if(aktuellesListenElement.next.next.inhalt==="^"){
+						neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.prev.inhalt;
+						neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.next.inhalt;
+						neuerRechterKnoten.inhaltKnotenPolynom.potenz = aktuellesListenElement.next.next.next.inhalt;
+					}else{		
+						neuerRechterKnoten.linkesChild = linkerPartV3(neuerRechterKnoten, functionAlsStringLokal.substring(0,i));
+						neuerRechterKnoten.rechtesChild = rechterPartV3(neuerRechterKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));					
+					}
+					i = functionAlsStringLokal.length;
+					return neuerRechterKnoten;
+				}
+			}
+			
+			else if (vorzeichenLevel === 3) {
+				//if ((parseInt(functionAlsStringLokal[i]) >= 0 && parseInt(functionAlsStringLokal[i]) <= 9) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+				if (!isNaN(aktuellesListenElement.inhalt) || functionAlsStringLokal[i] === 'x' || functionAlsStringLokal[i] === 'X') {
+					gefunden = true;
+					let neuerRechterKnoten = new FunktionAlsVektorSyntaxbaum();
+					neuerRechterKnoten.parent=aktuellerKnoten;
+					if(!isNaN(aktuellesListenElement.inhalt)){
+						neuerRechterKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+						neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = 1;
+						neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.inhalt;
+						neuerRechterKnoten.inhaltKnotenPolynom.potenz = 1;
+						i=aktuellesListenElement.indexBis;
+						neuerRechterKnoten.index=i;
+//						if(linkeGrenze<aktuellesListenElement.indexBis){
+//							linkeGrenze = aktuellesListenElement.indexBis;
+//						}
+																	
+					}else{
+						i=aktuellesListenElement.indexBis;
+						neuerRechterKnoten.index=i;
+						neuerRechterKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+					}
+					
+					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
+					
+					neuerRechterKnoten.linkesChild = linkerPartV3(neuerRechterKnoten, functionAlsStringLokal.substring(0,i));
+					neuerRechterKnoten.rechtesChild = rechterPartV3(neuerRechterKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));					
+					i = functionAlsStringLokal.length;
+					return neuerRechterKnoten;
+				}
+			}
+		}
+		if (vorzeichenLevel > 3) {
+			return null;
+		}
+		vorzeichenLevel++;
+	}
+}
+
+
+//Parst ganzrationale Funktionen zu einem Syntaxbaum aus dem ein Polynom als Vektor erstellt werden kann
+function parseFuntionBufferV3(neuerFunktionSyntaxbaum, functionAlsString,functionAlsListe) {
+	let gefunden = false;
+	let vorzeichenLevel = 0;
+	let rechteGrenze = functionAlsString.length;
+	let hatKlammern = false;
+
+	for (let i = 0; i < functionAlsString.length; i++) {
+		if (functionAlsString[i] === '(') {
+			hatKlammern = true;
+		}
+	}
+	while (!gefunden) {
+		if (rechteGrenze === 0) {
+			neuerFunktionSyntaxbaum.inhaltKnotenSymbol = aktuellesListenElement;
+			neuerFunktionSyntaxbaum.index=0;
+			
+		}
+		aktuellesListenElement=null;
+		for (let i = 0; i < rechteGrenze; i++) { // ^ , vorzeichen, * /, + -
+			aktuellesListenElement = aktuellesListenElementSuchen(i,functionAlsListe);
+			if(aktuellesListenElement!=null){
+				i=aktuellesListenElement.indexBis;
+			}
+			if (vorzeichenLevel === 0) {
+				if (functionAlsString[i] === '+' || functionAlsString[i] === '-') {
+					if (i === 0) {
+
+					}
+					else if (functionAlsString[i - 1] === '+' || functionAlsString[i - 1] === '-' || functionAlsString[i - 1] === '*' || functionAlsString[i - 1] === '/') {
+
+					}
+					else {
+						gefunden = true;
+						neuerFunktionSyntaxbaum.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+						neuerFunktionSyntaxbaum.index=i;
+						neuerFunktionSyntaxbaum.linkesChild = linkerPartV3(neuerFunktionSyntaxbaum, functionAlsString.substring(0,i));
+						neuerFunktionSyntaxbaum.rechtesChild = rechterPartV3(neuerFunktionSyntaxbaum, functionAlsString.substring(i+1,rechteGrenze));		
+						
+
+						i = rechteGrenze;
+						return neuerFunktionSyntaxbaum;
+					}
+				}
+			}
+			else if (vorzeichenLevel === 1) {
+				if (functionAlsString[i] === '*' || functionAlsString[i] === '/') {
+					gefunden = true;
+					neuerFunktionSyntaxbaum.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+					neuerFunktionSyntaxbaum.index=i;
+					neuerFunktionSyntaxbaum.linkesChild = linkerPartV3(neuerFunktionSyntaxbaum, functionAlsString.substring(0,i));
+					neuerFunktionSyntaxbaum.rechtesChild = rechterPartV3(neuerFunktionSyntaxbaum, functionAlsString.substring(i+1,rechteGrenze));		
+					i = rechteGrenze;
+					return neuerFunktionSyntaxbaum;
+				}
+			}
+			else if (vorzeichenLevel === 2) {
+				if (functionAlsString[i] === '^') {
+					gefunden = true;
+					neuerFunktionSyntaxbaum.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+					neuerFunktionSyntaxbaum.index=i;
+					neuerFunktionSyntaxbaum.linkesChild = linkerPartV3(neuerFunktionSyntaxbaum, functionAlsString.substring(0,i));
+					neuerFunktionSyntaxbaum.rechtesChild = rechterPartV3(neuerFunktionSyntaxbaum, functionAlsString.substring(i+1,rechteGrenze));		
+					i = rechteGrenze;
+					return neuerFunktionSyntaxbaum;
+				}
+			}
+			else if (vorzeichenLevel === 3) {
+				if (!isNaN(aktuellesListenElement.inhalt) || functionAlsString[i] === 'x' || functionAlsString[i] === 'X') {
+					gefunden = true;
+					neuerFunktionSyntaxbaum.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
+					neuerFunktionSyntaxbaum.index=i;
+					neuerFunktionSyntaxbaum.linkesChild = linkerPartV3(neuerFunktionSyntaxbaum, functionAlsString.substring(0,i));
+					neuerFunktionSyntaxbaum.rechtesChild = rechterPartV3(neuerFunktionSyntaxbaum, functionAlsString.substring(i+1,rechteGrenze));		
+					i = rechteGrenze;
+					return neuerFunktionSyntaxbaum;
+				}
+			}
+		}
+		if (vorzeichenLevel > 3) {
+			return;
+		}
+		vorzeichenLevel++;
+	}
+}
+
+
+
+function ausSyntaxbaumVektorErstellenV3(aktuellerKnoten,  functionAlsVectorLokal) {
+	if (aktuellerKnoten.linkesChild === null && aktuellerKnoten.rechtesChild === null) {
+		if (aktuellerKnoten.inhaltKnotenSymbol === 'x' || aktuellerKnoten.inhaltKnotenSymbol === 'X') {
+			if (functionAlsVectorLokal.length < 2) {
+				while(functionAlsVectorLokal.length < 2){
+					functionAlsVectorLokal.push(0)
+				}				
+			}
+			functionAlsVectorLokal[1] += 1;
+		}
+		else if (!isNaN(aktuellerKnoten.inhaltKnotenSymbol)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.inhaltKnotenSymbol;
+		}
+	}
+	if (aktuellerKnoten.linkesChild !== null) {
+		if (aktuellerKnoten.linkesChild.linkesChild !== null) {
+			ausSyntaxbaumVektorErstellenV3(aktuellerKnoten.linkesChild, functionAlsVectorLokal);
+		}
+	}
+	if (aktuellerKnoten.rechtesChild !== null) {
+		if (aktuellerKnoten.rechtesChild.rechtesChild !== null&&(aktuellerKnoten.inhaltKnotenSymbol === '+' || aktuellerKnoten.inhaltKnotenSymbol === '^' || aktuellerKnoten.inhaltKnotenSymbol === '*' )) {
+			ausSyntaxbaumVektorErstellenV3(aktuellerKnoten.rechtesChild, functionAlsVectorLokal);
+		}
+	
+		if (aktuellerKnoten.rechtesChild.rechtesChild !== null && aktuellerKnoten.inhaltKnotenSymbol === '-' ) {
+			ausSyntaxbaumVektorErstellenV3(aktuellerKnoten.rechtesChild, functionAlsVectorLokal);
+		}
+	}
+	if (aktuellerKnoten.inhaltKnotenSymbol === '^') {
+		if ((aktuellerKnoten.linkesChild.inhaltKnotenSymbol === 'x' || aktuellerKnoten.linkesChild.inhaltKnotenSymbol === 'X') && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol) ) {
+			let hochZahl = aktuellerKnoten.rechtesChild.inhaltKnotenSymbol;
+			if (functionAlsVectorLokal.length < hochZahl + 1) {
+				while(functionAlsVectorLokal.length < hochZahl + 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			let multiplyer = 1.0;
+			if (aktuellerKnoten.parent !== null) {
+				if (aktuellerKnoten.parent.inhaltKnotenSymbol === '*' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					multiplyer = aktuellerKnoten.parent.linkesChild.inhaltKnotenSymbol;
+				}
+			}
+			let vorzeichen = false;
+			let next = aktuellerKnoten;
+			while (next.parent !== null) {
+				/*if ((next.parent.inhalt === '+'|| next.parent.inhalt === '-') && next.parent.linkesChild === next) {
+					next = next.parent;
+				}
+				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
+					next = next.parent;
+				}*/
+				
+				if ((next.parent.inhaltKnotenSymbol === '+' || next.parent.inhaltKnotenSymbol === '-') && next.parent.rechtesChild === next) {
+					if (next.parent.inhaltKnotenSymbol === '+') {
+						vorzeichen = false;
+						break;
+					}
+					else if (next.parent.inhaltKnotenSymbol === '-') {
+						vorzeichen = true;
+						break;
+					}
+				}
+				else {
+					next = next.parent;
+				}
+			}
+			//if (aktuellerKnoten.parent.rechtesChild.inhalt >= '1' && aktuellerKnoten.parent.rechtesChild.inhalt >= '9' && aktuellerKnoten.parent.parent.inhalt === '-') {				
+			if(vorzeichen){
+				functionAlsVectorLokal[hochZahl] -= multiplyer;
+			}
+			else {
+				functionAlsVectorLokal[hochZahl] += multiplyer;
+			}			
+		}
+		
+		
+		else if (!isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol)  && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol) ) {
+			let konstante = Math.pow(aktuellerKnoten.linkesChild.inhaltKnotenSymbol, aktuellerKnoten.rechtesChild.inhaltKnotenSymbol);
+			let hochZahl = 0;
+			if (functionAlsVectorLokal.length < hochZahl + 1) {
+				functionAlsVectorLokal.push(0);
+			}
+			let multiplyer = 1.0;
+			if (aktuellerKnoten.parent !== null) {
+				if (aktuellerKnoten.parent.inhaltKnotenSymbol === '*' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					multiplyer = aktuellerKnoten.parent.linkesChild.inhaltKnotenSymbol;
+				}
+			}
+			let vorzeichen = false;
+			let next = aktuellerKnoten;
+			while (next.parent !== null) {
+				/*if ((next.parent.inhalt === '+'|| next.parent.inhalt === '-') && next.parent.linkesChild === next) {
+					next = next.parent;
+				}
+				else if ((next.parent.inhalt === '*' || next.parent.inhalt === '/')) {
+					next = next.parent;
+				}*/
+				
+				if ((next.parent.inhaltKnotenSymbol === '+' || next.parent.inhaltKnotenSymbol === '-') && next.parent.rechtesChild === next) {
+					if (next.parent.inhaltKnotenSymbol === '+') {
+						vorzeichen = false;
+						break;
+					}
+					else if (next.parent.inhaltKnotenSymbol === '-') {
+						vorzeichen = true;
+						break;
+					}
+				}
+				else {
+					next = next.parent;
+				}
+			}
+			//if (aktuellerKnoten.parent.rechtesChild.inhalt >= '1' && aktuellerKnoten.parent.rechtesChild.inhalt >= '9' && aktuellerKnoten.parent.parent.inhalt === '-') {				
+			if(vorzeichen){
+				functionAlsVectorLokal[hochZahl] -= multiplyer*konstante;
+			}
+			else {
+				functionAlsVectorLokal[hochZahl] += multiplyer*konstante;
+			}			
+		}
+	}
+
+	if (aktuellerKnoten.inhaltKnotenSymbol === '*') {
+		if ((aktuellerKnoten.rechtesChild.inhaltKnotenSymbol === 'x' || aktuellerKnoten.rechtesChild.inhaltKnotenSymbol === 'X') && !isNaN(aktuellerKnoten.linkesChild.inhaltKnotenSymbol)) {
+
+			if (functionAlsVectorLokal.length < 2) {
+				while(functionAlsVectorLokal.length < 2){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			if (aktuellerKnoten.parent !== null) {
+				let minusGerechnet = false;
+				if (aktuellerKnoten.parent.parent !== null) {
+					if (!isNaN(aktuellerKnoten.parent.rechtesChild.inhaltKnotenSymbol) && aktuellerKnoten.parent.parent.inhaltKnotenSymbol === '-') {
+						functionAlsVectorLokal[1] -= aktuellerKnoten.linkesChild.inhaltKnotenSymbol;
+						minusGerechnet=true;
+					}
+					if (!isNaN(aktuellerKnoten.parent.rechtesChild.inhaltKnotenSymbol) && aktuellerKnoten.parent.parent.inhaltKnotenSymbol === '+') { //hier könnte noch was falsch sein
+						functionAlsVectorLokal[1] += aktuellerKnoten.linkesChild.inhaltKnotenSymbol;
+					}
+				}
+			
+				if (aktuellerKnoten.parent.inhaltKnotenSymbol === '+' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					functionAlsVectorLokal[1] += aktuellerKnoten.linkesChild.inhaltKnotenSymbol;
+				}else if (aktuellerKnoten.parent.inhaltKnotenSymbol === '-' && aktuellerKnoten.parent.rechtesChild === aktuellerKnoten) {
+					functionAlsVectorLokal[1] -= aktuellerKnoten.linkesChild.inhaltKnotenSymbol;
+				}else if(!minusGerechnet){
+					functionAlsVectorLokal[1] += aktuellerKnoten.linkesChild.inhaltKnotenSymbol;
+				}
+			}
+			else {
+				functionAlsVectorLokal[1] += aktuellerKnoten.linkesChild.inhaltKnotenSymbol;
+			}			
+		}
+	}
+	if (aktuellerKnoten.inhaltKnotenSymbol === '+') {
+		if (aktuellerKnoten.linkesChild.inhaltKnotenSymbol === '^' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.rechtesChild.inhaltKnotenSymbol;
+		}
+		if (aktuellerKnoten.linkesChild.inhaltKnotenSymbol === '*' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.rechtesChild.inhaltKnotenSymbol;
+		}
+		if (aktuellerKnoten.linkesChild.inhaltKnotenSymbol === 'x' || aktuellerKnoten.linkesChild.inhaltKnotenSymbol === 'X' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol)) {
+			if (functionAlsVectorLokal.length < 2) {
+				while(functionAlsVectorLokal.length < 2){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.rechtesChild.inhaltKnotenSymbol;
+			functionAlsVectorLokal[1] += 1;
+		}
+		if (!isNaN(aktuellerKnoten.linkesChild.inhaltKnotenSymbol) && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] += aktuellerKnoten.linkesChild.inhaltKnotenSymbol + aktuellerKnoten.rechtesChild.inhaltKnotenSymbol;
+		}
+	}
+	else if (aktuellerKnoten.inhaltKnotenSymbol === '-') {
+		if (aktuellerKnoten.linkesChild.inhaltKnotenSymbol === '^' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] -= aktuellerKnoten.rechtesChild.inhaltKnotenSymbol;
+		}
+		if (aktuellerKnoten.linkesChild.inhaltKnotenSymbol === '*' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol)) {
+			if (functionAlsVectorLokal.length < 1) {
+				while(functionAlsVectorLokal.length < 1){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] -= aktuellerKnoten.rechtesChild.inhaltKnotenSymbol;
+		}
+		if (aktuellerKnoten.linkesChild.inhaltKnotenSymbol === 'x' || aktuellerKnoten.linkesChild.inhaltKnotenSymbol === 'X' && !isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenSymbol)) {
+			if (functionAlsVectorLokal.length < 2) {
+				while(functionAlsVectorLokal.length < 2){
+					functionAlsVectorLokal.push(0)
+				}	
+			}
+			functionAlsVectorLokal[0] -= aktuellerKnoten.rechtesChild.inhaltKnotenSymbol;
+			functionAlsVectorLokal[1] += 1;
+		}
+	}
+	return functionAlsVectorLokal;
+}
+
+
+

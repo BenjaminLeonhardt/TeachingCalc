@@ -240,7 +240,32 @@ function displayButtons(funktionObjekt){
 
 		}
 	}else{
-		let polynomGrad = funktionObjekt.gekürzt.inhaltKnotenVektor.length-1;
+		let polynomGrad = 0;
+		
+		
+		let aktuellerKnoten = funktionObjekt;
+		if(aktuellerKnoten.linkesChild===null&&aktuellerKnoten.rechtesChild===null){			//einfachster fall baum ohne childs wie zb 3*x^3
+			polynomGrad = aktuellerKnoten.inhaltKnotenPolynom.potenz;
+		}else{
+			while(aktuellerKnoten.rechtesChild!=null){											//ansonsten den ganzen baum parsen und höchste porenz suchen			
+				if(aktuellerKnoten.inhaltKnotenSymbol==="+"||aktuellerKnoten.inhaltKnotenSymbol==="-"){
+					if( aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz>polynomGrad){
+						polynomGrad = aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz;
+					}
+				}	
+				if(aktuellerKnoten.rechtesChild.rechtesChild===null){
+					if( aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz>polynomGrad){
+						polynomGrad = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz;
+					}
+				}
+				if(aktuellerKnoten.rechtesChild!=null){
+					aktuellerKnoten = aktuellerKnoten.rechtesChild;
+				}
+			}
+		}
+
+
+		
 		
 		[].forEach.call(document.getElementsByClassName("gebrochenRational"), function(el){
 			el.style.display = "none";
