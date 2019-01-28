@@ -1174,6 +1174,9 @@ function checkEingabeV2(){
 		if(equation !== equationOld){
 			equationOld=equation;
 			if(checkAufFalscheSymbole(equation)&&checkKlammernKorrekt(equation)&&checkDerSyntax(equation)&&checkObVollständigerAusdruck(equation)&&checkObKorrekteKommaZahl(equation)){
+				let tree = math.parse(equation);
+				let erg = math.derivative(equation, "x"); 
+				let text = tree.toString();
 				let rootSyntaxbaum = new FunktionAlsVektorSyntaxbaum();	
 				funktionenVorschau = rootSyntaxbaum;
 				
