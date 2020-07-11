@@ -139,7 +139,7 @@ function DrawLineColor(x1, y1, x2, y2, r, g, b, a, xTesten, yTesten) {
 	y2 += verschiebungDurchBenutzer.y+(canvas.height / 2);
 	
 	if(xTesten){
-		if(x1<0||x1>canvas.width&&x2<0||x2>canvas.width){
+		if(x1<-600||x1>600+canvas.width&&x2<-600||x2>600+canvas.width){
 			return;
 		}
 	}
@@ -165,7 +165,7 @@ function DrawLine(x1, y1) {
 
 	x1 += verschiebungDurchBenutzer.x+(canvas.width / 2);
 	y1 += verschiebungDurchBenutzer.y+(canvas.height / 2);
-	if(x1<0||x1>canvas.width){
+	if(x1<-600||x1>600+canvas.width){
 		return;
 	}
 

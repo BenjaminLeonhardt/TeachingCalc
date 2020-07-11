@@ -36,5 +36,7 @@ class FunktionAlsVektorSyntaxbaum {
 		this.polstellenAnzeigen = false;
 		this.stammfunktionAnzeigen = false;
 		this.matheFunktionSyntaxbaum = null;
+		this.einfachGanzrational = false;
+		this.einfachGebrochenrational = false;
 	}; 
 };

@@ -298,15 +298,15 @@ canvas.addEventListener('mousemove', function(event) {
 				aufgerundet = false;
 			}
 			//punktAmAusgewaehltenGraph.x = mausPositionX;//parseFloat(mausPositionX.toFixed(1));
-			punktAmAusgewaehltenGraph.y = -getPunktV3(punktAmAusgewaehltenGraph.x,funktionenListe[i].gekürzt,0);//parseFloat(-getPunkt(punktAmAusgewaehltenGraph.x,funktionenListe[i].gekürzt).toFixed(2));
+			punktAmAusgewaehltenGraph.y = -getPunktV4(punktAmAusgewaehltenGraph.x,funktionenListe[i],0);//parseFloat(-getPunkt(punktAmAusgewaehltenGraph.x,funktionenListe[i].gekürzt).toFixed(2));
 			
-			steigungTangente = getPunktV3(punktAmAusgewaehltenGraph.x,funktionenListe[i].ersteAbleitung,0);
+			steigungTangente = getPunktV4(punktAmAusgewaehltenGraph.x,funktionenListe[i].ersteAbleitung,0);
 			zeichneTangenteAmPunkt(punktAmAusgewaehltenGraph.y, steigungTangente);
 			
-			yf = getPunktV3(punktAmAusgewaehltenGraph.x, funktionenListe[i].gekürzt,0);
+			yf = getPunktV4(punktAmAusgewaehltenGraph.x, funktionenListe[i],0);
 			if(Math.abs(yf)<2500){
-				yfStrich = getPunktV3(punktAmAusgewaehltenGraph.x, funktionenListe[i].ersteAbleitung,0);
-				yfZweiStrich = getPunktV3(punktAmAusgewaehltenGraph.x, funktionenListe[i].zweiteAbleitung,0);
+				yfStrich = getPunktV4(punktAmAusgewaehltenGraph.x, funktionenListe[i].ersteAbleitung,0);
+				yfZweiStrich = getPunktV4(punktAmAusgewaehltenGraph.x, funktionenListe[i].zweiteAbleitung,0);
 				let yfStrichQuadrat = Math.pow(yfStrich, 2);
 				let einsPlusYStrichQuadrat = 1 + yfStrichQuadrat;
 	
@@ -588,157 +588,443 @@ if(equationFormAlternativ!=null){
 		if(key === 13){
 			if(funktionenVorschau!=0){
 				
-				funktionenListe.push(funktionenVorschau);
-				addToFunctionDropdownList(funktionenVorschau);
+				if(funktionenVorschau.einfachGanzrational){
+					funktionenListe.push(funktionenVorschau);
+					addToFunctionDropdownList(funktionenVorschau);
+					
+					displayButtons(funktionenListe[funktionenListe.length-1]);
+					berechneKurvenDiskusionsPunkteV4(funktionenListe[funktionenListe.length-1]);
+					
+					let abstandPunktZuPunkt = 0.1;
+					funktionenListe[funktionenListe.length-1].punkteRechtsVonNull = [];
+					funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert = [];
+					let naheKurvenDiskusionsPunkt = false;
+					for(let i=0;i<1000;i+=abstandPunktZuPunkt){
+						naheKurvenDiskusionsPunkt = false;
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].polstellen.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].polstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].polstellen[j]+1){
+								naheKurvenDiskusionsPunkt = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].nullstellen.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].nullstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].nullstellen[j]+1){
+								naheKurvenDiskusionsPunkt = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].extremstellen.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].extremstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].extremstellen[j]+1){
+								naheKurvenDiskusionsPunkt = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].wendepunkte.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].wendepunkte[j]-1&&i<funktionenListe[funktionenListe.length-1].wendepunkte[j]+1){
+								naheKurvenDiskusionsPunkt = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						if(!naheKurvenDiskusionsPunkt){
+							abstandPunktZuPunkt = 0.1;
+						}
+						if(funktionenListe[funktionenListe.length-1].einfachGanzrational===true){
+							let punkt = {
+									x:i,
+									y:getPunktEinfachesGanzrational(i,funktionenVorschau.gekuerzt,0)
+							}
+							funktionenListe[funktionenListe.length-1].punkteRechtsVonNull.push(punkt);
+						}else{
+							let punkt = {
+									x:i,
+									y:getPunktV4(i,funktionenVorschau.gekürzt,0)
+							}
+							funktionenListe[funktionenListe.length-1].punkteRechtsVonNull.push(punkt);
+						}
+
+						if(funktionenListe[funktionenListe.length-1].einfachGanzrational===true){
+							let punktVergroessert = {
+									x:i*vergroesserung,
+									y:getPunktEinfachesGanzrational(i,funktionenVorschau.gekuerzt,0)*vergroesserung
+							}
+							funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert.push(punktVergroessert);
+						}else{
+							let punktVergroessert = {
+									x:i*vergroesserung,
+									y:getPunktV4(i,funktionenVorschau.gekürzt,0)*vergroesserung
+							}
+							funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert.push(punktVergroessert);
+						}
+					
+					}
+					abstandPunktZuPunkt = 0.1;
+					
+					funktionenListe[funktionenListe.length-1].punkteLinksVonNull = [];
+					funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert = [];
+					
+					for(let i=0;i>-1000;i-=abstandPunktZuPunkt){
+						let naheKurvenDiskusionsPunkt = false;
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].polstellen.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].polstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].polstellen[j]+1){
+								naheKurvenDiskusionsPunkt = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].nullstellen.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].nullstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].nullstellen[j]+1){
+								naheKurvenDiskusionsPunkt = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].extremstellen.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].extremstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].extremstellen[j]+1){
+								naheKurvenDiskusionsPunkt = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].wendepunkte.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].wendepunkte[j]-1&&i<funktionenListe[funktionenListe.length-1].wendepunkte[j]+1){
+								naheKurvenDiskusionsPunkt = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						if(!naheKurvenDiskusionsPunkt){
+							abstandPunktZuPunkt = 0.1;
+						}
+						if(funktionenListe[funktionenListe.length-1].einfachGanzrational===true){
+							let punkt = {
+									x:i,
+									y:getPunktEinfachesGanzrational(i,funktionenVorschau.gekuerzt,0)
+							}
+							funktionenListe[funktionenListe.length-1].punkteLinksVonNull.push(punkt);
+						}else{
+							let punkt = {
+									x:i,
+									y:getPunktV3(i,funktionenVorschau.gekürzt,0)
+							}
+							funktionenListe[funktionenListe.length-1].punkteLinksVonNull.push(punkt);
+						}
+						if(funktionenListe[funktionenListe.length-1].einfachGanzrational===true){
+							let punktVergroessert = {
+									x:i*vergroesserung,
+									y:getPunktEinfachesGanzrational(i,funktionenVorschau.gekuerzt,0)*vergroesserung
+							}
+							funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert.push(punktVergroessert);
+						}else{
+							let punktVergroessert = {
+									x:i*vergroesserung,
+									y:getPunktV3(i,funktionenVorschau.gekürzt,0)*vergroesserung
+							}
+							funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert.push(punktVergroessert);
+						}
+						
+					}
+					
+					
+					
+					
+					if(funktionenListe[funktionenListe.length-1].einfachGanzrational===true){
+						for(let i=0;i<1000;i+=0.1){
+							
+							let punkterste = {
+									x:i,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].ersteAbleitung.gekuerzt,0)
+							}
+							let punktzweite = {
+									x:i,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung.gekuerzt,0)
+							}
+							let punktdritte = {
+									x:i,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].dritteAbleitung.gekuerzt,0)
+							}
+							funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
+							funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
+							funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
+							let punktVergroessertErste = {
+									x:i*vergroesserung,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].ersteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							let punktVergroessertZweite = {
+									x:i*vergroesserung,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							let punktVergroessertDritte = {
+									x:i*vergroesserung,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].dritteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
+							funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
+							funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertDritte);
 				
-				let funktionGekuerzt = funktionenVorschau; 
-				kuerzeSyntaxbaumGebrochenRationalV3(funktionGekuerzt);
-				funktionenListe[funktionenListe.length-1].gekürzt = funktionGekuerzt;
-				funktionenListe[funktionenListe.length-1].gekürzt.inhaltKnotenText = syntaxBaumZuText(funktionenListe[funktionenListe.length-1].gekürzt);
+						}
+						for(let i=0;i>-1000;i-=0.1){
+							
+							let punkterste = {
+									x:i,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].ersteAbleitung.gekuerzt,0)
+							}
+							let punktzweite = {
+									x:i,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung.gekuerzt,0)
+							}
+							let punktdritte = {
+									x:i,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].dritteAbleitung.gekuerzt,0)
+							}
+							funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
+							funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
+							funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNull.push(punktdritte);
+					
+							let punktVergroessErterste = {
+									x:i*vergroesserung,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].ersteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							let punktVergroessertZweite = {
+									x:i*vergroesserung,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							let punktVergroessertDritte = {
+									x:i*vergroesserung,
+									y:getPunktEinfachesGanzrational(i,funktionenListe[funktionenListe.length-1].dritteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
+							funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
+							funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertDritte);
+							
+						}
+					}else{
+						for(let i=0;i<1000;i+=0.1){
+							
+							let punkterste = {
+									x:i,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung.gekuerzt,0)
+							}
+							let punktzweite = {
+									x:i,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung.gekuerzt,0)
+							}
+							let punktdritte = {
+									x:i,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung.gekuerzt,0)
+							}
+							funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
+							funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
+							funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
+							let punktVergroessertErste = {
+									x:i*vergroesserung,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							let punktVergroessertZweite = {
+									x:i*vergroesserung,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							let punktVergroessertDritte = {
+									x:i*vergroesserung,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
+							funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
+							funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertDritte);
 				
-				funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenGebrochenRationalV3(funktionGekuerzt);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.ersteAbleitung);
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.ersteAbleitung = funktionenVorschau.zweiteAbleitung;
-				funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung);
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.zweiteAbleitung = funktionenVorschau.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.ersteAbleitung = funktionenVorschau.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung);
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.ersteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
-				funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
+						}
+						for(let i=0;i>-1000;i-=0.1){
+							
+							let punkterste = {
+									x:i,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung.gekuerzt,0)
+							}
+							let punktzweite = {
+									x:i,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung.gekuerzt,0)
+							}
+							let punktdritte = {
+									x:i,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung.gekuerzt,0)
+							}
+							funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
+							funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
+							funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNull.push(punktdritte);
+					
+							let punktVergroessErterste = {
+									x:i*vergroesserung,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							let punktVergroessertZweite = {
+									x:i*vergroesserung,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							let punktVergroessertDritte = {
+									x:i*vergroesserung,
+									y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung.gekuerzt,0)*vergroesserung
+							}
+							funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
+							funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
+							funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertDritte);
+							
+						}
+					}
+					
+					
+					
+					
+					
+					
+				}else{
+					funktionenListe.push(funktionenVorschau);
+					addToFunctionDropdownList(funktionenVorschau);
+					
+					let funktionGekuerzt = funktionenVorschau; 
+					//kuerzeSyntaxbaumGebrochenRationalV3(funktionGekuerzt);
+					funktionenListe[funktionenListe.length-1].gekürzt = funktionGekuerzt;
+					funktionenListe[funktionenListe.length-1].gekürzt.inhaltKnotenText = syntaxBaumZuTextV2(funktionenListe[funktionenListe.length-1].gekürzt,"");
+					
+					funktionenListe[funktionenListe.length-1].ersteAbleitung = funktionAbleitenSyntaxbaum(funktionGekuerzt);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.ersteAbleitung);
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.ersteAbleitung = funktionenVorschau.zweiteAbleitung;
+					funktionenListe[funktionenListe.length-1].dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.zweiteAbleitung);
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.zweiteAbleitung = funktionenVorschau.dritteAbleitung;
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.ersteAbleitung = funktionenVorschau.dritteAbleitung;
+					funktionenListe[funktionenListe.length-1].ersteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.dritteAbleitung);
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.zweiteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.ersteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
+					funktionenListe[funktionenListe.length-1].zweiteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
+					funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
+
+					
+//					funktionenListe[funktionenListe.length-1].stammfunktion = 
+					
+					displayButtonsV2(funktionenListe[funktionenListe.length-1]);
+					//berechneKurvenDiskusionsPunkte(funktionenListe[funktionenListe.length-1]);
+					
+					let abstandPunktZuPunkt = 0.1;
+					funktionenListe[funktionenListe.length-1].punkteRechtsVonNull = [];
+					funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert = [];
+					
+					for(let i=0;i<1000;i+=abstandPunktZuPunkt){
+						let nahePolstelle = false;
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].polstellen.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].polstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].polstellen[j]+1){
+								nahePolstelle = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						if(!nahePolstelle){
+							abstandPunktZuPunkt = 0.1;
+						}
+						
+						let punkt = {
+								x:i,
+								y:getPunktV4(i,funktionenVorschau,0)
+						}
+						funktionenListe[funktionenListe.length-1].punkteRechtsVonNull.push(punkt);
+						let punktVergroessert = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenVorschau,0)*vergroesserung
+						}
+						funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert.push(punktVergroessert);
+					}
+					abstandPunktZuPunkt = 0.1;
+					
+					funktionenListe[funktionenListe.length-1].punkteLinksVonNull = [];
+					funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert = [];
+					for(let i=0;i>-1000;i-=0.1){
+						let nahePolstelle = false;
+						for(let j=0;j<funktionenListe[funktionenListe.length-1].polstellen.length;j++){
+							if(i>funktionenListe[funktionenListe.length-1].polstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].polstellen[j]+1){
+								nahePolstelle = true;
+								abstandPunktZuPunkt = 0.01
+							}
+						}
+						if(!nahePolstelle){
+							abstandPunktZuPunkt = 0.1;
+						}
+						let punkt = {
+								x:i,
+								y:getPunktV4(i,funktionenVorschau.gekürzt,0)
+						}
+						funktionenListe[funktionenListe.length-1].punkteLinksVonNull.push(punkt);
+						let punktVergroessert = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenVorschau.gekürzt,0)*vergroesserung
+						}
+						funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert.push(punktVergroessert);
+					}
+					
+					for(let i=0;i<1000;i+=0.1){
+						let punkterste = {
+								x:i,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)
+						}
+						let punktzweite = {
+								x:i,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)
+						}
+						let punktdritte = {
+								x:i,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)
+						}
+						funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
+						funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
+						funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
+						let punktVergroessertErste = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)*vergroesserung
+						}
+						let punktVergroessertZweite = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)*vergroesserung
+						}
+						let punktVergroessertDritte = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)*vergroesserung
+						}
+						funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
+						funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
+						funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertDritte);
+			
+					}
+					for(let i=0;i>-1000;i-=0.1){
+						
+						let punkterste = {
+								x:i,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)
+						}
+						let punktzweite = {
+								x:i,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)
+						}
+						let punktdritte = {
+								x:i,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)
+						}
+						funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
+						funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
+						funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNull.push(punktdritte);
+				
+						let punktVergroessErterste = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)*vergroesserung
+						}
+						let punktVergroessertZweite = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)*vergroesserung
+						}
+						let punktVergroessertDritte = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)*vergroesserung
+						}
+						funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
+						funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
+						funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertDritte);
+						
+					}
+				}
+				
+		
 				
 
-				
-				
-//				funktionenListe[funktionenListe.length-1].stammfunktion = 
-				
-				displayButtons(funktionenListe[funktionenListe.length-1]);
-				//berechneKurvenDiskusionsPunkte(funktionenListe[funktionenListe.length-1]);
-				
-				let abstandPunktZuPunkt = 0.1;
-				funktionenListe[funktionenListe.length-1].punkteRechtsVonNull = [];
-				funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert = [];
-				
-				for(let i=0;i<1000;i+=abstandPunktZuPunkt){
-					let nahePolstelle = false;
-					for(let j=0;j<funktionenListe[funktionenListe.length-1].polstellen.length;j++){
-						if(i>funktionenListe[funktionenListe.length-1].polstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].polstellen[j]+1){
-							nahePolstelle = true;
-							abstandPunktZuPunkt = 0.01
-						}
-					}
-					if(!nahePolstelle){
-						abstandPunktZuPunkt = 0.1;
-					}
-					
-					let punkt = {
-							x:i,
-							y:getPunktV3(i,funktionenVorschau.gekürzt,0)
-					}
-					funktionenListe[funktionenListe.length-1].punkteRechtsVonNull.push(punkt);
-					let punktVergroessert = {
-							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenVorschau.gekürzt,0)*vergroesserung
-					}
-					funktionenListe[funktionenListe.length-1].punkteRechtsVonNullVergroessert.push(punktVergroessert);
-				}
-				abstandPunktZuPunkt = 0.1;
-				
-				funktionenListe[funktionenListe.length-1].punkteLinksVonNull = [];
-				funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert = [];
-				for(let i=0;i>-1000;i-=0.1){
-					let nahePolstelle = false;
-					for(let j=0;j<funktionenListe[funktionenListe.length-1].polstellen.length;j++){
-						if(i>funktionenListe[funktionenListe.length-1].polstellen[j]-1&&i<funktionenListe[funktionenListe.length-1].polstellen[j]+1){
-							nahePolstelle = true;
-							abstandPunktZuPunkt = 0.01
-						}
-					}
-					if(!nahePolstelle){
-						abstandPunktZuPunkt = 0.1;
-					}
-					let punkt = {
-							x:i,
-							y:getPunktV3(i,funktionenVorschau.gekürzt,0)
-					}
-					funktionenListe[funktionenListe.length-1].punkteLinksVonNull.push(punkt);
-					let punktVergroessert = {
-							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenVorschau.gekürzt,0)*vergroesserung
-					}
-					funktionenListe[funktionenListe.length-1].punkteLinksVonNullVergroessert.push(punktVergroessert);
-				}
-				
-				for(let i=0;i<1000;i+=0.1){
-					let punkterste = {
-							x:i,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)
-					}
-					let punktzweite = {
-							x:i,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)
-					}
-					let punktdritte = {
-							x:i,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)
-					}
-					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
-					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
-					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
-					let punktVergroessertErste = {
-							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)*vergroesserung
-					}
-					let punktVergroessertZweite = {
-							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)*vergroesserung
-					}
-					let punktVergroessertDritte = {
-							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)*vergroesserung
-					}
-					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
-					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
-					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertDritte);
-		
-				}
-				for(let i=0;i>-1000;i-=0.1){
-					
-					let punkterste = {
-							x:i,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)
-					}
-					let punktzweite = {
-							x:i,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)
-					}
-					let punktdritte = {
-							x:i,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)
-					}
-					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
-					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
-					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNull.push(punktdritte);
-			
-					let punktVergroessErterste = {
-							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)*vergroesserung
-					}
-					let punktVergroessertZweite = {
-							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].zweiteAbleitung,0)*vergroesserung
-					}
-					let punktVergroessertDritte = {
-							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)*vergroesserung
-					}
-					funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
-					funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
-					funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertDritte);
-					
-				}
 				
 				funktionenVorschau = 0;
 			}
@@ -1174,20 +1460,22 @@ function checkEingabeV2(){
 		if(equation !== equationOld){
 			equationOld=equation;
 			if(checkAufFalscheSymbole(equation)&&checkKlammernKorrekt(equation)&&checkDerSyntax(equation)&&checkObVollständigerAusdruck(equation)&&checkObKorrekteKommaZahl(equation)){
-				let tree = math.parse(equation);
-				let erg = math.derivative(equation, "x"); 
-				let text = tree.toString();
+
+//				let tree = math.parse(equation);
+//				let erg = math.derivative(equation, "x"); 
+//				let text = tree.toString();
 				let rootSyntaxbaum = new FunktionAlsVektorSyntaxbaum();	
 				funktionenVorschau = rootSyntaxbaum;
+				let polynomListe = [];
 				
 				eingabeAlsVerketteteListe = convertiereStringZuVerketteteListe(equation);
-				erstelleSyntaxBaumV3(rootSyntaxbaum, equation);
 				
+				erstelleSyntaxBaumV4(rootSyntaxbaum, equation);
 				let funktionGekuerzt = funktionenVorschau; 
-				kuerzeSyntaxbaumGebrochenRationalV3(funktionGekuerzt);
-				funktionenVorschau.gekürzt = funktionGekuerzt;
+				//kuerzeSyntaxbaumGebrochenRationalV3(funktionGekuerzt);
+				//funktionenVorschau.gekürzt = funktionGekuerzt;
 				
-				funktionenVorschau.ersteAbleitung = funktionAbleitenGebrochenRationalV3(funktionGekuerzt);
+				funktionenVorschau.ersteAbleitung = funktionAbleitenSyntaxbaum(funktionGekuerzt);
 				funktionenVorschau.zweiteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.ersteAbleitung);
 				funktionenVorschau.ersteAbleitung.ersteAbleitung = funktionenVorschau.zweiteAbleitung;
 				funktionenVorschau.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung);
@@ -1199,22 +1487,18 @@ function checkEingabeV2(){
 				funktionenVorschau.zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
 				funktionenVorschau.dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
 				funktionenVorschau.dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
-//				funktionenVorschau.stammfunktion = 
-				
-//				displayButtons(funktionenVorschau);
-//				berechneKurvenDiskusionsPunkteV3(funktionenVorschau);
 				
 				for(let i=0;i<1000;i+=0.1){
 					let punkt = {
 							x:i,
 //							y:getPunktV3(i,funktionenVorschau.gekürzt)
-							y:getPunktV3(i,funktionenVorschau,0)
+							y:getPunktV4(i,funktionenVorschau,0)
 					}
 					rootSyntaxbaum.punkteRechtsVonNull.push(punkt);
 					let punktVergroessert = {
 							x:i*vergroesserung,
 //							y:getPunktV3(i,funktionenVorschau.gekürzt)*vergroesserung
-							y:getPunktV3(i,funktionenVorschau,0)*vergroesserung
+							y:getPunktV4(i,funktionenVorschau,0)*vergroesserung
 					}
 					rootSyntaxbaum.punkteRechtsVonNullVergroessert.push(punktVergroessert);
 				}
@@ -1222,16 +1506,129 @@ function checkEingabeV2(){
 					let punkt = {
 							x:i,
 //							y:getPunktV3(i,funktionenVorschau.gekürzt)
-							y:getPunktV3(i,funktionenVorschau,0)
+							y:getPunktV4(i,funktionenVorschau,0)
 					}
 					rootSyntaxbaum.punkteLinksVonNull.push(punkt);
 					let punktVergroessert = {
 							x:i*vergroesserung,
-							y:getPunktV3(i,funktionenVorschau,0)*vergroesserung
+							y:getPunktV4(i,funktionenVorschau,0)*vergroesserung
 //							y:getPunktV3(i,funktionenVorschau.gekürzt)*vergroesserung
 					}
 					rootSyntaxbaum.punkteLinksVonNullVergroessert.push(punktVergroessert);
 				}
+				
+//				if(einfachesGanzrationalesPolynom(eingabeAlsVerketteteListe, polynomListe)){
+//					funktionenVorschau.inhaltKnotenString = equation;
+//					funktionenVorschau.einfachGanzrational = true; 
+//					funktionenVorschau.gekuerzt = funktionKuerzenEinfachGanzrational(polynomListe);
+//					funktionenVorschau.ersteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.ersteAbleitung.gekuerzt = funktionAbleitenEinfachGanzrational(funktionenVorschau.gekuerzt);
+//					
+//					funktionenVorschau.zweiteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.ersteAbleitung.ersteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.dritteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.ersteAbleitung.zweiteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.zweiteAbleitung.ersteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.ersteAbleitung.dritteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.zweiteAbleitung.zweiteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.dritteAbleitung.ersteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.zweiteAbleitung.dritteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.dritteAbleitung.zweiteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//					funktionenVorschau.dritteAbleitung.dritteAbleitung = new FunktionAlsVektorSyntaxbaum();	
+//
+//					
+//					funktionenVorschau.zweiteAbleitung.gekuerzt = funktionAbleitenEinfachGanzrational(funktionenVorschau.ersteAbleitung.gekuerzt);
+//					funktionenVorschau.ersteAbleitung.ersteAbleitung.gekuerzt = funktionenVorschau.zweiteAbleitung.gekuerzt;
+//					funktionenVorschau.dritteAbleitung.gekuerzt = funktionAbleitenEinfachGanzrational(funktionenVorschau.zweiteAbleitung.gekuerzt);
+//					funktionenVorschau.ersteAbleitung.zweiteAbleitung.gekuerzt = funktionenVorschau.dritteAbleitung.gekuerzt;
+//					funktionenVorschau.zweiteAbleitung.ersteAbleitung.gekuerzt = funktionenVorschau.dritteAbleitung.gekuerzt;
+//					funktionenVorschau.ersteAbleitung.dritteAbleitung.gekuerzt = funktionAbleitenEinfachGanzrational(funktionenVorschau.dritteAbleitung.gekuerzt);
+//					funktionenVorschau.zweiteAbleitung.zweiteAbleitung.gekuerzt = funktionenVorschau.ersteAbleitung.dritteAbleitung.gekuerzt;
+//					funktionenVorschau.dritteAbleitung.ersteAbleitung.gekuerzt = funktionenVorschau.ersteAbleitung.dritteAbleitung.gekuerzt;
+//					funktionenVorschau.zweiteAbleitung.dritteAbleitung.gekuerzt = funktionAbleitenEinfachGanzrational(funktionenVorschau.zweiteAbleitung.zweiteAbleitung.gekuerzt);
+//					funktionenVorschau.dritteAbleitung.zweiteAbleitung.gekuerzt = funktionenVorschau.zweiteAbleitung.dritteAbleitung.gekuerzt;
+//					funktionenVorschau.dritteAbleitung.dritteAbleitung.gekuerzt = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung.zweiteAbleitung.gekuerzt);
+//
+//					
+//					for(let i=0;i<1000;i+=0.1){
+//						let punkt = {
+//								x:i,
+//								y:getPunktEinfachesGanzrational(i,funktionenVorschau.gekuerzt)								
+//						}
+//						rootSyntaxbaum.punkteRechtsVonNull.push(punkt);
+//						let punktVergroessert = {
+//								x:i*vergroesserung,
+//								y:getPunktEinfachesGanzrational(i,funktionenVorschau.gekuerzt)*vergroesserung								
+//						}
+//						rootSyntaxbaum.punkteRechtsVonNullVergroessert.push(punktVergroessert);
+//					}
+//					for(let i=0;i>-1000;i-=0.1){
+//						let punkt = {
+//								x:i,
+//								y:getPunktEinfachesGanzrational(i,funktionenVorschau.gekuerzt)							
+//						}
+//						rootSyntaxbaum.punkteLinksVonNull.push(punkt);
+//						let punktVergroessert = {
+//								x:i*vergroesserung,
+//								y:getPunktEinfachesGanzrational(i,funktionenVorschau.gekuerzt)*vergroesserung
+//						}
+//						rootSyntaxbaum.punkteLinksVonNullVergroessert.push(punktVergroessert);
+//					}
+//					
+//				}else{
+//					erstelleSyntaxBaumV3(rootSyntaxbaum, equation);
+//					
+//					let funktionGekuerzt = funktionenVorschau; 
+//					kuerzeSyntaxbaumGebrochenRationalV3(funktionGekuerzt);
+//					funktionenVorschau.gekürzt = funktionGekuerzt;
+//					
+//					funktionenVorschau.ersteAbleitung = funktionAbleitenGebrochenRationalV3(funktionGekuerzt);
+//					funktionenVorschau.zweiteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.ersteAbleitung);
+//					funktionenVorschau.ersteAbleitung.ersteAbleitung = funktionenVorschau.zweiteAbleitung;
+//					funktionenVorschau.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung);
+//					funktionenVorschau.ersteAbleitung.zweiteAbleitung = funktionenVorschau.dritteAbleitung;
+//					funktionenVorschau.zweiteAbleitung.ersteAbleitung = funktionenVorschau.dritteAbleitung;
+//					funktionenVorschau.ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung);
+//					funktionenVorschau.zweiteAbleitung.zweiteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
+//					funktionenVorschau.dritteAbleitung.ersteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
+//					funktionenVorschau.zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
+//					funktionenVorschau.dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
+//					funktionenVorschau.dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
+////					funktionenVorschau.stammfunktion = 
+//					
+////					displayButtons(funktionenVorschau);
+////					berechneKurvenDiskusionsPunkteV3(funktionenVorschau);
+//					
+//					for(let i=0;i<1000;i+=0.1){
+//						let punkt = {
+//								x:i,
+////								y:getPunktV3(i,funktionenVorschau.gekürzt)
+//								y:getPunktV3(i,funktionenVorschau,0)
+//						}
+//						rootSyntaxbaum.punkteRechtsVonNull.push(punkt);
+//						let punktVergroessert = {
+//								x:i*vergroesserung,
+////								y:getPunktV3(i,funktionenVorschau.gekürzt)*vergroesserung
+//								y:getPunktV3(i,funktionenVorschau,0)*vergroesserung
+//						}
+//						rootSyntaxbaum.punkteRechtsVonNullVergroessert.push(punktVergroessert);
+//					}
+//					for(let i=0;i>-1000;i-=0.1){
+//						let punkt = {
+//								x:i,
+////								y:getPunktV3(i,funktionenVorschau.gekürzt)
+//								y:getPunktV3(i,funktionenVorschau,0)
+//						}
+//						rootSyntaxbaum.punkteLinksVonNull.push(punkt);
+//						let punktVergroessert = {
+//								x:i*vergroesserung,
+//								y:getPunktV3(i,funktionenVorschau,0)*vergroesserung
+////								y:getPunktV3(i,funktionenVorschau.gekürzt)*vergroesserung
+//						}
+//						rootSyntaxbaum.punkteLinksVonNullVergroessert.push(punktVergroessert);
+//					}
+//				}
+				
 			}
 		}else{			
 			return;
@@ -1285,9 +1682,18 @@ function zeichneFunktionsgraphen(){
 						canvasContext.beginPath();
 						canvasContext.strokeStyle = 'rgba(' + String(farbeExtremstellen.r) + ',' + String(farbeExtremstellen.g) + ',' + String(farbeExtremstellen.b) + ',' + String(farbeExtremstellen.a) + ')';
 						DrawLine(funktionenListe[i].extremstellen[j], 0);	
-						DrawLine(funktionenListe[i].extremstellen[j], -getPunkt(funktionenListe[i].extremstellen[j],funktionenListe[i].gekürzt));	
-						canvasContext.stroke();
-						DrawCircle(funktionenListe[i].extremstellen[j], -getPunkt(funktionenListe[i].extremstellen[j],funktionenListe[i].gekürzt), 0.1, farbeExtremstellen.r, farbeExtremstellen.g, farbeExtremstellen.b, farbeExtremstellen.a,true,false);
+						if(funktionenListe[i].einfachGanzrational===true){
+							DrawLine(funktionenListe[i].extremstellen[j], -getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].gekuerzt));	
+							canvasContext.stroke();
+							DrawCircle(funktionenListe[i].extremstellen[j], -getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].gekuerzt), 0.1, farbeExtremstellen.r, farbeExtremstellen.g, farbeExtremstellen.b, farbeExtremstellen.a,true,false);
+						
+						}else{
+							DrawLine(funktionenListe[i].extremstellen[j], -getPunkt(funktionenListe[i].extremstellen[j],funktionenListe[i].gekürzt));	
+							canvasContext.stroke();
+							DrawCircle(funktionenListe[i].extremstellen[j], -getPunkt(funktionenListe[i].extremstellen[j],funktionenListe[i].gekürzt), 0.1, farbeExtremstellen.r, farbeExtremstellen.g, farbeExtremstellen.b, farbeExtremstellen.a,true,false);
+						
+						}
+						
 					}
 				}if(funktionenListe[i].wendepunkteAnzeigen){
 					for(let j=0;j<funktionenListe[i].wendepunkte.length;j++){
@@ -1295,9 +1701,9 @@ function zeichneFunktionsgraphen(){
 						canvasContext.beginPath();
 						canvasContext.strokeStyle = 'rgba(' + String(farbeWendestellen.r) + ',' + String(farbeWendestellen.g) + ',' + String(farbeWendestellen.b) + ',' + String(farbeWendestellen.a) + ')';
 						DrawLine(funktionenListe[i].wendepunkte[j], 0);	
-						DrawLine(funktionenListe[i].wendepunkte[j], -getPunkt(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekürzt));	
+						DrawLine(funktionenListe[i].wendepunkte[j], -getPunktEinfachesGanzrational(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekuerzt));	
 						canvasContext.stroke();
-						DrawCircle(funktionenListe[i].wendepunkte[j], -getPunkt(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekürzt), 0.1, farbeWendestellen.r, farbeWendestellen.g, farbeWendestellen.b, farbeWendestellen.a,true,false);
+						DrawCircle(funktionenListe[i].wendepunkte[j], -getPunktEinfachesGanzrational(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekuerzt), 0.1, farbeWendestellen.r, farbeWendestellen.g, farbeWendestellen.b, farbeWendestellen.a,true,false);
 					}
 				}if(funktionenListe[i].polstellenAnzeigen){
 					for(let j=0;j<funktionenListe[i].polstellen.length;j++){
