@@ -1476,17 +1476,17 @@ function checkEingabeV2(){
 				//funktionenVorschau.gekürzt = funktionGekuerzt;
 				
 				funktionenVorschau.ersteAbleitung = funktionAbleitenSyntaxbaum(funktionGekuerzt);
-				funktionenVorschau.zweiteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.ersteAbleitung);
+				funktionenVorschau.zweiteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.ersteAbleitung);
 				funktionenVorschau.ersteAbleitung.ersteAbleitung = funktionenVorschau.zweiteAbleitung;
-				funktionenVorschau.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung);
+				funktionenVorschau.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.zweiteAbleitung);
 				funktionenVorschau.ersteAbleitung.zweiteAbleitung = funktionenVorschau.dritteAbleitung;
 				funktionenVorschau.zweiteAbleitung.ersteAbleitung = funktionenVorschau.dritteAbleitung;
-				funktionenVorschau.ersteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung);
+				funktionenVorschau.ersteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.dritteAbleitung);
 				funktionenVorschau.zweiteAbleitung.zweiteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
 				funktionenVorschau.dritteAbleitung.ersteAbleitung = funktionenVorschau.ersteAbleitung.dritteAbleitung;
-				funktionenVorschau.zweiteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
+				funktionenVorschau.zweiteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
 				funktionenVorschau.dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
-				funktionenVorschau.dritteAbleitung.dritteAbleitung = funktionAbleitenGebrochenRationalV3(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
+				funktionenVorschau.dritteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
 				
 				for(let i=0;i<1000;i+=0.1){
 					let punkt = {
@@ -1683,14 +1683,14 @@ function zeichneFunktionsgraphen(){
 						canvasContext.strokeStyle = 'rgba(' + String(farbeExtremstellen.r) + ',' + String(farbeExtremstellen.g) + ',' + String(farbeExtremstellen.b) + ',' + String(farbeExtremstellen.a) + ')';
 						DrawLine(funktionenListe[i].extremstellen[j], 0);	
 						if(funktionenListe[i].einfachGanzrational===true){
-							DrawLine(funktionenListe[i].extremstellen[j], -getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].gekuerzt));	
+							DrawLine(funktionenListe[i].extremstellen[j], -getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i],0));	
 							canvasContext.stroke();
-							DrawCircle(funktionenListe[i].extremstellen[j], -getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].gekuerzt), 0.1, farbeExtremstellen.r, farbeExtremstellen.g, farbeExtremstellen.b, farbeExtremstellen.a,true,false);
+							DrawCircle(funktionenListe[i].extremstellen[j], -getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i],0), 0.1, farbeExtremstellen.r, farbeExtremstellen.g, farbeExtremstellen.b, farbeExtremstellen.a,true,false);
 						
 						}else{
-							DrawLine(funktionenListe[i].extremstellen[j], -getPunkt(funktionenListe[i].extremstellen[j],funktionenListe[i].gekürzt));	
+							DrawLine(funktionenListe[i].extremstellen[j], -getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i],0));	
 							canvasContext.stroke();
-							DrawCircle(funktionenListe[i].extremstellen[j], -getPunkt(funktionenListe[i].extremstellen[j],funktionenListe[i].gekürzt), 0.1, farbeExtremstellen.r, farbeExtremstellen.g, farbeExtremstellen.b, farbeExtremstellen.a,true,false);
+							DrawCircle(funktionenListe[i].extremstellen[j], -getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i],0), 0.1, farbeExtremstellen.r, farbeExtremstellen.g, farbeExtremstellen.b, farbeExtremstellen.a,true,false);
 						
 						}
 						
@@ -1701,9 +1701,9 @@ function zeichneFunktionsgraphen(){
 						canvasContext.beginPath();
 						canvasContext.strokeStyle = 'rgba(' + String(farbeWendestellen.r) + ',' + String(farbeWendestellen.g) + ',' + String(farbeWendestellen.b) + ',' + String(farbeWendestellen.a) + ')';
 						DrawLine(funktionenListe[i].wendepunkte[j], 0);	
-						DrawLine(funktionenListe[i].wendepunkte[j], -getPunktEinfachesGanzrational(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekuerzt));	
+						DrawLine(funktionenListe[i].wendepunkte[j], -getPunktV4(funktionenListe[i].wendepunkte[j],funktionenListe[i]));	
 						canvasContext.stroke();
-						DrawCircle(funktionenListe[i].wendepunkte[j], -getPunktEinfachesGanzrational(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekuerzt), 0.1, farbeWendestellen.r, farbeWendestellen.g, farbeWendestellen.b, farbeWendestellen.a,true,false);
+						DrawCircle(funktionenListe[i].wendepunkte[j], -getPunktV4(funktionenListe[i].wendepunkte[j],funktionenListe[i]), 0.1, farbeWendestellen.r, farbeWendestellen.g, farbeWendestellen.b, farbeWendestellen.a,true,false);
 					}
 				}if(funktionenListe[i].polstellenAnzeigen){
 					for(let j=0;j<funktionenListe[i].polstellen.length;j++){

@@ -194,7 +194,7 @@ function getPunktV3(x, funktion, y) {
 
 
 
-function getPunktV4(x, funktion, y) {
+function getPunktV4(x, funktion, y=0) {
 
 	if(funktion.linkesChild!=undefined||funktion.linkesChild!=null){
 		if ((funktion.inhaltKnotenSymbol === '+'|| funktion.inhaltKnotenSymbol === '-') && (funktion.linkesChild.inhaltKnotenSymbol==="+"||funktion.linkesChild.inhaltKnotenSymbol==="-")) {//bis an das linke ende des baums
@@ -249,7 +249,10 @@ function getPunktV4(x, funktion, y) {
 
 	
 	if(funktion.inhaltKnotenPolynom!=undefined && !isNaN(funktion.inhaltKnotenPolynom.koeffizient)){
-		y += fV3(x, funktion.inhaltKnotenPolynom);
+		if(funktion.inhaltKnotenPolynom.zahlOderVariablenName==='x'||funktion.inhaltKnotenPolynom.zahlOderVariablenName==='X'){
+			y += fV3(x, funktion.inhaltKnotenPolynom);
+		}
+		
 	} 
 	
 	if(funktion.linkesChild!=undefined||funktion.linkesChild!=null){
@@ -318,10 +321,12 @@ function getPunktV4(x, funktion, y) {
 	}
 	
 	if(funktion.rechtesChild===undefined||funktion.rechtesChild===null&&funktion.linkesChild===undefined||funktion.linkesChild===null){
-		if(!isNaN(funktion.inhaltKnotenSymbol)){
+		if(!isNaN(funktion.inhaltKnotenSymbol)&&funktion.inhaltKnotenSymbol!=""){
 			y += funktion.inhaltKnotenSymbol;
 		}
-		
+		if(!isNaN(funktion.inhaltKnotenPolynom.zahlOderVariablenName)){
+			y += funktion.inhaltKnotenPolynom.koeffizient;
+		}
 	}
 
 	return y;
@@ -500,7 +505,23 @@ function syntaxBaumZuTextV2(root,funktionAlsText){
 	
 	let aktuellerKnoten = root;
 	if(aktuellerKnoten.linkesChild===null&&aktuellerKnoten.rechtesChild===null&&aktuellerKnoten.parent===null){
-		funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.koeffizient;
+		if(aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName==='x'){
+			if(aktuellerKnoten.inhaltKnotenPolynom.koeffizient!=1){
+				funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.koeffizient;
+				funktionAlsText += '*'
+			}
+		
+			funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName;
+			if(aktuellerKnoten.inhaltKnotenPolynom.potenz!=1){
+				funktionAlsText += '^'
+				funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.potenz;
+			}
+			
+			
+		}else{
+			funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.koeffizient;
+		}
+		
 		return funktionAlsText;
 	}
 	if(aktuellerKnoten.linkesChild!=null){
@@ -563,10 +584,10 @@ function syntaxBaumZuTextV2(root,funktionAlsText){
 						}
 					}
 				}else if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=0&&!isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)){
-					if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=1){
+					//if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=1){
 						funktionAlsText += aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient;
 						
-					}					
+					//}					
 				}
 			}
 		}
@@ -702,9 +723,19 @@ function schaueAlleKnotenAnUndLeiteAb(rootFunktion, fStrich){
 
 function schaueAlleKnotenAnUndLeiteAbV2(rootFunktion, fStrich){
 	if(rootFunktion.linkesChild===null&&rootFunktion.rechtesChild===null&&rootFunktion.parent===null){
-		fStrich.inhaltKnotenPolynom.potenz = 0;
-		fStrich.inhaltKnotenPolynom.zahlOderVariablenName = 0;
-		fStrich.inhaltKnotenPolynom.koeffizient = 0;
+		if(rootFunktion.inhaltKnotenSymbol==='x'||rootFunktion.inhaltKnotenSymbol==='X'){
+			fStrich.inhaltKnotenPolynom.potenz = 1;
+			fStrich.inhaltKnotenPolynom.zahlOderVariablenName = 1;
+			fStrich.inhaltKnotenPolynom.koeffizient = 1;
+		}else if(rootFunktion.inhaltKnotenSymbol==='^'){
+			fStrich.inhaltKnotenPolynom = funktionAbleitenV3(rootFunktion.inhaltKnotenPolynom);
+		}else if(rootFunktion.inhaltKnotenPolynom.potenz!=0&&rootFunktion.inhaltKnotenPolynom.koeffizient!=0&&((rootFunktion.inhaltKnotenPolynom.zahlOderVariablenName==='x')||(rootFunktion.inhaltKnotenPolynom.zahlOderVariablenName==='X'))){
+			fStrich.inhaltKnotenPolynom = funktionAbleitenV3(rootFunktion.inhaltKnotenPolynom);
+		}else{
+			fStrich.inhaltKnotenPolynom.potenz = 0;
+			fStrich.inhaltKnotenPolynom.zahlOderVariablenName = 0;
+			fStrich.inhaltKnotenPolynom.koeffizient = 0;
+		}
 		return;
 	}
 	if(rootFunktion.linkesChild!=null){
@@ -842,15 +873,20 @@ function funktionAbleitenGebrochenRationalV3(funktion) {
 
 
 function funktionAbleitenSyntaxbaum(funktion) {
-	let fStrich = new FunktionAlsVektorSyntaxbaum();
-	schaueAlleKnotenAnUndLeiteAbV2(funktion, fStrich);
+	if(funktion.inhaltKnotenSymbol==='/'){
+		
+	}else{
+		let fStrich = new FunktionAlsVektorSyntaxbaum();
+		schaueAlleKnotenAnUndLeiteAbV2(funktion, fStrich);
 
-	while(fStrich.parent != null){
-		fStrich = fStrich.parent;
+		while(fStrich.parent != null){
+			fStrich = fStrich.parent;
+		}
+		
+		fStrich.inhaltKnotenString = syntaxBaumZuTextV2(fStrich,"");
+		return fStrich;
 	}
 	
-	fStrich.inhaltKnotenString = syntaxBaumZuTextV2(fStrich,"");
-	return fStrich;
 }
 
 
@@ -1304,7 +1340,7 @@ function newtonVerfahren_GanzRational(startPunktNewton, funktion){
 }
 
 function newtonVerfahren_GebrochenRational(startPunktNewton, funktion, gebrochenRationalPolstellen){
-	let tolleranz = Math.pow(10,-15);
+	let tolleranz = Math.pow(10,-13);
 	let xnZaehler = startPunktNewton;
 	let xn1Zaehler = 0;
 	let counterZaehler = 0;
@@ -1316,36 +1352,36 @@ function newtonVerfahren_GebrochenRational(startPunktNewton, funktion, gebrochen
 		if(funktion.einfachGanzrational===false){
 			if(funktion.inhaltKnotenSymbol === "/"){
 				fXZaehler = funktion.linkesChild;
-				fStrichXZaehler = funktionAbleitenGebrochenRational(funktion.linkesChild);
+				fStrichXZaehler = funktionAbleitenGebrochenRationalV4(funktion.linkesChild);
 			}else{
 				if(funktion.gekürzt!=undefined){
-					fXZaehler = funktion.gekürzt;
-					fStrichXZaehler = funktionAbleitenGebrochenRational(funktion.gekürzt);
+					fXZaehler = funktion;
+					fStrichXZaehler = funktionAbleitenSyntaxbaum(funktion);
 				}else{
 					fXZaehler = funktion;
-					fStrichXZaehler = funktionAbleitenGebrochenRational(funktion.gekuerzt);
+					fStrichXZaehler = funktionAbleitenSyntaxbaum(funktion);
 				}
 				
 			}
 		}else if(funktion.einfachGanzrational===true){
-			fXZaehler = funktion.gekuerzt;
-			fStrichXZaehler = funktion.ersteAbleitung;
+			fXZaehler = funktion;
+			fStrichXZaehler = funktionAbleitenSyntaxbaum(funktion);
 		}
 		
-		while (getPunktEinfachesGanzrational(xn1Zaehler, fStrichXZaehler) === 0) {
+		while (getPunktV4(xn1Zaehler, fStrichXZaehler, 0) === 0) {
 			xn1Zaehler++;
 		}
-		while ((Math.abs(xnZaehler - xn1Zaehler)>tolleranz || Math.abs(getPunktEinfachesGanzrational(xn1Zaehler, fXZaehler))>tolleranz) && counterZaehler<1000) {
+		while ((Math.abs(xnZaehler - xn1Zaehler)>tolleranz || Math.abs(getPunktV4(xn1Zaehler, fXZaehler, 0))>tolleranz) && counterZaehler<1000) {
 			if (counterZaehler > 0) {
 				xnZaehler = xn1Zaehler;
 			}
-			xn1Zaehler = xnZaehler - (getPunktEinfachesGanzrational(xn1Zaehler, fXZaehler) / getPunktEinfachesGanzrational(xn1Zaehler, fStrichXZaehler));
-			yVonXn1Zaehler = getPunktEinfachesGanzrational(xn1Zaehler, fXZaehler);
+			xn1Zaehler = xnZaehler - (getPunktV4(xn1Zaehler, fXZaehler, 0) / getPunktV4(xn1Zaehler, fStrichXZaehler, 0));
+			yVonXn1Zaehler = getPunktV4(xn1Zaehler, fXZaehler, 0);
 			counterZaehler++;
 		}
 		let p1Zaehler = {
 				x:xn1Zaehler,
-				y:getPunktEinfachesGanzrational(xn1Zaehler, fXZaehler)
+				y:getPunktV4(xn1Zaehler, fXZaehler, 0)
 		}
 
 		if (Math.abs(p1Zaehler.y) > tolleranz) {
@@ -1356,7 +1392,7 @@ function newtonVerfahren_GebrochenRational(startPunktNewton, funktion, gebrochen
 		}
 	}else{
 		
-		if (funktion.gekürzt.inhaltKnotenSymbol == '/') {
+		if (funktion.inhaltKnotenSymbol == '/') {
 			let xnNenner = x;
 			let xn1Nenner = 0;
 			let counterNenner = 0;
@@ -1403,15 +1439,15 @@ function regulaFalsi_GebrochenRational( a,  b, funktion) {
 	let tolleranz = Math.pow(10,-10);
 	let c = 0;
 	let counter = 0;
-	let fb = f(b, funktion);
-	let fa = f(a, funktion);
+	let fb = getPunktV4(b, funktion,0);
+	let fa = getPunktV4(a, funktion,0);
 	let fc = 0;
 	
 	while (Math.abs(fb) > tolleranz && Math.abs(fa) > tolleranz && counter<1000) {
-		fb = f(b, funktion);
-		fa = f(a, funktion);
+		fb = getPunktV4(b, funktion,0);
+		fa = getPunktV4(a, funktion,0);
 		c = b - (((b - a) / (fb - fa))*fb);
-		let fc = f(c, funktion);
+		let fc = getPunktV4(c, funktion,0);
 		if (fc*fa<0) {
 			a = c;
 		}
@@ -1425,14 +1461,14 @@ function regulaFalsi_GebrochenRational( a,  b, funktion) {
 	if (Math.abs(fa) < tolleranz) {
 		p = {
 				x:a,
-				y:f(a, funktion)
+				y:getPunktV4(a, funktion)
 		};
 		return p;
 	}
 	if (Math.abs(fb) < tolleranz) {
 		p = {
 				x:b,
-				y:f(b, funktion)
+				y:getPunktV4(b, funktion)
 		};
 		return p;
 	}

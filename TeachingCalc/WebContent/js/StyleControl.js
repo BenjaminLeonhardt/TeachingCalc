@@ -583,7 +583,7 @@ function displayButtonsV2(funktionObjekt){
 
 function getHoechstePotenzV2(funktionObjekt){
 	let hoechstePotenz = 0;
-	if(funktionObjekt.inhaltKnotenSymbol==='^'){
+	if(funktionObjekt.inhaltKnotenSymbol==='^'||!isNaN(funktionObjekt.inhaltKnotenPolynom.potenz)){
 		hoechstePotenz = funktionObjekt.inhaltKnotenPolynom.potenz;
 	}
 	if(funktionObjekt.rechtesChild!=null){
@@ -618,11 +618,103 @@ function getVector(i){
 	return knotenVektor;
 }
 
-function getPolynom(i){
-	if(funktionenListe[i].inhaltKnotenSymbol==='+'){
-		return funktionenListe[i].inhaltKnotenPolynom;
+class quadratischesPolynom {
+	constructor(){
+		this.a = NaN;
+		this.b = NaN; //im normalfall x oder auch konstante Zahl
+		this.c = NaN;
+	}; 
+};
+
+function getABC(funktion){
+	let a=0,b=0,c=0;
+	if(((funktion.inhaltKnotenSymbol==='^'||funktion.inhaltKnotenSymbol==='*'))||
+			(funktion.inhaltKnotenPolynom.potenz==2) && //für wenn nur polynom 2ten grades vorhanden z.b. x^2 oder 2*x^2
+			funktion.linkesChild===null &&
+			funktion.rechtesChild===null){
+		
+		
+		a = funktion.inhaltKnotenPolynom.koeffizient;
+		b = 0;
+		c = 0;
+		
+	}else  if((funktion.inhaltKnotenSymbol==='+'||funktion.inhaltKnotenSymbol==='-') && //für wenn nur polynom 2ten und 1ten grades vorhanden z.b. x^2+x oder 2*x^2+2*x und x^2+1
+			funktion.linkesChild.linkesChild===null){
+		
+		a = funktion.linkesChild.inhaltKnotenPolynom.koeffizient;
+        if(funktion.inhaltKnotenSymbol==='-'){
+        	if(funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='x'||funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='X'){
+        		b = -funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}else{
+        		c = -funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}
+        	
+        }else{
+        	if(funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='x'||funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='X'){
+        		b = funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}else{
+        		c = funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}
+        }
+        
+        
+	}else if((funktion.inhaltKnotenSymbol==='+'||funktion.inhaltKnotenSymbol==='-') &&
+			funktion.linkesChild.linkesChild.inhaltKnotenPolynom.potenz===2 &&
+			funktion.linkesChild.rechtesChild.inhaltKnotenPolynom.potenz===1 &&
+			funktion.rechtesChild.inhaltKnotenPolynom.potenz===1){
+		
+	
+		
+        
+        a = funktion.linkesChild.linkesChild.inhaltKnotenPolynom.koeffizient;
+        if(funktion.linkesChild.inhaltKnotenSymbol==='-'){
+        	b = -funktion.linkesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }else{
+        	b = funktion.linkesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }
+       
+        if(funktion.inhaltKnotenSymbol==='-'){
+        	c = -funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }else{
+        	c = funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }
+	}else{
+		let polynom = new quadratischesPolynom();  
+		polynom.a = 0;
+		polynom.b = 0;
+		polynom.c = 0;
+		return polynom;
 	}
+    let polynom = new quadratischesPolynom();   
+    polynom.a = a;
+    polynom.b = b;
+    polynom.c = c;
+    return polynom;
 }
+
+function getAB(funktion){
+	let polynom = new quadratischesPolynom();
+	polynom.a = 0;
+	polynom.b = 0;
+	if(funktion.inhaltKnotenSymbol==='+'){
+		polynom.a = funktion.linkesChild.inhaltKnotenPolynom.koeffizient;
+		polynom.b = funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+	}else if(funktion.inhaltKnotenSymbol==='-'){
+		polynom.a = funktion.linkesChild.inhaltKnotenPolynom.koeffizient;
+		polynom.b = -funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+	}else if(funktion.inhaltKnotenSymbol=""&&!isNaN(funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)){
+		polynom.a = funktion.inhaltKnotenPolynom.koeffizient;
+		polynom.b = 0;
+	}else if(funktion.inhaltKnotenPolynom.potenz===1){
+		polynom.a = funktion.inhaltKnotenPolynom.koeffizient;
+		polynom.b = 0;
+	}
+	 
+	return polynom;
+}
+
+
+
 
 
 function onClickGeradengleichungNullstellen(){
@@ -634,11 +726,20 @@ function onClickGeradengleichungNullstellen(){
 			document.getElementById("NullstellenTextfeld").value = "";
 			funktionenListe[i].nullstellen = [];
 			
-			let knotenPolynom = getPolynom(i);
+			let polynom = getAB(funktionenListe[i]);
 			
-			if(funktionenListe[i].inhaltKnotenSymbol==='+'&&funktionenListe[i].linkesChild.inhaltKnotenPolynom.potenz===1&&funktionenListe[i].rechtesChild.inhaltKnotenPolynom.potenz===1){
+			if(polynom.a!=0){
 
-				funktionenListe[i].nullstellen.push((-funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient)/funktionenListe[i].linkesChild.inhaltKnotenPolynom.koeffizient);
+				if(funktionenListe[i].inhaltKnotenSymbol==='+')
+					funktionenListe[i].nullstellen.push((-funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient)/funktionenListe[i].linkesChild.inhaltKnotenPolynom.koeffizient);
+				else if(funktionenListe[i].inhaltKnotenSymbol==='-'){
+					funktionenListe[i].nullstellen.push((funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient)/funktionenListe[i].linkesChild.inhaltKnotenPolynom.koeffizient);
+				}else if(polynom.b===0){
+					funktionenListe[i].nullstellen.push(0);
+				}
+				
+				
+//				funktionenListe[i].nullstellen.push((-funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient)/funktionenListe[i].linkesChild.inhaltKnotenPolynom.koeffizient);
 				
 				document.getElementById("NullstellenTextfeld").value = "x1=" + zahlRunden(funktionenListe[i].nullstellen[0]);
 			}else{
@@ -658,6 +759,8 @@ function onClickGeradengleichungNullstellen(){
 	}
 }
 
+
+
 function onClickMitternachtsformelNullstellen(){
 	zeichneReiter6 = true;
 	zeigeInhaltReiter6 = 2;
@@ -667,27 +770,26 @@ function onClickMitternachtsformelNullstellen(){
 			document.getElementById("NullstellenTextfeld").value = "";
 			funktionenListe[i].nullstellen = [];
 			
-			let knotenVektor = getVector(i);
+			let a=0,b=0,c=0;
 			
-			if(getHoechstePotenz(knotenVektor)===2){
-				let a=0,b=0,c=0;
-				for(let j=0;j<knotenVektor.length;j++){
-					if(knotenVektor[j].potenz===0){
-						c = knotenVektor[j].koeffizient;
-					}else if(knotenVektor[j].potenz===1){
-						b = knotenVektor[j].koeffizient;
-					}else if(knotenVektor[j].potenz===2){
-						a = knotenVektor[j].koeffizient;
-					}
-				}
+			let polynom = getABC(funktionenListe[i]);
+            a = polynom.a;
+            b = polynom.b;
+            c = polynom.c;
+            
+			if(a===0&&b===0&&c===0){
+				document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich...Für die Mitternachtsformel muss das Polynom muss die Form ax^2+bx+c haben";
+				return;
+			}
+			
 
-				let minusB = (-b);
-				let BQuadrat = Math.pow(b,2);
-				let VierAC = (4*a*c);
-				let wurzelBQuadratMinus4AC = Math.sqrt(BQuadrat - VierAC);
-				let zweiMalA = 2*a;
-			
-				if(BQuadrat-VierAC>=0){
+                let minusB = (-b);
+ 				let BQuadrat = Math.pow(b,2);
+ 				let VierAC = (4*a*c);
+ 				let wurzelBQuadratMinus4AC = Math.sqrt(BQuadrat - VierAC);
+ 				let zweiMalA = 2*a;
+
+ 				if(BQuadrat-VierAC>=0){
 					let x1 = (minusB + wurzelBQuadratMinus4AC) / zweiMalA;
 					let x2 = (minusB - wurzelBQuadratMinus4AC) / zweiMalA;
 				
@@ -698,13 +800,48 @@ function onClickMitternachtsformelNullstellen(){
 				}else{
 					document.getElementById("NullstellenTextfeld").value = "Keine Nullstellen gefunden.";
 				}
-							
-				
-			}else{
-				document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich...Für die Mitternachtsformel muss das Polynom muss die Form ax^2+bx+c haben";
-			}		
-		}
-	}
+
+            }
+        }
+	
+			
+//			let knotenVektor = getVector(i);
+//			if(getHoechstePotenz(knotenVektor)===2){
+//				let a=0,b=0,c=0;
+//				for(let j=0;j<knotenVektor.length;j++){
+//					if(knotenVektor[j].potenz===0){
+//						c = knotenVektor[j].koeffizient;
+//					}else if(knotenVektor[j].potenz===1){
+//						b = knotenVektor[j].koeffizient;
+//					}else if(knotenVektor[j].potenz===2){
+//						a = knotenVektor[j].koeffizient;
+//					}
+//				}
+//
+//				let minusB = (-b);
+//				let BQuadrat = Math.pow(b,2);
+//				let VierAC = (4*a*c);
+//				let wurzelBQuadratMinus4AC = Math.sqrt(BQuadrat - VierAC);
+//				let zweiMalA = 2*a;
+//			
+//				if(BQuadrat-VierAC>=0){
+//					let x1 = (minusB + wurzelBQuadratMinus4AC) / zweiMalA;
+//					let x2 = (minusB - wurzelBQuadratMinus4AC) / zweiMalA;
+//				
+//		
+//					funktionenListe[i].nullstellen.push(x1);
+//					funktionenListe[i].nullstellen.push(x2);
+//					document.getElementById("NullstellenTextfeld").value = "x1=" + zahlRunden(x1) + " x2=" + zahlRunden(x2);
+//				}else{
+//					document.getElementById("NullstellenTextfeld").value = "Keine Nullstellen gefunden.";
+//				}
+//							
+//				
+//			}else{
+//				document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich...Für die Mitternachtsformel muss das Polynom muss die Form ax^2+bx+c haben";
+//			}		
+//		}
+//	}
 }
 
 function onClickPQFormelNullstellen(){
@@ -716,26 +853,19 @@ function onClickPQFormelNullstellen(){
 			document.getElementById("NullstellenTextfeld").value = "";
 			funktionenListe[i].nullstellen = [];
 			
-			let knotenVektor = getVector(i);
+			let bOderP = 0, cOderQ = 0;
+			let teilerFuerRichtigeForm = 0;
 			
-			if(getHoechstePotenz(knotenVektor)===2){
-				let bOderP = 0, cOderQ = 0;
-				let teilerFuerRichtigeForm = 0;
-				for(let j=0;j<knotenVektor.length;j++){
-					if(knotenVektor[j].potenz===2){
-						teilerFuerRichtigeForm = knotenVektor[j].koeffizient;
-					}
+			let polynom = getABC(funktionenListe[i]);
+			teilerFuerRichtigeForm = polynom.a;
+            bOderP = polynom.b / teilerFuerRichtigeForm;
+            cOderQ = polynom.c / teilerFuerRichtigeForm;
+			
+            if(polynom.a===0&&polynom.b===0&&polynom.c===0){
+					document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich...Für die PQ-Formel muss das Polynom muss die Form ax^2+bx+c haben";
+					return;
 				}
-				
-				for(let j=0;j<knotenVektor.length;j++){
-					if(knotenVektor[j].potenz===0){
-						cOderQ = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
-					}else if(knotenVektor[j].potenz===1){
-						bOderP = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
-					}
-				}
-				
-						
+	                
 				if(Math.pow(bOderP/2,2)-cOderQ>=0){
 					let x1 = -(bOderP/2)+Math.sqrt(Math.pow(bOderP/2,2)-cOderQ);
 					let x2 = -(bOderP/2)-Math.sqrt(Math.pow(bOderP/2,2)-cOderQ);
@@ -748,9 +878,44 @@ function onClickPQFormelNullstellen(){
 				}else{
 					document.getElementById("NullstellenTextfeld").value = "Keine Nullstellen gefunden.";
 				}
-			}else{
-				document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich...Für die PQ-Formel muss das Polynom muss die Form ax^2+bx+c haben";
-			}
+	
+			
+			
+//			let knotenVektor = getVector(i);
+//			
+//			if(getHoechstePotenz(knotenVektor)===2){
+//				let bOderP = 0, cOderQ = 0;
+//				let teilerFuerRichtigeForm = 0;
+//				for(let j=0;j<knotenVektor.length;j++){
+//					if(knotenVektor[j].potenz===2){
+//						teilerFuerRichtigeForm = knotenVektor[j].koeffizient;
+//					}
+//				}
+//				
+//				for(let j=0;j<knotenVektor.length;j++){
+//					if(knotenVektor[j].potenz===0){
+//						cOderQ = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
+//					}else if(knotenVektor[j].potenz===1){
+//						bOderP = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
+//					}
+//				}
+//				
+//						
+//				if(Math.pow(bOderP/2,2)-cOderQ>=0){
+//					let x1 = -(bOderP/2)+Math.sqrt(Math.pow(bOderP/2,2)-cOderQ);
+//					let x2 = -(bOderP/2)-Math.sqrt(Math.pow(bOderP/2,2)-cOderQ);
+//				
+//					
+//					funktionenListe[i].nullstellen.push(x1);
+//					funktionenListe[i].nullstellen.push(x2);
+//					
+//					document.getElementById("NullstellenTextfeld").value = "x1=" + zahlRunden(x1) + " x2=" + zahlRunden(x2);
+//				}else{
+//					document.getElementById("NullstellenTextfeld").value = "Keine Nullstellen gefunden.";
+//				}
+//			}else{
+//				document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich...Für die PQ-Formel muss das Polynom muss die Form ax^2+bx+c haben";
+//			}
 		}
 	}
 }
@@ -764,24 +929,31 @@ function onClickSatzVonVietaNullstellen(){
 			document.getElementById("NullstellenTextfeld").value = "";
 			funktionenListe[i].nullstellen = [];
 			
-			let knotenVektor = getVector(i);
 			
-			if(getHoechstePotenz(knotenVektor)===2){
 				let p = 0, q = 0;
-				let teilerFuerRichtigeForm = 0;
-				for(let j=0;j<knotenVektor.length;j++){
-					if(knotenVektor[j].potenz===2){
-						teilerFuerRichtigeForm = knotenVektor[j].koeffizient;
-					}
-				}
+				let teilerFuerRichtigeForm = 0;			
 				
-				for(let j=0;j<knotenVektor.length;j++){
-					if(knotenVektor[j].potenz===0){
-						q = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
-					}else if(knotenVektor[j].potenz===1){
-						p = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
-					}
-				}
+				let polynom = getABC(funktionenListe[i]);
+				teilerFuerRichtigeForm = polynom.a;
+	            bOderP = polynom.b;
+	            cOderQ = polynom.c;
+	            
+	            q = cOderQ / teilerFuerRichtigeForm;
+				p = bOderP / teilerFuerRichtigeForm;
+				
+//				for(let j=0;j<knotenVektor.length;j++){
+//					if(knotenVektor[j].potenz===2){
+//						teilerFuerRichtigeForm = knotenVektor[j].koeffizient;
+//					}
+//				}
+//				
+//				for(let j=0;j<knotenVektor.length;j++){
+//					if(knotenVektor[j].potenz===0){
+//						q = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
+//					}else if(knotenVektor[j].potenz===1){
+//						p = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
+//					}
+//				}
 				let gefunden=false;
 				
 				for(let x1=-100;x1<100;x1++){
@@ -800,9 +972,9 @@ function onClickSatzVonVietaNullstellen(){
 					document.getElementById("NullstellenTextfeld").value = "Keine Nullstellen gefunden.";
 				}
 
-			}else{
-				document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich... Um mit dem Satz von Vieta die Nullstellen ermitteln zu können, muss das Polynom die Form ax^2+bx+c haben";
-			}
+//			}else{
+//				document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich... Um mit dem Satz von Vieta die Nullstellen ermitteln zu können, muss das Polynom die Form ax^2+bx+c haben";
+//			}
 		}
 	}
 }
@@ -821,8 +993,8 @@ function onClickNewtonVerfahrenNullstellen(){
 			document.getElementById("NullstellenTextfeld").value = "";
 			funktionenListe[i].nullstellen = [];
 			let funktionTmp = funktionenListe[i];
-			for(let i=-30;i<30;i++){				
-				nullstellenTmp.push(newtonVerfahren_GebrochenRational(i, funktionTmp, false));
+			for(let j=-30;j<30;j++){				
+				nullstellenTmp.push(newtonVerfahren_GebrochenRational(j, funktionTmp, false));
 			}
 			let tolleranzErreicht = false;
 			for(let j=0;j<nullstellenTmp.length;j++){
@@ -849,7 +1021,6 @@ function onClickNewtonVerfahrenNullstellen(){
 	
 }
 
-
 function onClickRegulaFalsiNullstellen(){
 	let tolleranz = Math.pow(10,-10);
 	zeichneReiter6 = true;
@@ -865,17 +1036,14 @@ function onClickRegulaFalsiNullstellen(){
 			let zaehler = 0;
 			let nenner = 0;
 			
-			if (funktionenListe[i].einfachGanzrational===false) {
+			if (funktionenListe[i].inhaltKnotenSymbol==='/') {
 				zaehler = funktionenListe[i].linkesChild.inhaltKnotenVektor;
 				nenner = funktionenListe[i].rechtesChild.inhaltKnotenVektor;
 			}
-			else if(funktionenListe[i].einfachGanzrational===true){
-				if (funktionenListe[i].gekuerzt.length === 0) {
-					zaehler = funktionenListe[i].gekuerzt;
-				}
-				else {
-					zaehler = funktionenListe[i].gekuerzt;
-				}
+			else{
+				
+				zaehler = funktionenListe[i];
+				
 			}
 			
 			let y = 0;
@@ -951,6 +1119,9 @@ function onClickRegulaFalsiNullstellen(){
 	}
 }
 
+
+
+
 function getVectorErsteAbleitung(i){
 	if (funktionenListe[i].einfachGanzrational===false) {
 		
@@ -965,6 +1136,8 @@ function getVectorErsteAbleitung(i){
 }
 
 
+
+
 function onClickGeradengleichungExtremstellen(){
 	let tolleranz = Math.pow(10,-10);
 	zeichneReiter6 = true;
@@ -975,35 +1148,52 @@ function onClickGeradengleichungExtremstellen(){
 			document.getElementById("ExtremstellenTextfeld").value = "";
 			funktionenListe[i].extremstellen = [];
 			
-			let knotenVektorErsteAbleitung = getVectorErsteAbleitung(i);
+			let polynom = getAB(funktionenListe[i].ersteAbleitung);
 			
-			if(getHoechstePotenz(knotenVektorErsteAbleitung)===1){
-				let mx=0,b=0;
-				for(let j=0;j<knotenVektorErsteAbleitung.length;j++){
-					if(knotenVektorErsteAbleitung[j].potenz===0){
-						b = knotenVektorErsteAbleitung[j].koeffizient;
-					}else if(knotenVektorErsteAbleitung[j].potenz===1){
-						mx = knotenVektorErsteAbleitung[j].koeffizient;
-					}
+			if(polynom.a!=0){
+				
+				if(funktionenListe[i].ersteAbleitung.inhaltKnotenSymbol==='+')
+					funktionenListe[i].extremstellen.push((-funktionenListe[i].ersteAbleitung.rechtesChild.inhaltKnotenPolynom.koeffizient)/funktionenListe[i].ersteAbleitung.linkesChild.inhaltKnotenPolynom.koeffizient);
+				else if(funktionenListe[i].ersteAbleitung.inhaltKnotenSymbol==='-'){
+					funktionenListe[i].extremstellen.push((funktionenListe[i].ersteAbleitung.rechtesChild.inhaltKnotenPolynom.koeffizient)/funktionenListe[i].ersteAbleitung.linkesChild.inhaltKnotenPolynom.koeffizient);
+				}else if(polynom.b===0){
+					funktionenListe[i].extremstellen.push(0);
 				}
-				
-				funktionenListe[i].extremstellen.push((-b)/mx);
-								
-				
-				if(  getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[0],funktionenListe[i].zweiteAbleitung)>0 ){
+				if(  getPunktV4(funktionenListe[i].extremstellen[0],funktionenListe[i].zweiteAbleitung)>0 ){
 					document.getElementById("ExtremstellenTextfeld").value =  "t1=" + zahlRunden(funktionenListe[i].extremstellen[0]);
-				}else if(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[0],funktionenListe[i].zweiteAbleitung)<0){
+				}else if(getPunktV4(funktionenListe[i].extremstellen[0],funktionenListe[i].zweiteAbleitung)<0){
 					document.getElementById("ExtremstellenTextfeld").value =  "h1=" + zahlRunden(funktionenListe[i].extremstellen[0]);
 				}
-
-
-			}else if(knotenVektorErsteAbleitung.length===3){
-				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die Ableitung des Polynoms die Form bx+c haben";
-			}else if(knotenVektorErsteAbleitung.length>3){
-				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die Ableitung des Polynoms die Form bx+c haben";
-			}else if(knotenVektorErsteAbleitung.length===1){
-				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die Ableitung des Polynoms die Form bx+c haben";
+			}else{
+				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss das Polynom muss die Form bx+c haben";
 			}
+			
+			
+//			let knotenVektorErsteAbleitung = getVectorErsteAbleitung(i);
+//			
+//			if(getHoechstePotenz(knotenVektorErsteAbleitung)===1){
+//				let mx=0,b=0;
+//				for(let j=0;j<knotenVektorErsteAbleitung.length;j++){
+//					if(knotenVektorErsteAbleitung[j].potenz===0){
+//						b = knotenVektorErsteAbleitung[j].koeffizient;
+//					}else if(knotenVektorErsteAbleitung[j].potenz===1){
+//						mx = knotenVektorErsteAbleitung[j].koeffizient;
+//					}
+//				}
+//				
+//				funktionenListe[i].extremstellen.push((-b)/mx);
+								
+				
+				
+
+
+//			}else if(knotenVektorErsteAbleitung.length===3){
+//				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die Ableitung des Polynoms die Form bx+c haben";
+//			}else if(knotenVektorErsteAbleitung.length>3){
+//				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die Ableitung des Polynoms die Form bx+c haben";
+//			}else if(knotenVektorErsteAbleitung.length===1){
+//				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die Ableitung des Polynoms die Form bx+c haben";
+//			}
 		}
 	}
 }
@@ -1028,20 +1218,32 @@ function onClickMitternachtsformelExtremstellen(){
 			document.getElementById("ExtremstellenTextfeld").value = "";
 			funktionenListe[i].extremstellen = [];
 			
-			let knotenVektorErsteAbleitung = getVectorErsteAbleitung(i);
-			
-			if(getHoechstePotenz(knotenVektorErsteAbleitung)===2){
+//			let knotenVektorErsteAbleitung = getVectorErsteAbleitung(i);
+//			
+//			if(getHoechstePotenz(knotenVektorErsteAbleitung)===2){
+//				let a=0,b=0,c=0;
+//				for(let j=0;j<knotenVektorErsteAbleitung.length;j++){
+//					if(knotenVektorErsteAbleitung[j].potenz===0){
+//						c = knotenVektorErsteAbleitung[j].koeffizient;
+//					}else if(knotenVektorErsteAbleitung[j].potenz===1){
+//						b = knotenVektorErsteAbleitung[j].koeffizient;
+//					}else if(knotenVektorErsteAbleitung[j].potenz===2){
+//						a = knotenVektorErsteAbleitung[j].koeffizient;
+//					}
+//				}
 				let a=0,b=0,c=0;
-				for(let j=0;j<knotenVektorErsteAbleitung.length;j++){
-					if(knotenVektorErsteAbleitung[j].potenz===0){
-						c = knotenVektorErsteAbleitung[j].koeffizient;
-					}else if(knotenVektorErsteAbleitung[j].potenz===1){
-						b = knotenVektorErsteAbleitung[j].koeffizient;
-					}else if(knotenVektorErsteAbleitung[j].potenz===2){
-						a = knotenVektorErsteAbleitung[j].koeffizient;
-					}
-				}
+			
 
+				let polynom = getABC(funktionenListe[i].ersteAbleitung);
+				a = polynom.a;
+				b = polynom.b;
+				c = polynom.c;
+
+				if(a==0&&b==0&&c==0){
+					document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit der Mitternachtsformel die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
+					return
+				}
+				
 				let minusB = (-b);
 				let BQuadrat = Math.pow(b,2);
 				let VierAC = (4*a*c);
@@ -1060,10 +1262,10 @@ function onClickMitternachtsformelExtremstellen(){
 					
 					for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
 						
-						if(  getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)>0 ){
-							text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
-						}else if(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
-							text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+						if(  getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)>0 ){
+							text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+						}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
+							text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 						}
 							
 						
@@ -1074,16 +1276,14 @@ function onClickMitternachtsformelExtremstellen(){
 				}else{
 					document.getElementById("ExtremstellenTextfeld").value = "Keine Extremstellen gefunden.";
 				}
-			}else if(knotenVektorErsteAbleitung.length===1){
-				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit der Mitternachtsformel die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
-			}else{
-				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit der Mitternachtsformel die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
-			}		
+//			}else if(knotenVektorErsteAbleitung.length===1){
+//				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit der Mitternachtsformel die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
+//			}else{
+//				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit der Mitternachtsformel die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
+//			}		
 		}
 	}
 }
-
-
 
 function onClickPQFormelExtremstellen(){
 	let tolleranz = Math.pow(10,-10);
@@ -1095,23 +1295,39 @@ function onClickPQFormelExtremstellen(){
 			document.getElementById("ExtremstellenTextfeld").value = "";
 			funktionenListe[i].extremstellen = [];
 			
-			let knotenVektorErsteAbleitung = getVectorErsteAbleitung(i);
+//			let knotenVektorErsteAbleitung = getVectorErsteAbleitung(i);
+//			
+//			if(getHoechstePotenz(knotenVektorErsteAbleitung)===2){
 			
-			if(getHoechstePotenz(knotenVektorErsteAbleitung)===2){
-				let bOderP = 0, cOderQ = 0;
-				let teilerFuerRichtigeForm = 0;
-				for(let j=0;j<knotenVektor.length;j++){
-					if(knotenVektor[j].potenz===2){
-						teilerFuerRichtigeForm = knotenVektor[j].koeffizient;
-					}
-				}
+			
+			
+//				let bOderP = 0, cOderQ = 0;
+//				let teilerFuerRichtigeForm = 0;
+//				for(let j=0;j<knotenVektor.length;j++){
+//					if(knotenVektor[j].potenz===2){
+//						teilerFuerRichtigeForm = knotenVektor[j].koeffizient;
+//					}
+//				}
 				
-				for(let j=0;j<knotenVektor.length;j++){
-					if(knotenVektor[j].potenz===0){
-						cOderQ = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
-					}else if(knotenVektor[j].potenz===1){
-						bOderP = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
-					}
+//				for(let j=0;j<knotenVektor.length;j++){
+//					if(knotenVektor[j].potenz===0){
+//						cOderQ = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
+//					}else if(knotenVektor[j].potenz===1){
+//						bOderP = knotenVektor[j].koeffizient/teilerFuerRichtigeForm;
+//					}
+//				}
+			
+			let bOderP = 0, cOderQ = 0;
+			let teilerFuerRichtigeForm = 0;
+			
+			let polynom = getABC(funktionenListe[i].ersteAbleitung);
+			teilerFuerRichtigeForm = polynom.a;
+            bOderP = polynom.b / teilerFuerRichtigeForm;
+            cOderQ = polynom.c / teilerFuerRichtigeForm;
+			
+            if(polynom.a===0&&polynom.b===0&&polynom.c===0){
+					document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich...Für die PQ-Formel muss das Polynom muss die Form ax^2+bx+c haben";
+					return;
 				}
 					
 				if(Math.pow(bOderP/2,2)-cOderQ>=0){
@@ -1126,19 +1342,19 @@ function onClickPQFormelExtremstellen(){
 					let text = "";
 					
 					for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
-						if(  getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)>0 ){
-							text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
-						}else if(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
-							text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+						if(  getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)>0 ){
+							text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+						}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
+							text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 						}
 					}
 					document.getElementById("ExtremstellenTextfeld").value = text;		
 				}else{
 					document.getElementById("ExtremstellenTextfeld").value = "Keine Extremstellen gefunden.";
 				}
-			}else{
-				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit der PQ-Formel die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
-			}
+//			}else{
+//				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit der PQ-Formel die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
+//			}
 		}
 	}
 }
@@ -1154,24 +1370,39 @@ function onClickSatzVonVietaExtremstellen(){
 			document.getElementById("ExtremstellenTextfeld").value = "";
 			funktionenListe[i].extremstellen = [];
 			
-			let knotenVektorErsteAbleitung = getVectorErsteAbleitung(i);
+			let p = 0, q = 0;
+			let teilerFuerRichtigeForm = 0;			
 			
-			if(getHoechstePotenz(knotenVektorErsteAbleitung)===2){
-				let p = 0, q = 0;
-				let teilerFuerRichtigeForm = 0;
-				for(let j=0;j<knotenVektorErsteAbleitung.length;j++){
-					if(knotenVektorErsteAbleitung[j].potenz===2){
-						teilerFuerRichtigeForm = knotenVektorErsteAbleitung[j].koeffizient;
-					}
-				}
-				
-				for(let j=0;j<knotenVektorErsteAbleitung.length;j++){
-					if(knotenVektorErsteAbleitung[j].potenz===0){
-						q = knotenVektorErsteAbleitung[j].koeffizient/teilerFuerRichtigeForm;
-					}else if(knotenVektorErsteAbleitung[j].potenz===1){
-						p = knotenVektorErsteAbleitung[j].koeffizient/teilerFuerRichtigeForm;
-					}
-				}
+			let polynom = getABC(funktionenListe[i].ersteAbleitung);
+			teilerFuerRichtigeForm = polynom.a;
+            bOderP = polynom.b;
+            cOderQ = polynom.c;
+            
+            q = cOderQ / teilerFuerRichtigeForm;
+			p = bOderP / teilerFuerRichtigeForm;
+			
+			if(polynom.a==0&&polynom.c==0&&polynom.b==0){
+				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit dem Satz von Vieta die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
+			}
+			
+//			let knotenVektorErsteAbleitung = getVectorErsteAbleitung(i);
+//			
+//			if(getHoechstePotenz(knotenVektorErsteAbleitung)===2){
+//				let p = 0, q = 0;
+//				let teilerFuerRichtigeForm = 0;
+//				for(let j=0;j<knotenVektorErsteAbleitung.length;j++){
+//					if(knotenVektorErsteAbleitung[j].potenz===2){
+//						teilerFuerRichtigeForm = knotenVektorErsteAbleitung[j].koeffizient;
+//					}
+//				}
+//				
+//				for(let j=0;j<knotenVektorErsteAbleitung.length;j++){
+//					if(knotenVektorErsteAbleitung[j].potenz===0){
+//						q = knotenVektorErsteAbleitung[j].koeffizient/teilerFuerRichtigeForm;
+//					}else if(knotenVektorErsteAbleitung[j].potenz===1){
+//						p = knotenVektorErsteAbleitung[j].koeffizient/teilerFuerRichtigeForm;
+//					}
+//				}
 				let gefunden=false;
 
 			
@@ -1185,10 +1416,10 @@ function onClickSatzVonVietaExtremstellen(){
 							let text = "";
 							
 							for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
-								if(  getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)>0 ){
-									text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
-								}else if(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
-									text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+								if(  getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)>0 ){
+									text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+								}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
+									text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 								}
 							}
 							document.getElementById("ExtremstellenTextfeld").value = text;
@@ -1205,13 +1436,10 @@ function onClickSatzVonVietaExtremstellen(){
 					document.getElementById("ExtremstellenTextfeld").value = "Keine Extremstellen gefunden.";
 				}
 
-			}else{
-				document.getElementById("ExtremstellenTextfeld").value = "Leider nicht möglich... Um mit dem Satz von Vieta die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
-			}
+			
 		}
 	}
 }
-
 
 function onClickNewtonVerfahrenExtremstellen(){
 	let tolleranz = Math.pow(10,-15);
@@ -1226,14 +1454,15 @@ function onClickNewtonVerfahrenExtremstellen(){
 			if((document.getElementById("funktionenDropdown").value === buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString)){
 				document.getElementById("ExtremstellenTextfeld").value = "";
 				funktionenListe[i].extremstellen = [];
-				let funktionTmp = funktionenListe[i];
+				let funktionTmp = funktionenListe[i].ersteAbleitung;
 				for(let j=-30;j<30;j++){				
-					if(funktionTmp.inhaltKnotenSymbol!="/"){
-						extremstellenTmp.push(newtonVerfahren_GanzRational(j, funktionTmp.ersteAbleitung));
-					
-					}else{
-						extremstellenTmp.push(newtonVerfahren_GebrochenRational(j, funktionTmp, true));
-					}
+//					if(funktionTmp.inhaltKnotenSymbol==="/"){
+					extremstellenTmp.push(newtonVerfahren_GebrochenRational(j, funktionTmp, false));
+//					
+//					}else{
+//
+//						extremstellenTmp.push(newtonVerfahren_GanzRational(j, funktionTmp.ersteAbleitung));
+//					}
 					
 				}
 				let tolleranzErreicht = false;
@@ -1256,10 +1485,10 @@ function onClickNewtonVerfahrenExtremstellen(){
 				let text = "";
 				
 				for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
-					if(  getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung.gekuerzt)>0 ){
-						text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktEinfachesGanzrational(Math.round(funktionenListe[i].extremstellen[j]),funktionenListe[i].gekuerzt)) + ") ";
-					}else if(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung.gekuerzt)<0){
-						text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktEinfachesGanzrational(Math.round(funktionenListe[i].extremstellen[j]),funktionenListe[i].gekuerzt)) + ") ";
+					if(  getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung,0)>0 ){
+						text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktV4(Math.round(funktionenListe[i].extremstellen[j]),funktionenListe[i],0)) + ") ";
+					}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung,0)<0){
+						text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(Math.round(funktionenListe[i].extremstellen[j]),funktionenListe[i],0)) + ") ";
 					}
 				}
 				document.getElementById("ExtremstellenTextfeld").value = text;
@@ -1285,19 +1514,19 @@ function onClickRegulaFalsiExtremstellen(){
 			
 			if (funktionenListe[i].einfachGanzrational===false) {
 				if (funktionenListe[i].inhaltKnotenSymbol === '/') {
-					zaehler = funktionenListe[i].ersteAbleitung.linkesChild.inhaltKnotenVektor;
-					nenner = funktionenListe[i].ersteAbleitung.rechtesChild.inhaltKnotenVektor;
+					zaehler = funktionenListe[i].ersteAbleitung.linkesChild;
+					nenner = funktionenListe[i].ersteAbleitung.rechtesChild;
 				}
 				else {
 					if (funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length === 0) {
-						zaehler = funktionenListe[i].ersteAbleitung.linkesChild.inhaltKnotenVektor;
+						zaehler = funktionenListe[i].ersteAbleitung;
 					}
 					else {
-						zaehler = funktionenListe[i].ersteAbleitung.inhaltKnotenVektor;
+						zaehler = funktionenListe[i].ersteAbleitung;
 					}
 				}
 			}else if (funktionenListe[i].einfachGanzrational===true){
-				zaehler = funktionenListe[i].ersteAbleitung.gekuerzt;
+				zaehler = funktionenListe[i].ersteAbleitung;
 			}
 			
 			
@@ -1307,9 +1536,9 @@ function onClickRegulaFalsiExtremstellen(){
 			let uebergangGefunden = false;
 			for (let j = -30; j < 30; j += 0.1) {
 				if (funktionenListe[i].einfachGanzrational===false) {
-					y = f(j, zaehler);
+					y = getPunktV4(j, zaehler,0);
 				}else if (funktionenListe[i].einfachGanzrational===true){
-					y = getPunktEinfachesGanzrational(j, zaehler);
+					y = getPunktV4(j, zaehler,0);
 				}
 				
 				if (rundenCounter > 0) {
@@ -1373,10 +1602,10 @@ function onClickRegulaFalsiExtremstellen(){
 			let text = "";
 			
 			for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
-				if(  getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung.gekuerzt)>0 ){
-					text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktEinfachesGanzrational(Math.round(funktionenListe[i].extremstellen[j]),funktionenListe[i].gekuerzt)) + ") ";
-				}else if(getPunktEinfachesGanzrational(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung.gekuerzt)<0){
-					text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktEinfachesGanzrational(Math.round(funktionenListe[i].extremstellen[j]),funktionenListe[i].gekuerzt)) + ") ";
+				if(  getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung,0)>0 ){
+					text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktV4(Math.round(funktionenListe[i].extremstellen[j]),funktionenListe[i],0)) + ") ";
+				}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung,0)<0){
+					text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(Math.round(funktionenListe[i].extremstellen[j]),funktionenListe[i],0)) + ") ";
 				}
 			}
 			document.getElementById("ExtremstellenTextfeld").value = text;
@@ -1386,13 +1615,18 @@ function onClickRegulaFalsiExtremstellen(){
 }
 
 
+
+
 function getVectorZweiteAbleitung(i){
+
 	let knotenVektor = funktionenListe[i].zweiteAbleitung.gekuerzt;
 	if(funktionenListe[i].inhaltKnotenSymbol==="/"){
 		knotenVektor = funktionenListe[i].gekürzt.zweiteAbleitung.linkesChild.inhaltKnotenVektor;
 	}
 	return knotenVektor;
 }
+
+
 
 
 function onClickGeradengleichungWendepunkte(){
@@ -1404,33 +1638,53 @@ function onClickGeradengleichungWendepunkte(){
 			document.getElementById("WendepunkteTextfeld").value = "";
 			funktionenListe[i].wendepunkte = [];
 			
-			let knotenVektorZweiteAbleitung = getVectorZweiteAbleitung(i);
 			
-			if(getHoechstePotenz(knotenVektorZweiteAbleitung)===1){
-				let mx=0,b=0;
-				for(let j=0;j<knotenVektorZweiteAbleitung.length;j++){
-					if(knotenVektorZweiteAbleitung[j].potenz===0){
-						b = knotenVektorZweiteAbleitung[j].koeffizient;
-					}else if(knotenVektorZweiteAbleitung[j].potenz===1){
-						mx = knotenVektorZweiteAbleitung[j].koeffizient;
-					}
+			if(((funktionenListe[i].zweiteAbleitung.inhaltKnotenSymbol==='+'||funktionenListe[i].zweiteAbleitung.inhaltKnotenSymbol==='-')&&funktionenListe[i].zweiteAbleitung.linkesChild.inhaltKnotenPolynom.potenz===1&&funktionenListe[i].zweiteAbleitung.rechtesChild.inhaltKnotenPolynom.potenz===0)
+					||funktionenListe[i].zweiteAbleitung.inhaltKnotenPolynom.potenz===1){
+				
+				if(funktionenListe[i].zweiteAbleitung.inhaltKnotenSymbol==='+')
+					funktionenListe[i].wendepunkte.push((-funktionenListe[i].zweiteAbleitung.rechtesChild.inhaltKnotenPolynom.koeffizient)/funktionenListe[i].zweiteAbleitung.linkesChild.inhaltKnotenPolynom.koeffizient);
+				else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenSymbol==='-'){
+					funktionenListe[i].wendepunkte.push((funktionenListe[i].zweiteAbleitung.rechtesChild.inhaltKnotenPolynom.koeffizient)/funktionenListe[i].zweiteAbleitung.linkesChild.inhaltKnotenPolynom.koeffizient);
+				}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenPolynom.potenz===1){
+					funktionenListe[i].wendepunkte.push(0);
 				}
-				
-				funktionenListe[i].wendepunkte.push((-b)/mx);
-				
-				document.getElementById("WendepunkteTextfeld").value =  "w1(" + zahlRunden(funktionenListe[i].wendepunkte[0])+"|"+zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].wendepunkte[0],funktionenListe[i]))+")";
-
-			}else if(knotenVektorZweiteAbleitung.length===3){
-				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die zweite Ableitung des Polynoms die Form bx+c haben";
-			}else if(knotenVektorZweiteAbleitung.length>3){
-				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die zweite Ableitung des Polynoms die Form bx+c haben";
-			}else if(knotenVektorZweiteAbleitung.length===0){
-				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die zweite Ableitung des Polynoms die Form bx+c haben";
+				if(  getPunktV4(funktionenListe[i].wendepunkte[0],funktionenListe[i].dritteAbleitung)>0 ){
+					document.getElementById("WendepunkteTextfeld").value =  "w1=" + zahlRunden(funktionenListe[i].wendepunkte[0]);
+				}else if(getPunktV4(funktionenListe[i].wendepunkte[0],funktionenListe[i].dritteAbleitung)<0){
+					document.getElementById("WendepunkteTextfeld").value =  "w1=" + zahlRunden(funktionenListe[i].wendepunkte[0]);
+				}
+			}else{
+				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss das Polynom die Form bx+c haben";
 			}
+			
+			
+//			let knotenVektorZweiteAbleitung = getVectorZweiteAbleitung(i);
+//			
+//			if(getHoechstePotenz(knotenVektorZweiteAbleitung)===1){
+//				let mx=0,b=0;
+//				for(let j=0;j<knotenVektorZweiteAbleitung.length;j++){
+//					if(knotenVektorZweiteAbleitung[j].potenz===0){
+//						b = knotenVektorZweiteAbleitung[j].koeffizient;
+//					}else if(knotenVektorZweiteAbleitung[j].potenz===1){
+//						mx = knotenVektorZweiteAbleitung[j].koeffizient;
+//					}
+//				}
+//				
+//				funktionenListe[i].wendepunkte.push((-b)/mx);
+//				
+//				document.getElementById("WendepunkteTextfeld").value =  "w1(" + zahlRunden(funktionenListe[i].wendepunkte[0])+"|"+zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].wendepunkte[0],funktionenListe[i]))+")";
+//
+//			}else if(knotenVektorZweiteAbleitung.length===3){
+//				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die zweite Ableitung des Polynoms die Form bx+c haben";
+//			}else if(knotenVektorZweiteAbleitung.length>3){
+//				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die zweite Ableitung des Polynoms die Form bx+c haben";
+//			}else if(knotenVektorZweiteAbleitung.length===0){
+//				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich...Für die Geradengleichung muss die zweite Ableitung des Polynoms die Form bx+c haben";
+//			}
 		}
 	}
 }
-
 
 function onClickMitternachtsformelWendepunkte(){
 	let tolleranz = Math.pow(10,-10);
@@ -1441,20 +1695,28 @@ function onClickMitternachtsformelWendepunkte(){
 		if((document.getElementById("funktionenDropdown").value === buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString)){
 			document.getElementById("WendepunkteTextfeld").value = "";
 			funktionenListe[i].wendepunkte = [];
-			
-			let knotenVektorZweiteAbleitung = getVectorZweiteAbleitung(i);
-			
-			if(getHoechstePotenz(knotenVektorZweiteAbleitung)===2){
+						
 				let a=0,b=0,c=0;
-				for(let j=0;j<knotenVektorZweiteAbleitung.length;j++){
-					if(knotenVektorZweiteAbleitung[j].potenz===0){
-						c = knotenVektorZweiteAbleitung[j].koeffizient;
-					}else if(knotenVektorZweiteAbleitung[j].potenz===1){
-						b = knotenVektorZweiteAbleitung[j].koeffizient;
-					}else if(knotenVektorZweiteAbleitung[j].potenz===2){
-						a = knotenVektorZweiteAbleitung[j].koeffizient;
-					}
-				}
+				
+				let polynom = getABC(funktionenListe[i].zweiteAbleitung);
+				a = polynom.a;
+				b = polynom.b;
+				c = polynom.c;
+				
+			if(a===0&&b===0&&c===0){
+				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich... Um mit der Mitternachtsformel die Wendepunkte ermitteln zu können, muss die zweite Ableitung des Polynom die Form ax^2+bx+c haben";
+				return;
+			}	
+				
+//				for(let j=0;j<knotenVektorZweiteAbleitung.length;j++){
+//					if(knotenVektorZweiteAbleitung[j].potenz===0){
+//						c = knotenVektorZweiteAbleitung[j].koeffizient;
+//					}else if(knotenVektorZweiteAbleitung[j].potenz===1){
+//						b = knotenVektorZweiteAbleitung[j].koeffizient;
+//					}else if(knotenVektorZweiteAbleitung[j].potenz===2){
+//						a = knotenVektorZweiteAbleitung[j].koeffizient;
+//					}
+//				}
 
 				let minusB = (-b);
 				let BQuadrat = Math.pow(b,2);
@@ -1473,7 +1735,7 @@ function onClickMitternachtsformelWendepunkte(){
 					let text = "";
 					
 					for(let j=0;j<funktionenListe[i].wendepunkte.length;j++){
-						text +=  "w"+ (j+1) +"(" + zahlRunden(funktionenListe[i].wendepunkte[j])+"|"+zahlRunden(getPunkt(funktionenListe[i].wendepunkte[j],funktionenListe[i]))+") ";
+						text +=  "w"+ (j+1) +"(" + zahlRunden(funktionenListe[i].wendepunkte[j])+"|"+zahlRunden(getPunktV4(funktionenListe[i].wendepunkte[j],funktionenListe[i]))+") ";
 					}
 					
 					
@@ -1481,15 +1743,10 @@ function onClickMitternachtsformelWendepunkte(){
 				}else{
 					document.getElementById("WendepunkteTextfeld").value = "Keine Wendepunkte gefunden.";
 				}
-			}else if(knotenVektorZweiteAbleitung.length===2){
-				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich... Um mit der Mitternachtsformel die Wendepunkte ermitteln zu können, muss die zweite Ableitung des Polynom die Form ax^2+bx+c haben";
-			}else{
-				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich... Um mit der Mitternachtsformel die Wendepunkte ermitteln zu können, muss die zweite Ableitung des Polynom die Form ax^2+bx+c haben";
-			}		
+				
 		}
 	}
 }
-
 
 function onClickPQFormelWendepunkte(){
 	let tolleranz = Math.pow(10,-10);
@@ -1501,12 +1758,26 @@ function onClickPQFormelWendepunkte(){
 			document.getElementById("WendepunkteTextfeld").value = "";
 			funktionenListe[i].wendepunkte = [];
 			
-			let knotenVektorZweiteAbleitung = getVectorZweiteAbleitung(i);
+//			let knotenVektorZweiteAbleitung = getVectorZweiteAbleitung(i);
+//			
+//			if(knotenVektorZweiteAbleitung.length===3){
 			
-			if(knotenVektorZweiteAbleitung.length===3){
-				
-				let bOderP=knotenVektorZweiteAbleitung[1]/knotenVektorZweiteAbleitung[2];
-				let cOderQ=knotenVektorZweiteAbleitung[0]/knotenVektorZweiteAbleitung[2];
+			let bOderP = 0, cOderQ = 0;
+			let teilerFuerRichtigeForm = 0;
+			
+			let polynom = getABC(funktionenListe[i].zweiteAbleitung);
+			teilerFuerRichtigeForm = polynom.a;
+            bOderP = polynom.b / teilerFuerRichtigeForm;
+            cOderQ = polynom.c / teilerFuerRichtigeForm;
+			
+            if(polynom.a===0&&polynom.b===0&&polynom.c===0){
+					document.getElementById("NullstellenTextfeld").value = "Leider nicht möglich...Für die PQ-Formel muss das Polynom muss die Form ax^2+bx+c haben";
+					return;
+				}
+			
+//			
+//				let bOderP=knotenVektorZweiteAbleitung[1]/knotenVektorZweiteAbleitung[2];
+//				let cOderQ=knotenVektorZweiteAbleitung[0]/knotenVektorZweiteAbleitung[2];
 					
 				if(Math.pow(bOderP/2,2)-cOderQ>=0){
 					let x1 = -(bOderP/2)+Math.sqrt(Math.pow(bOderP/2,2)-cOderQ);
@@ -1520,20 +1791,18 @@ function onClickPQFormelWendepunkte(){
 					let text = "";
 					
 					for(let j=0;j<funktionenListe[i].wendepunkte.length;j++){
-						text +=  "wp" + (j+1) + "(" + zahlRunden(funktionenListe[i].wendepunkte[j]) + "|" + zahlRunden(getPunkt(funktionenListe[i].wendepunkte[j],funktionenListe[i])) + ") ";
+						text +=  "wp" + (j+1) + "(" + zahlRunden(funktionenListe[i].wendepunkte[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].wendepunkte[j],funktionenListe[i])) + ") ";
 					}
 					document.getElementById("WendepunkteTextfeld").value = text;		
 				}else{
 					document.getElementById("WendepunkteTextfeld").value = "Keine Wendepunkte gefunden.";
 				}
-			}else{
-				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich... Um mit der PQ-Formel die Wendepunkte ermitteln zu können, muss die zweite Ableitung des Polynom die Form ax^2+bx+c haben";
-			}
+//			}else{
+//				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich... Um mit der PQ-Formel die Wendepunkte ermitteln zu können, muss die zweite Ableitung des Polynom die Form ax^2+bx+c haben";
+//			}
 		}
 	}
 }
-
-
 
 function onClickSatzVonVietaWendepunkte(){
 	let tolleranz = Math.pow(10,-10);
@@ -1545,14 +1814,30 @@ function onClickSatzVonVietaWendepunkte(){
 		if((document.getElementById("funktionenDropdown").value === buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString)){
 			document.getElementById("WendepunkteTextfeld").value = "";
 			funktionenListe[i].wendepunkte = [];
+			let gefunden=false;
+			let p = 0, q = 0;
+			let teilerFuerRichtigeForm = 0;			
 			
-			let knotenVektorZweiteAbleitung = getVectorZweiteAbleitung(i);
+			let polynom = getABC(funktionenListe[i].zweiteAbleitung);
+			teilerFuerRichtigeForm = polynom.a;
+            bOderP = polynom.b;
+            cOderQ = polynom.c;
+            
+            q = cOderQ / teilerFuerRichtigeForm;
+			p = bOderP / teilerFuerRichtigeForm;
 			
-			if(knotenVektorZweiteAbleitung.length===3){
-				let gefunden=false;
-
-				let p = knotenVektorZweiteAbleitung[1]/knotenVektorZweiteAbleitung[2];
-				let q = knotenVektorZweiteAbleitung[0]/knotenVektorZweiteAbleitung[2];
+			if(polynom.a==0&&polynom.c==0&&polynom.b==0){
+				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich... Um mit dem Satz von Vieta die Extremstellen ermitteln zu können, muss die Ableitung des Polynom die Form ax^2+bx+c haben";
+			}
+			
+			
+//			let knotenVektorZweiteAbleitung = getVectorZweiteAbleitung(i);
+//			
+//			if(knotenVektorZweiteAbleitung.length===3){
+//				let gefunden=false;
+//
+//				let p = knotenVektorZweiteAbleitung[1]/knotenVektorZweiteAbleitung[2];
+//				let q = knotenVektorZweiteAbleitung[0]/knotenVektorZweiteAbleitung[2];
 				
 				for(let x1=-100;x1<100;x1++){
 					for(let x2=-100;x2<100;x2++){
@@ -1564,7 +1849,7 @@ function onClickSatzVonVietaWendepunkte(){
 							let text = "";
 							
 							for(let j=0;j<funktionenListe[i].wendepunkte.length;j++){
-								text +=  "wp" + (j+1) + "(" + zahlRunden(funktionenListe[i].wendepunkte[j]) + "|" + zahlRunden(getPunkt(funktionenListe[i].wendepunkte[j],funktionenListe[i])) + ") ";
+								text +=  "wp" + (j+1) + "(" + zahlRunden(funktionenListe[i].wendepunkte[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].wendepunkte[j],funktionenListe[i])) + ") ";
 							}
 							document.getElementById("WendepunkteTextfeld").value = text;
 							
@@ -1578,17 +1863,15 @@ function onClickSatzVonVietaWendepunkte(){
 					document.getElementById("WendepunkteTextfeld").value = "Keine Wendepunkte gefunden.";
 				}
 
-			}else{
-				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich... Um mit dem Satz von Vieta die Wendepunkte ermitteln zu können, muss die zweite Ableitung des Polynom die Form ax^2+bx+c haben";
-			}
+//			}else{
+//				document.getElementById("WendepunkteTextfeld").value = "Leider nicht möglich... Um mit dem Satz von Vieta die Wendepunkte ermitteln zu können, muss die zweite Ableitung des Polynom die Form ax^2+bx+c haben";
+//			}
 		}
 	}
 }
 
-
-
 function onClickNewtonVerfahrenWendepunkte(){
-	let tolleranz = Math.pow(10,-15);
+	let tolleranz = Math.pow(10,-14);
 	zeichneReiter6 = true;
 	zeigeInhaltReiter6 = 17;
 	aktiverReiter = 6;
@@ -1601,11 +1884,11 @@ function onClickNewtonVerfahrenWendepunkte(){
 				document.getElementById("WendepunkteTextfeld").value = "";
 				funktionenListe[i].wendepunkte = [];
 				let funktionTmp = funktionenListe[i];
-				for(let i=-30;i<30;i++){				
+				for(let j=-30;j<30;j++){				
 					
 					
 					if(funktionTmp.inhaltKnotenSymbol!="/"){
-						wendepunkteTmp.push(newtonVerfahren_GanzRational(j, funktionTmp.zweiteAbleitung));
+						wendepunkteTmp.push(newtonVerfahren_GebrochenRational(j, funktionTmp.zweiteAbleitung,false));
 					
 					}else{
 						wendepunkteTmp.push(newtonVerfahren_GebrochenRational(j, funktionTmp, true));
@@ -1664,19 +1947,19 @@ function onClickRegulaFalsiWendepunkte(){
 			let nenner = 0;
 			if (funktionenListe[i].einfachGanzrational===false) {
 				if (funktionenListe[i].inhaltKnotenSymbol === '/') {
-					zaehler = funktionenListe[i].zweiteAbleitung.linkesChild.inhaltKnotenVektor;
-					nenner = funktionenListe[i].zweiteAbleitung.rechtesChild.inhaltKnotenVektor;
+					zaehler = funktionenListe[i].zweiteAbleitung.linkesChild;
+					nenner = funktionenListe[i].zweiteAbleitung.rechtesChild;
 				}
 				else {
 					if (funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length === 0) {
-						zaehler = funktionenListe[i].zweiteAbleitung.linkesChild.inhaltKnotenVektor;
+						zaehler = funktionenListe[i].zweiteAbleitung;
 					}
 					else {
-						zaehler = funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor;
+						zaehler = funktionenListe[i].zweiteAbleitung;
 					}
 				}
 			}else if (funktionenListe[i].einfachGanzrational===true){
-				zaehler = funktionenListe[i].zweiteAbleitung.gekuerzt;
+				zaehler = funktionenListe[i].zweiteAbleitung;
 			}
 			let y = 0;
 			let yOld = 0;
@@ -1742,13 +2025,15 @@ function onClickRegulaFalsiWendepunkte(){
 			let text = "";
 			
 			for(let j=0;j<funktionenListe[i].wendepunkte.length;j++){				
-				text +=  "wp" + (j+1) + "(" + zahlRunden(funktionenListe[i].wendepunkte[j]) + "|" + zahlRunden(getPunktEinfachesGanzrational(funktionenListe[i].wendepunkte[j],funktionenListe[i].gekuerzt)) + ") ";
+				text +=  "wp" + (j+1) + "(" + zahlRunden(funktionenListe[i].wendepunkte[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].wendepunkte[j],funktionenListe[i])) + ") ";
 			}
 			document.getElementById("WendepunkteTextfeld").value = text;
 			
 		}
 	}
 }
+
+
 
 
 
@@ -1779,10 +2064,6 @@ function onClickGeradengleichungPolstellen(){
 		}
 	}
 }
-
-
-
-
 
 function onClickMitternachtsformelPolstellen(){
 	zeichneReiter6 = true;
@@ -1821,8 +2102,6 @@ function onClickMitternachtsformelPolstellen(){
 		}
 	}
 }
-
-
 
 function onClickPQFormelPolstellen(){
 	zeichneReiter6 = true;
@@ -1898,7 +2177,6 @@ function onClickSatzVonVietaPolstellen(){
 		}
 	}
 }
-
 
 function onClickNewtonVerfahrenPolstellen(){
 	let tolleranz = Math.pow(10,-15);
@@ -2034,6 +2312,11 @@ function onClickRegulaFalsiPolstellen(){
 	}
 	document.getElementById("PolstellenTextfeld").value = text;
 }
+
+
+
+
+
 
 function onChangeNullstellenAnzeigen(){
 	for(let i=0;i<funktionenListe.length;i++){

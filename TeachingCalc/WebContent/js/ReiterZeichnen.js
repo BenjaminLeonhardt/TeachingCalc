@@ -645,6 +645,16 @@ function reiter5Aktiv(i){
 	}
 }
 
+let hoeheWurzelZeichen1Schriftgroesse35 = 25;
+let hoeheWurzelZeichen2Schriftgroesse35 = 15;
+let hoeheWurzelZeichen1Schriftgroesse20 = 17;
+let hoeheWurzelZeichen2Schriftgroesse20 = 12;
+let hoeheWurzelZeichen1Schriftgroesse15 = 22;
+let hoeheWurzelZeichen2Schriftgroesse15 = 18;
+
+
+
+
 function reiter61GeradengleichungNullstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-95;
@@ -659,49 +669,46 @@ function reiter61GeradengleichungNullstellen(i){
 	canvasContext.textAlign = "left";
 	
 	WriteText(`Wenn das Polynom b[ersten Grades] ist, handelt es sich um eine b[Gerade]. Die b[Nullstellen] einer b[Gerade] können durch b[y = 0 setzen] und b[nach x auflösen] bestimmt werden.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-	if(funktionenListe[i].inhaltKnotenVektor.length===2){
-		if((-funktionenListe[i].inhaltKnotenVektor[0])<0){
-			if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))>1){
-				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    ${(-funktionenListe[i].inhaltKnotenVektor[0])}x = ${funktionenListe[i].inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].inhaltKnotenVektor[0])/funktionenListe[i].inhaltKnotenVektor[1]}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-			}else if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))===1){
-				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    -x = ${funktionenListe[i].inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].inhaltKnotenVektor[0])/funktionenListe[i].inhaltKnotenVektor[1]}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	
+	let polynom = getAB(funktionenListe[i]);
+	let potenz = getHoechstePotenzV2(funktionenListe[i]);
+	
+	if(potenz===1){
+		if((-polynom.b)<0){
+			if(Math.abs((-polynom.b))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    ${(-polynom.a)}x = ${polynom.b}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-polynom.b))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    -x = ${polynom.b}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			}
 
 		}else{
-			if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))>1){
-				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    ${(-funktionenListe[i].inhaltKnotenVektor[0])}x = ${funktionenListe[i].inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].inhaltKnotenVektor[0])/funktionenListe[i].inhaltKnotenVektor[1]}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-			}else if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))===1){
-				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    x = ${funktionenListe[i].inhaltKnotenVektor[1]}`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-			}else if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))===0){
+			if(Math.abs((-polynom.b))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    ${(-polynom.a)}x = ${polynom.b}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-polynom.b))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    x = ${polynom.b}`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-polynom.b))===0){
 				WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}    ==>    0 = ${funktionenListe[i].inhaltKnotenString}    ==>    x = 0]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			}
 		}
-	}else if(funktionenListe[i].inhaltKnotenVektor.length===3){
+	}else if(potenz===2){
 		WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 2ten Grades. Die Nullstellen können bei diesem Polynom mithilfe der Mitternachtsformel oder PQ-Formel berechnet werden.]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
-	}else if(funktionenListe[i].inhaltKnotenVektor.length>3){
+	}else if(potenz>2){
 		WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist höher als 2ten Grades. Die Nullstellen können bei diesem Polynom nur näherungsweise mithilfe des Newton Verfahren oder Regula Falsi berechnet werden.]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
-	}else if(funktionenListe[i].inhaltKnotenVektor.length===1){
-		if(funktionenListe[i].inhaltKnotenVektor[0]!=0){
+	}else if(potenz===1){
+		if(polynom.b!=0){
 			WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade ist parallel zu X-Achse und besitzt keine Nullstelle.]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-		}else if(funktionenListe[i].inhaltKnotenVektor[0]!=0){
+		}else if(polynom.b!=0){
 			WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade sitzt genau auf der X-Achse und besitzt unendlich viele Nullstellen.]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		}
 		
 	}
 }
-
-let hoeheWurzelZeichen1Schriftgroesse35 = 25;
-let hoeheWurzelZeichen2Schriftgroesse35 = 15;
-let hoeheWurzelZeichen1Schriftgroesse20 = 17;
-let hoeheWurzelZeichen2Schriftgroesse20 = 12;
-let hoeheWurzelZeichen1Schriftgroesse15 = 22;
-let hoeheWurzelZeichen2Schriftgroesse15 = 18;
 
 function reiter62MitternachtsformelNullstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -725,31 +732,79 @@ function reiter62MitternachtsformelNullstellen(i){
 	let polynomMitHoch0 = new Polynom();
 	
 	let aktuellerKnoten = funktionenListe[i];
-	while(aktuellerKnoten.rechtesChild!=null){
-		if(aktuellerKnoten.linkesChild!=null){
-			if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom!=null){
-				if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===2){
-					polynomMitHoch2 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
-				}else if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===1){
-					polynomMitHoch1 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
-				}else if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===0){
-					polynomMitHoch0 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
-				}
-			}			
-		}
-		if(aktuellerKnoten.rechtesChild!=null){
-			if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===2){
-				polynomMitHoch2 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
-			}else if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===1){
-				polynomMitHoch1 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
-			}else if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===0){
-				polynomMitHoch0 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
-			}
-		}
-	}
+//	while(aktuellerKnoten.rechtesChild!=null){
+//		if(aktuellerKnoten.linkesChild!=null){
+//			if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom!=null){
+//				if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===2){
+//					polynomMitHoch2 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
+//				}else if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===1){
+//					polynomMitHoch1 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
+//				}else if(aktuellerKnoten.linkesChild.inhaltKnotenPolynom.potenz===0){
+//					polynomMitHoch0 = aktuellerKnoten.linkesChild.inhaltKnotenPolynom; 
+//				}
+//			}			
+//		}
+//		if(aktuellerKnoten.rechtesChild!=null){
+//			if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===2){
+//				polynomMitHoch2 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
+//			}else if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===1){
+//				polynomMitHoch1 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
+//			}else if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.potenz===0){
+//				polynomMitHoch0 = aktuellerKnoten.rechtesChild.inhaltKnotenPolynom; 
+//			}
+//		}
+//	}
+	let a=0,b=0,c=0;
 	
-	if(funktionenListe[i].inhaltKnotenVektor.length==3&&funktionenListe[i].linkesChild==null&&funktionenListe[i].rechtesChild==null&&funktionenListe[i].inhaltKnotenVektor[2]!=0){
+	if((funktionenListe[i].inhaltKnotenSymbol==='^'||funktionenListe[i].inhaltKnotenSymbol==='*') && //für wenn nur polynom 2ten grades vorhanden z.b. x^2 oder 2*x^2
+			funktionenListe[i].linkesChild===null &&
+			funktionenListe[i].rechtesChild===null){
 		
+		
+		a = funktionenListe[i].inhaltKnotenPolynom.koeffizient;
+		b = 0;
+		c = 0;
+		
+	}else  if((funktionenListe[i].inhaltKnotenSymbol==='+'||funktionenListe[i].inhaltKnotenSymbol==='-') && //für wenn nur polynom 2ten und 1ten grades vorhanden z.b. x^2+x oder 2*x^2+2*x und x^2+1
+			funktionenListe[i].linkesChild.linkesChild===null){
+		
+		a = funktionenListe[i].linkesChild.inhaltKnotenPolynom.koeffizient;
+        if(funktionenListe[i].inhaltKnotenSymbol==='-'){
+        	if(funktionenListe[i].rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='x'||funktionenListe[i].rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='X'){
+        		b = -funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}else{
+        		c = -funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}
+        	
+        }else{
+        	if(funktionenListe[i].rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='x'||funktionenListe[i].rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='X'){
+        		b = funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}else{
+        		c = funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}
+        }
+        
+        
+	}else if((funktionenListe[i].inhaltKnotenSymbol==='+'||funktionenListe[i].inhaltKnotenSymbol==='-') &&
+			funktionenListe[i].linkesChild.linkesChild.inhaltKnotenPolynom.potenz===2 &&
+			funktionenListe[i].linkesChild.rechtesChild.inhaltKnotenPolynom.potenz===1 &&
+			funktionenListe[i].rechtesChild.inhaltKnotenPolynom.potenz===1){
+		
+		
+        a = funktionenListe[i].linkesChild.linkesChild.inhaltKnotenPolynom.koeffizient;
+        if(funktionenListe[i].linkesChild.inhaltKnotenSymbol==='-'){
+        	b = -funktionenListe[i].linkesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }else{
+        	b = funktionenListe[i].linkesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }
+       
+        if(funktionenListe[i].inhaltKnotenSymbol==='-'){
+        	c = -funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }else{
+        	c = funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }
+	}
+
 		let textPositionZweiteZeile = 10 + WriteText(`x`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		textPositionZweiteZeile += WriteText(`1,2`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '9px Calibri');
 		textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
@@ -777,7 +832,7 @@ function reiter62MitternachtsformelNullstellen(i){
 		
 		
 		textPositionZweiteZeile += 30 + WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}]`, textPositionZweiteZeile+30, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-		textPositionZweiteZeile += 30 + WriteText(`b[a = ${funktionenListe[i].inhaltKnotenVektor[2]} b = ${funktionenListe[i].inhaltKnotenVektor[1]} c = ${funktionenListe[i].inhaltKnotenVektor[0]}]`, textPositionZweiteZeile + 30, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += 30 + WriteText(`b[a = ${a} b = ${b} c = ${c}]`, textPositionZweiteZeile + 30, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		
 				
 		let textPositionDritteZeile = 10 + WriteText(`x`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
@@ -785,10 +840,10 @@ function reiter62MitternachtsformelNullstellen(i){
 		textPositionDritteZeile += WriteText(` = `, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		laengeBisWurzel = canvasContext.measureText("-b \xB1 \u221A").width + textPositionDritteZeile;
 		
-		if((4*funktionenListe[i].inhaltKnotenVektor[2]*funktionenListe[i].inhaltKnotenVektor[0])<0){
-			textPositionDritteZeile += WriteText(`${(-funktionenListe[i].inhaltKnotenVektor[1])} \xB1 \u221A ${Math.pow(funktionenListe[i].inhaltKnotenVektor[1],2)}-( ${4*funktionenListe[i].inhaltKnotenVektor[2]*funktionenListe[i].inhaltKnotenVektor[0]})/2*${funktionenListe[i].inhaltKnotenVektor[2]}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		if((4*a*c)<0){
+			textPositionDritteZeile += WriteText(`${(-b)} \xB1 \u221A ${Math.pow(b,2)}-( ${4*a*c})/2*${b}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}else{
-			textPositionDritteZeile += WriteText(`${(-funktionenListe[i].inhaltKnotenVektor[1])} \xB1 \u221A ${Math.pow(funktionenListe[i].inhaltKnotenVektor[1],2)}-${4*funktionenListe[i].inhaltKnotenVektor[2]*funktionenListe[i].inhaltKnotenVektor[0]}/2*${funktionenListe[i].inhaltKnotenVektor[2]}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionDritteZeile += WriteText(`${(-b)} \xB1 \u221A ${Math.pow(b,2)}-${4*a*c}/2*${b}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}
 		
 		canvasContext.beginPath();
@@ -811,8 +866,8 @@ function reiter62MitternachtsformelNullstellen(i){
 		
 		
 		textPositionDritteZeile += WriteText(`   =   `, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-		laengeBisWurzel = canvasContext.measureText(`${(-funktionenListe[i].inhaltKnotenVektor[1])} \xB1 \u221A`).width + textPositionDritteZeile;
-		textPositionDritteZeile += WriteText(`${(-funktionenListe[i].inhaltKnotenVektor[1])} \xB1 \u221A ${(Math.pow(funktionenListe[i].inhaltKnotenVektor[1],2) - (4*funktionenListe[i].inhaltKnotenVektor[2]*funktionenListe[i].inhaltKnotenVektor[0]))}/${2*funktionenListe[i].inhaltKnotenVektor[2]}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		laengeBisWurzel = canvasContext.measureText(`${(-b)} \xB1 \u221A`).width + textPositionDritteZeile;
+		textPositionDritteZeile += WriteText(`${(-b)} \xB1 \u221A ${(Math.pow(b,2) - (4*a*c))}/${2*a}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		
 		canvasContext.beginPath();
 		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
@@ -832,14 +887,14 @@ function reiter62MitternachtsformelNullstellen(i){
 		canvasContext.lineTo( textPositionDritteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
 		canvasContext.stroke();
 		
-
+	
 		
 		
-		let minusB = (-funktionenListe[i].inhaltKnotenVektor[1]);
-		let BQuadrat = Math.pow(funktionenListe[i].inhaltKnotenVektor[1],2);
-		let VierAC = (4*funktionenListe[i].inhaltKnotenVektor[2]*funktionenListe[i].inhaltKnotenVektor[0]);
+		let minusB = (-b);
+		let BQuadrat = Math.pow(b,2);
+		let VierAC = (4*a*c);
 		let wurzelBQuadratMinus4AC = Math.sqrt(BQuadrat - VierAC);
-		let zweiMalA = 2*funktionenListe[i].inhaltKnotenVektor[2];
+		let zweiMalA = 2*a;
 		
 		if(BQuadrat-VierAC>0){
 			
@@ -854,7 +909,7 @@ function reiter62MitternachtsformelNullstellen(i){
 		}else{
 			textPositionDritteZeile += WriteText(`   =>   b[Wenn die Wurzel negativ wird, gibt es keine Lösung. Keine lösung bedeutet das Polynom hat keine Nullstellen.]`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}
-	}else if(funktionenListe[i].inhaltKnotenVektor.length===2){	
+	if(funktionenListe[i].inhaltKnotenVektor.length===2){	
 		WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist ersten Grades. Die Nullstellen können mit bei diesem Polynom hilfe der Geradengleichung errechnet werden.]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 	}else if(funktionenListe[i].inhaltKnotenVektor.length>3){
@@ -862,8 +917,6 @@ function reiter62MitternachtsformelNullstellen(i){
 		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist höher als 2ten Grades. Die Nullstellen können bei diesem Polynom nur näherungsweise mithilfe des Newton Verfahren oder Regula Falsi berechnet werden.]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 	}
 }
-
-
 
 function reiter63PQFormelNullstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -880,7 +933,81 @@ function reiter63PQFormelNullstellen(i){
 	
 	WriteText(`Mit hilfe der b[PQ-Formel] können die b[Nullstellen] eines Polynoms berechnet werden. Sie funktioniert nur bei b[Polynomen 2-ten Grades]. Das Polynom muss also die Form b[x^2+px+q] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
-	if(funktionenListe[i].inhaltKnotenVektor.length==3&&funktionenListe[i].linkesChild==null&&funktionenListe[i].rechtesChild==null&&funktionenListe[i].inhaltKnotenVektor[2]!=0){
+	let a=0,b=0,c=0;
+	
+	if((funktionenListe[i].inhaltKnotenSymbol==='^'||funktionenListe[i].inhaltKnotenSymbol==='*') && //für wenn nur polynom 2ten grades vorhanden z.b. x^2 oder 2*x^2
+			funktionenListe[i].linkesChild===null &&
+			funktionenListe[i].rechtesChild===null){
+		
+		if(funktionenListe[i].inhaltKnotenSymbol==='^'){ // für f(x)=x^2
+			a = 1;
+		}else if(funktionenListe[i].inhaltKnotenSymbol==='*'){ // für f(x)=2*x^2
+			a = funktionenListe[i].inhaltKnotenPolynom.koeffizient;
+		}
+		
+        b = 0 / a;
+        c = 0 / a;
+	}else  if((funktionenListe[i].inhaltKnotenSymbol==='+'||funktionenListe[i].inhaltKnotenSymbol==='-') && //für wenn nur polynom 2ten und 1ten grades vorhanden z.b. x^2+x oder 2*x^2+2*x und x^2+1
+			funktionenListe[i].linkesChild.linkesChild===null){
+		
+		a = funktionenListe[i].linkesChild.inhaltKnotenPolynom.koeffizient;
+        if(funktionenListe[i].inhaltKnotenSymbol==='-'){
+        	if(funktionenListe[i].rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='x'||funktionenListe[i].rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='X'){
+        		b = -funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}else{
+        		c = -funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}
+        	
+        }else{
+        	if(funktionenListe[i].rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='x'||funktionenListe[i].rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==='X'){
+        		b = funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}else{
+        		c = funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        	}
+        }
+        
+        
+	}else if((funktionenListe[i].inhaltKnotenSymbol==='+'||funktionenListe[i].inhaltKnotenSymbol==='-') &&
+			funktionenListe[i].linkesChild.linkesChild.inhaltKnotenPolynom.potenz===2 &&
+			funktionenListe[i].linkesChild.rechtesChild.inhaltKnotenPolynom.potenz===1 &&
+			funktionenListe[i].rechtesChild.inhaltKnotenPolynom.potenz===1){
+			
+        a = funktionenListe[i].linkesChild.linkesChild.inhaltKnotenPolynom.koeffizient;
+        if(funktionenListe[i].linkesChild.inhaltKnotenSymbol==='-'){
+        	b = -funktionenListe[i].linkesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }else{
+        	b = funktionenListe[i].linkesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }
+       
+        if(funktionenListe[i].inhaltKnotenSymbol==='-'){
+        	c = -funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }else{
+        	c = funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }
+		
+	}else if((funktionenListe[i].inhaltKnotenSymbol==='+'||funktionenListe[i].inhaltKnotenSymbol==='-') && //für wenn nur polynom 2ten und 1ten grades vorhanden z.b. x^2+x oder 2*x^2+2*x und x^2+1
+			funktionenListe[i].linkesChild.linkesChild===null &&
+			funktionenListe[i].rechtesChild===null){
+		
+		a = funktionenListe[i].linkesChild.inhaltKnotenPolynom.koeffizient;
+        if(funktionenListe[i].inhaltKnotenSymbol==='-'){
+        	b = -funktionenListe[i].linkesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }else{
+        	b = funktionenListe[i].linkesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }
+       
+        if(funktionenListe[i].inhaltKnotenSymbol==='-'){
+        	c = -funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }else{
+        	c = funktionenListe[i].rechtesChild.inhaltKnotenPolynom.koeffizient;
+        }
+        
+        
+	}else{
+		WriteText(`y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		WriteText("Die angegebene Funktion hat leider nicht die passende Form...", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		return;
+	}
 		
 		let textPositionZweiteZeile = 10 + WriteText("x", 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		textPositionZweiteZeile += WriteText("1,2", textPositionZweiteZeile ,hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
@@ -912,10 +1039,10 @@ function reiter63PQFormelNullstellen(i){
 		canvasContext.lineWidth = alteStichstaerke;
 		
 		textPositionZweiteZeile += 30 + WriteText(`b[y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}]`,textPositionZweiteZeile + 30 , hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-		textPositionZweiteZeile += 30 + WriteText(`b[a = ${funktionenListe[i].inhaltKnotenVektor[2]} p = ${funktionenListe[i].inhaltKnotenVektor[1]} q = ${funktionenListe[i].inhaltKnotenVektor[0]}]`,textPositionZweiteZeile + 30, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += 30 + WriteText(`b[a = ${a} p = ${b} q = ${c}]`,textPositionZweiteZeile + 30, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		
 
-		if(funktionenListe[i].inhaltKnotenVektor[2]!=1){
+		if(a!=1){
 			textPositionZweiteZeile += 30 + WriteText(` Der Koeffizient von x^2 muss 1 sein, dafür alles geteilt durch a. Allgemein also `,30 + textPositionZweiteZeile,hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
 			
@@ -926,34 +1053,34 @@ function reiter63PQFormelNullstellen(i){
 			textPositionZweiteZeile += WriteText(`q/a`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
 			textPositionZweiteZeile += 10 + WriteText(` => `, textPositionZweiteZeile + 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-			textPositionZweiteZeile += WriteText(`${funktionenListe[i].inhaltKnotenVektor[2]}x^2/${funktionenListe[i].inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${a}x^2/${a}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			
 			
 			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);			
-			textPositionZweiteZeile += WriteText(`${funktionenListe[i].inhaltKnotenVektor[1]}x/${funktionenListe[i].inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${b}x/${a}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-			textPositionZweiteZeile += WriteText(`${funktionenListe[i].inhaltKnotenVektor[0]}/${funktionenListe[i].inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);		
+			textPositionZweiteZeile += WriteText(`${c}/${a}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);		
 			textPositionZweiteZeile += WriteText(` => x^2`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);	
 			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
 	
-			if(funktionenListe[i].inhaltKnotenVektor[1]/funktionenListe[i].inhaltKnotenVektor[2]>=0){
-				textPositionZweiteZeile += WriteText(`${(funktionenListe[i].inhaltKnotenVektor[1]/funktionenListe[i].inhaltKnotenVektor[2]).toFixed(2)}x`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			if(b/a>=0){
+				textPositionZweiteZeile += WriteText(`${(b/a).toFixed(2)}x`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}else{
-				textPositionZweiteZeile += WriteText(`(${(funktionenListe[i].inhaltKnotenVektor[1]/funktionenListe[i].inhaltKnotenVektor[2]).toFixed(2)}x)`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+				textPositionZweiteZeile += WriteText(`(${(b/a).toFixed(2)}x)`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}
 			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			
-			if(funktionenListe[i].inhaltKnotenVektor[0]/funktionenListe[i].inhaltKnotenVektor[2]>=0){
-				textPositionZweiteZeile += WriteText(`${(funktionenListe[i].inhaltKnotenVektor[0]/funktionenListe[i].inhaltKnotenVektor[2]).toFixed(2)}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			if(c/a>=0){
+				textPositionZweiteZeile += WriteText(`${(c/a).toFixed(2)}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}else{
-				textPositionZweiteZeile += WriteText(`(${(funktionenListe[i].inhaltKnotenVektor[0]/funktionenListe[i].inhaltKnotenVektor[2]).toFixed(2)})`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+				textPositionZweiteZeile += WriteText(`(${(c/a).toFixed(2)})`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}
 			
 		}
 		
-		let p = funktionenListe[i].inhaltKnotenVektor[1]/funktionenListe[i].inhaltKnotenVektor[2];
-		let q = funktionenListe[i].inhaltKnotenVektor[0]/funktionenListe[i].inhaltKnotenVektor[2]
+		let p = b/a;
+		let q = c/a;
 		
 		
 		let textPositionDritteZeile = 10 + WriteText("x", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
@@ -967,7 +1094,7 @@ function reiter63PQFormelNullstellen(i){
 		textPositionDritteZeile += WriteText(`${p.toFixed(2)}/2`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		textPositionDritteZeile += WriteText(")", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');
 		textPositionDritteZeile += WriteText("²",  textPositionDritteZeile, hoeheDritteZeile-5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);	
-		if(funktionenListe[i].inhaltKnotenVektor[0]>=0){
+		if(c>=0){
 			textPositionDritteZeile += WriteText(` -${q.toFixed(2)}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}else{
 			textPositionDritteZeile += WriteText(` -(${q.toFixed(2)})`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
@@ -1058,8 +1185,8 @@ function reiter63PQFormelNullstellen(i){
 
 			textPositionDritteZeile += WriteText(`${wurzelAusgerechnet.toFixed(2)}`,textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			
-			let x1 = p/2+wurzelAusgerechnet;
-			let x2 = p/2-wurzelAusgerechnet;
+			let x1 = -p/2+wurzelAusgerechnet;
+			let x2 = -p/2-wurzelAusgerechnet;
 			
 			textPositionDritteZeile += 10 + WriteText(` => b[x1=${x1.toFixed(2)} x2=${x2.toFixed(2)}]`, textPositionDritteZeile+10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
@@ -1067,14 +1194,8 @@ function reiter63PQFormelNullstellen(i){
 			textPositionDritteZeile += WriteText(" => Wenn die Wurzel negativ wird, gibt es keine Lösung. Keine lösung bedeutet das Polynom hat keine Nullstellen.", textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			
 		}
-	}else{
-		WriteText(`y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString}`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-		WriteText("Die angegebene Funktion hat leider nicht die passende Form...", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-
-	}
+	
 }
-
-
 
 function reiter64SatzVonVietaNullstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -1144,7 +1265,6 @@ function reiter64SatzVonVietaNullstellen(i){
 	}
 }
 
-// TODO test
 function reiter65NewtonVerfahrenNullstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -1164,7 +1284,6 @@ function reiter65NewtonVerfahrenNullstellen(i){
 	WriteText(`Das Newton Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
 }
-
 
 function reiter66RegulaFalsiNullstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -1188,6 +1307,7 @@ function reiter66RegulaFalsiNullstellen(i){
 
 
 
+
 function reiter67GeradengleichungExtremstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -1207,42 +1327,45 @@ function reiter67GeradengleichungExtremstellen(i){
 	WriteText(`b[Die Extremstellen eines Polynoms sind die Nullstellen der ersten Ableitung]. Also muss das Polynom erst abgeleitet werden. b[${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 	WriteText(`Danach wird die b[Ableitung gleich 0 gesetzt] und b[nach X aufgelöst]. Genau wie bei den Nullstellen nur mit der Ableitung.`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
+	let polynom = getAB(funktionenListe[i].ersteAbleitung);
+	let potenz = getHoechstePotenzV2(funktionenListe[i].ersteAbleitung);
 	
-	if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length===2){
-		if((-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])<0){
-			if(Math.abs((-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]))>1){
-				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])}x = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-			}else if(Math.abs((-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]))===1){
-				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    -x = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	if(potenz===1){
+		if((-polynom.b)<0){
+			if(Math.abs((-polynom.b))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    ${(-polynom.b)}x = ${polynom.a}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-polynom.b))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    -x = ${polynom.a}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			}
 
 		}else{
-			if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))>1){
-				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])}x = ${funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-			}else if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))===1){
-				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    x = ${(-funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			if(Math.abs((-polynom.b))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    ${(-polynom.b)}x = ${polynom.a}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-polynom.b))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(polynom.b===0){
+				WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}    ==>    x = ${0}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			}
 		}
-	}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length===3){
+	}else if(potenz===2){
 		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 2ten Grades. Die Nullstellen können bei diesem Polynom mithilfe der Mitternachtsformel oder PQ-Formel berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
-	}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length>3){
+	}else if(potenz>2){
 		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist höher als 2ten Grades. Die Nullstellen können bei diesem Polynom nur näherungsweise mithilfe des Newton Verfahren oder Regula Falsi berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
-	}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor.length===1){
-		if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]!=0){
+	}else if(potenz===0){
+		if(polynom.b!=0){
 			WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade ist parallel zu X-Achse und besitzt keine Nullstelle.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-		}else if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]===0){
+		}else if(polynom.b===0){
 			WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].ersteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade sitzt genau auf der X-Achse und besitzt unendlich viele Nullstellen.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		}
 		
 	}
 }
-
 
 function reiter68MitternachtsformelExtremstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -1590,8 +1713,6 @@ function reiter69PQFormelExtremstellen(i){
 	}
 }
 
-
-
 function reiter610SatzVonVietaExtremstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -1640,7 +1761,6 @@ function reiter610SatzVonVietaExtremstellen(i){
 	}
 }
 
-
 function reiter611NewtonVerfahrenExtremstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -1660,7 +1780,6 @@ function reiter611NewtonVerfahrenExtremstellen(i){
 	WriteText(`Das Newton Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
 }
-
 
 function reiter612RegulaFalsiExtremstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -1683,6 +1802,8 @@ function reiter612RegulaFalsiExtremstellen(i){
 }
 
 
+
+
 function reiter613GeradengleichungWendepunkte(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -1702,42 +1823,45 @@ function reiter613GeradengleichungWendepunkte(i){
 	WriteText(`b[Die Wendestellen eines Polynoms sind die Nullstellen der zweiten Ableitung]. Also muss das Polynom zuerst zwei mal abgeleitet werden. b[${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 	WriteText(`Danach wird die b[Ableitung gleich 0 gesetzt] und b[nach X aufgelöst]. Genau wie bei den Nullstellen nur mit der zweiten Ableitung.`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
-	
-	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length===2){
-		if((-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])<0){
-			if(Math.abs((-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]))>1){
-				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])}x = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-			}else if(Math.abs((-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]))===1){
-				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    -x = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+	let polynom = getAB(funktionenListe[i].zweiteAbleitung);
+	let potenz = getHoechstePotenzV2(funktionenListe[i].zweiteAbleitung);
+	if(potenz===1){
+		
+		if((-polynom.b)<0){	
+			if(Math.abs((-polynom.b))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    ${(-polynom.b)}x = ${polynom.a}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-polynom.b))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    -x = ${polynom.a}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			}
 
 		}else{
-			if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))>1){
-				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])}x = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}    ==>    x = ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-			}else if(Math.abs((-funktionenListe[i].inhaltKnotenVektor[0]))===1){
-				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    x = ${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			if(Math.abs((-polynom.b))>1){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    ${(-polynom.b)}x = ${polynom.a}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(Math.abs((-polynom.b))===1){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    x = ${(-polynom.b)/polynom.a}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
+			}else if(polynom.b===0){
+				WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    0 = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}    ==>    x = ${0}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			}
 		}
-	}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length===3){
+	}else if(potenz===2){
 		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 2ten Grades. Die Wendepunkte können bei diesem Polynom mithilfe der Mitternachtsformel oder PQ-Formel berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
-	}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length>3){
+	}else if(potenz>2){
 		WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist höher als 2ten Grades. Die Wendepunkte können bei diesem Polynom nur näherungsweise mithilfe des Newton Verfahren oder Regula Falsi berechnet werden.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
-	}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length===1){
-		if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]!=0){
+	}else if(potenz===1){
+		if(polynom.b!=0){
 			WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade ist parallel zu X-Achse und besitzt keine Nullstelle.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
-		}else if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]===0){
+		}else if(polynom.b===0){
 			WriteText(`b[y = ${buchstabenArray[i]}'(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 			WriteText(`b[Die angegebene Funktion hat leider nicht die passende Form... Das Polynom ist 1ten Grades. Die Gerade sitzt genau auf der X-Achse und besitzt unendlich viele Nullstellen.]`, 10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 		}
 		
 	}
 }
-
 
 function reiter614MitternachtsformelWendepunkte(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -1758,8 +1882,9 @@ function reiter614MitternachtsformelWendepunkte(i){
 	WriteText(`Mit hilfe der b[Mitternachts- oder auch a-b-c Formel] können auch die b[Wendepunkte] eines Polynoms berechnet werden. Dies funktioniert nur bei b[Polynomen 4-ten Grades]. Die zweite b[Ableitung] des Polynoms muss also die Form b[ax^2+bx+c] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 	WriteText(`b[Die Nullstellen der zweiten Ableitung sind die Wendestellen der Stammfunktion]. Es muss also zuerst zwei mal abgeleitet werden. b[Die zweite Ableitung von ${buchstabenArray[i]}(x) = ${funktionenListe[i].inhaltKnotenString} lautet ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 	
-	
-	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].zweiteAbleitung.linkesChild==null&&funktionenListe[i].zweiteAbleitung.rechtesChild==null&&funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]!=0){
+	let polynom = getABC(funktionenListe[i].zweiteAbleitung);
+	if(polynom.a!=0){
+//	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].zweiteAbleitung.linkesChild==null&&funktionenListe[i].zweiteAbleitung.rechtesChild==null&&funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]!=0){
 		
 		let textPositionZweiteZeile = 10 + WriteText(`x`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		textPositionZweiteZeile += WriteText(`1,2`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '10px Calibri');
@@ -1788,7 +1913,7 @@ function reiter614MitternachtsformelWendepunkte(i){
 		
 		
 		textPositionZweiteZeile += 30 + WriteText(`y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}`, textPositionZweiteZeile+30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-		textPositionZweiteZeile += 30 + WriteText(`a = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]} b = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]} c = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]}`, textPositionZweiteZeile + 30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionZweiteZeile += 30 + WriteText(`a = ${polynom.a} b = ${polynom.b} c = ${polynom.c}`, textPositionZweiteZeile + 30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		
 				
 		textPositionZweiteZeile += 30 + WriteText(`x`, textPositionZweiteZeile+30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
@@ -1797,9 +1922,9 @@ function reiter614MitternachtsformelWendepunkte(i){
 		laengeBisWurzel = canvasContext.measureText("-b \xB1 \u221A").width + textPositionZweiteZeile;
 		
 		if((4*funktionenListe[i].inhaltKnotenVektor[2]*funktionenListe[i].inhaltKnotenVektor[0])<0){
-			textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${Math.pow(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1],2)}-( ${4*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]})/2*${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${(-polynom.b)} \xB1 \u221A ${Math.pow(polynom.b,2)}-( ${4*polynom.a*polynom.c})/2*${polynom.a}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}else{
-			textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${Math.pow(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1],2)}-${4*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]}/2*${funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${(-polynom.b)} \xB1 \u221A ${Math.pow(polynom.b,2)}-${4*polynom.a*polynom.c}/2*${polynom.a}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}
 		
 		canvasContext.beginPath();
@@ -1822,8 +1947,8 @@ function reiter614MitternachtsformelWendepunkte(i){
 		
 		
 		textPositionZweiteZeile += WriteText(` = `, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-		laengeBisWurzel = canvasContext.measureText(`${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A`).width + textPositionZweiteZeile;
-		textPositionZweiteZeile += WriteText(`${(-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} \xB1 \u221A ${(Math.pow(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1],2) - (4*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]))}/${2*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		laengeBisWurzel = canvasContext.measureText(`${(-polynom.b)} \xB1 \u221A`).width + textPositionZweiteZeile;
+		textPositionZweiteZeile += WriteText(`${(-polynom.b)} \xB1 \u221A ${(Math.pow(polynom.b,2) - (4*polynom.a*polynom.c))}/${2*polynom.a}`, textPositionZweiteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		
 		canvasContext.beginPath();
 		canvasContext.strokeStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
@@ -1843,11 +1968,11 @@ function reiter614MitternachtsformelWendepunkte(i){
 		canvasContext.lineTo( textPositionZweiteZeile, hoeheDritteZeile-hoeheWurzelZeichen2Schriftgroesse15);
 		canvasContext.stroke();
 		
-		let minusB = (-funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]);
-		let BQuadrat = Math.pow(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1],2);
-		let VierAC = (4*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]);
+		let minusB = (-polynom.b);
+		let BQuadrat = Math.pow(polynom.b,2);
+		let VierAC = (4*polynom.a*polynom.c);
 		let wurzelBQuadratMinus4AC = Math.sqrt(BQuadrat - VierAC);
-		let zweiMalA = 2*funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2];
+		let zweiMalA = 2*polynom.a;
 		
 		if(BQuadrat-VierAC>0){
 			
@@ -1871,7 +1996,6 @@ function reiter614MitternachtsformelWendepunkte(i){
 	}
 }
 
-
 function reiter615PQFormelWendepunkte(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -1886,13 +2010,17 @@ function reiter615PQFormelWendepunkte(i){
 	canvasContext.fillStyle = `rgba(${farbeSchriftInfoLeiste.r},${farbeSchriftInfoLeiste.g},${farbeSchriftInfoLeiste.b},${farbeSchriftInfoLeiste.a})`;
 	canvasContext.textAlign = "left";
 	
+	
+	
 	WriteText(`Mit hilfe der b[PQ-Formel] können auch die b[Wendepunkte] eines Polynoms berechnet werden. Dies funktioniert nur bei b[Polynomen 4-ten Grades]. Die zweite b[Ableitung] des Polynoms muss die Form b[ax^2+bx+c] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 	let textPositionZweiteZeile = 10 + WriteText(`Es muss also zuerst zwei mal abgeleitet werden. b[Die zweite Ableitung lautet ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
 	
-	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].zweiteAbleitung.linkesChild==null&&funktionenListe[i].zweiteAbleitung.rechtesChild==null&&funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]!=0){
-		
-		if(funktionenListe[i].inhaltKnotenVektor[2]!=1){
+	let polynom = getABC(funktionenListe[i].zweiteAbleitung);
+	if(polynom.a!=0){
+//	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].zweiteAbleitung.linkesChild==null&&funktionenListe[i].zweiteAbleitung.rechtesChild==null&&funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]!=0){
+//		
+		if(polynom.a!=1){
 			textPositionZweiteZeile += 30 + WriteText(`Der Koeffizient von x^2 muss 1 sein, dafür alles geteilt durch a. Allgemein also `, 30 + textPositionZweiteZeile,hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
 			
@@ -1903,28 +2031,28 @@ function reiter615PQFormelWendepunkte(i){
 			textPositionZweiteZeile += WriteText(`q/a`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
 			textPositionZweiteZeile += 10 + WriteText(` => `, textPositionZweiteZeile + 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}x^2/${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${zahlRunden(polynom.a)}x^2/${zahlRunden(polynom.a)}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			
 			
 			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);			
-			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])}x/${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionZweiteZeile += WriteText(`${zahlRunden(polynom.b)}x/${zahlRunden(polynom.a)}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-			textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])}/${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);		
+			textPositionZweiteZeile += WriteText(`${zahlRunden(polynom.c)}/${zahlRunden(polynom.a)}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);		
 			textPositionZweiteZeile += WriteText(` => x^2`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);	
 			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
 
-			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]>=0){
-				textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}x`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			if(polynom.b/polynom.a>=0){
+				textPositionZweiteZeile += WriteText(`${zahlRunden(polynom.b/polynom.a)}x`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}else{
-				textPositionZweiteZeile += WriteText(`(${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}x)`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+				textPositionZweiteZeile += WriteText(`(${zahlRunden(polynom.b/polynom.a)}x)`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}
 			textPositionZweiteZeile += WriteText(` + `,  textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			
-			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]>=0){
-				textPositionZweiteZeile += WriteText(`${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			if(polynom.c/polynom.a>=0){
+				textPositionZweiteZeile += WriteText(`${zahlRunden(polynom.c/polynom.a)}`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}else{
-				textPositionZweiteZeile += WriteText(`(${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])})`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+				textPositionZweiteZeile += WriteText(`(${zahlRunden(polynom.c/polynom.a)})`, textPositionZweiteZeile, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}
 			
 		}
@@ -1959,13 +2087,13 @@ function reiter615PQFormelWendepunkte(i){
 		canvasContext.lineWidth = alteStichstaerke;
 		
 		textPositionDritteZeile += 30 + WriteText(`y = ${buchstabenArray[i]}(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}`,textPositionDritteZeile + 30 , hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-		textPositionDritteZeile += 30 + WriteText(`a = ${zahlRunden(funktionenListe[i].inhaltKnotenVektor[2])} p = ${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1])} q = ${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0])}`,textPositionDritteZeile + 30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		textPositionDritteZeile += 30 + WriteText(`a = ${zahlRunden(polynom.a)} p = ${zahlRunden(polynom.b)} q = ${zahlRunden(polynom.c)}`,textPositionDritteZeile + 30, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		
 
 		
 		
-		let p = funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2];
-		let q = funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2];
+		let p = polynom.b/polynom.a;
+		let q = polynom.c/polynom.a;
 		
 		
 		textPositionDritteZeile += 10 + WriteText("x", 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
@@ -2010,7 +2138,7 @@ function reiter615PQFormelWendepunkte(i){
 		textPositionDritteZeile += WriteText("\u221A", textPositionDritteZeile, hoeheDritteZeile+5, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '35px Calibri');	
 		laengeTextWurzel = textPositionDritteZeile;
 		textPositionDritteZeile += WriteText(`${zahlRunden(Math.pow(p/2,2))}`,textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-		if(funktionenListe[i].inhaltKnotenVektor[0]>=0){
+		if(polynom.c>=0){
 			textPositionDritteZeile += WriteText(` -${zahlRunden(q)}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}else{
 			textPositionDritteZeile += WriteText(` +${(-zahlRunden(q))}`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
@@ -2086,7 +2214,6 @@ function reiter615PQFormelWendepunkte(i){
 	}
 }
 
-
 function reiter616SatzVonVietaWendepunkte(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -2104,29 +2231,31 @@ function reiter616SatzVonVietaWendepunkte(i){
 	let textPositionErsteZeile = 10 + WriteText(`Mit hilfe des b[Satzes von Vieta], können auch die b[Wendepunkte] eines Polynoms berechnet werden. Sie funktioniert nur bei b[Polynomen 4-ten Grades] und eignet sich nur für b[ganzzahlige Wendepunkte]. Die b[zweite Ableitung] des Polynoms muss also die Form b[x^2+px+q] haben.`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 
 
-	if(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor.length==3&&funktionenListe[i].zweiteAbleitung.linkesChild==null&&funktionenListe[i].zweiteAbleitung.rechtesChild==null&&funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2]!=0){
+	let polynom = getABC(funktionenListe[i].zweiteAbleitung);
+	
+	if(polynom.a!=0){
 		let textPositionZweiteZeile = 10 + WriteText(`Die b[zweite Ableitung] des Polynoms wird wie bei der b[PQ-Formel] zuerst in die b[Normalform] gebracht. Es muss also die Form b[ax^2+px+q] haben wobei b[a=1] sein muss. Das die b[zweite Ableitung des eingegebenen Polynoms lautet: ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		let textPositionDritteZeile = 0;
 		if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
 			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
-				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2${zahlRunden(polynom.b/polynom.a)}${zahlRunden(polynom.c/polynom.a)}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}else{
-				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}+${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a,  fontSchriftInfoLeiste);
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2${zahlRunden(polynom.b/polynom.a)}+${zahlRunden(polynom.c/polynom.a)}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a,  fontSchriftInfoLeiste);
 			}	
 		}else{
 			if(funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].ersteAbleitung.inhaltKnotenVektor[2]<0){
-				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2+${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2+${zahlRunden(polynom.b/polynom.a)}${zahlRunden(polynom.c/polynom.a)}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}else{
-				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2+${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}+${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+				textPositionDritteZeile += 10 + WriteText(`b[In Normalform gebracht] lautet es: b[${buchstabenArray[i]}''(x) = x^2+${zahlRunden(polynom.b/polynom.a)}+${zahlRunden(polynom.c/polynom.a)}]`, 10, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			}	
 		}
 		textPositionDritteZeile += 10 + WriteText(` Es muss nun b[p = -(x1+x2) und q = x1*x2] gelten. Um auf die b[Wendepunkte] zu kommen muss b[eine Kombination von x1 und x2 gefunden werden für die beide Aussagen wahr sind.]`, textPositionDritteZeile, hoeheDritteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, "bold " + fontSchriftInfoLeiste);
-		if(funktionenListe[i].extremstellen.length===0){
-			let textPositionVierteZeile = 10 + WriteText(`b[p=${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])} q=${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])} für x1 und x2 werden nun zufällig Zahlen eingesetzt bis eine Kombination passt: ==>]`,  10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+		if(funktionenListe[i].wendepunkte.length===0){
+			let textPositionVierteZeile = 10 + WriteText(`b[p=${zahlRunden(polynom.b/polynom.a)} q=${zahlRunden(polynom.c/polynom.a)} für x1 und x2 werden nun zufällig Zahlen eingesetzt bis eine Kombination passt: ==>]`,  10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 			textPositionVierteZeile += WriteText(`b[Es konnte keine Kombination für x1 und für x2 gefunden werden. Verwenden Sie die Mitternachts- oder PQ-Formel.]`,  textPositionVierteZeile, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}else{
-			let textPositionVierteZeile = 10 + WriteText(`b[p=${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])} q=${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])} für x1 und x2 werden nun zufällig Zahlen eingesetzt bis eine Kombination passt: ==>]`,  10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
-			textPositionVierteZeile += WriteText(`b[Wahr werden für dieses Polynom beide Aussagen nur wenn für x1=${zahlRunden(funktionenListe[i].wendepunkte[0])} und für x2=${zahlRunden(funktionenListe[i].extremstellen[1])} einsetzt: ${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[1]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}=-(${zahlRunden(funktionenListe[i].wendepunkte[0])}+${zahlRunden(funktionenListe[i].wendepunkte[1])}) und ${zahlRunden(funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[0]/funktionenListe[i].zweiteAbleitung.inhaltKnotenVektor[2])}=${zahlRunden(funktionenListe[i].wendepunkte[0])}*${zahlRunden(funktionenListe[i].wendepunkte[1])}]`,  textPositionVierteZeile, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			let textPositionVierteZeile = 10 + WriteText(`b[p=${zahlRunden(polynom.b/polynom.a)} q=${zahlRunden(polynom.c/polynom.a)} für x1 und x2 werden nun zufällig Zahlen eingesetzt bis eine Kombination passt: ==>]`,  10, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
+			textPositionVierteZeile += WriteText(`b[Wahr werden für dieses Polynom beide Aussagen nur wenn für x1=${zahlRunden(funktionenListe[i].wendepunkte[0])} und für x2=${zahlRunden(funktionenListe[i].wendepunkte[1])} einsetzt: ${zahlRunden(polynom.b/polynom.a)}=-(${zahlRunden(funktionenListe[i].wendepunkte[0])}+${zahlRunden(funktionenListe[i].wendepunkte[1])}) und ${zahlRunden(polynom.c/polynom.a)}=${zahlRunden(funktionenListe[i].wendepunkte[0])}*${zahlRunden(funktionenListe[i].wendepunkte[1])}]`,  textPositionVierteZeile, hoeheVierteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
 		}
 	}else{
 		WriteText(`b[y = ${buchstabenArray[i]}''(x) = ${funktionenListe[i].zweiteAbleitung.inhaltKnotenString}]`, 10, hoeheZweiteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, fontSchriftInfoLeiste);
@@ -2134,7 +2263,6 @@ function reiter616SatzVonVietaWendepunkte(i){
 
 	}
 }
-
 
 function reiter617NewtonVerfahrenWendepunkte(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -2156,7 +2284,6 @@ function reiter617NewtonVerfahrenWendepunkte(i){
 
 }
 
-
 function reiter618RegulaFalsiWendepunkte(i){
 	let hoeheErsteZeile = canvas.height-125;
 	let hoeheZweiteZeile = canvas.height-90;
@@ -2176,6 +2303,7 @@ function reiter618RegulaFalsiWendepunkte(i){
 	WriteText(`Das Regula Falsi Verfahren`, 10, hoeheErsteZeile, farbeSchriftInfoLeiste.r, farbeSchriftInfoLeiste.g, farbeSchriftInfoLeiste.b, farbeSchriftInfoLeiste.a, '15px Calibri');
 
 }
+
 
 
 
@@ -2233,7 +2361,6 @@ function reiter619GeradengleichungPolstellen(i){
 		
 	}
 }
-
 
 function reiter620MitternachtsformelPolstellen(i){
 	let hoeheErsteZeile = canvas.height-125;
@@ -2580,8 +2707,6 @@ function reiter621PQFormelPolstellen(i){
 
 	}
 }
-
-
 
 function reiter622SatzVonVietaPolstellen(i){
 	let hoeheErsteZeile = canvas.height-125;

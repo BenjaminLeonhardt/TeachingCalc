@@ -2463,7 +2463,7 @@ function erstelleSyntaxBaumV4(neuerFunktionSyntaxbaumGebrochenRational, funktion
 							//neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = functionAlsString[i];
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
-							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.koeffizient = 1;
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.inhalt;
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.inhalt;
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.potenz = 1;
 							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
@@ -2727,6 +2727,9 @@ function rechterPartV4(aktuellerKnoten, functionAlsStringLokal) {
 						i=aktuellesListenElement.indexBis;
 						neuerRechterKnoten.index=i;
 						neuerRechterKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+						neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = 1;
+						neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.inhalt;
+						neuerRechterKnoten.inhaltKnotenPolynom.potenz = 1;
 					}
 					
 					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
