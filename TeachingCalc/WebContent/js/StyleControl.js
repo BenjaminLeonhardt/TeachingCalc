@@ -1486,11 +1486,17 @@ function onClickSatzVonVietaExtremstellen(){
 							
 							let text = "";
 							
+							if(x1===x2){
+						        text += "Doppelter Hoch/Tiefpunkt: ";
+					        }
+							
 							for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
 								if(  getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)>0 ){
 									text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 								}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
 									text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+								}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)===0){
+									text +=  "p" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 								}
 							}
 							document.getElementById("ExtremstellenTextfeld").value = text;
