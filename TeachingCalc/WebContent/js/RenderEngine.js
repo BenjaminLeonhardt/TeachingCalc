@@ -1,7 +1,7 @@
 var canvas = document.querySelector('canvas');
 var canvasContext = canvas.getContext('2d');
-canvas.width = window.innerWidth-302;
-canvas.height = window.innerHeight-70;
+canvas.width = window.innerWidth-305;
+canvas.height = window.innerHeight-75;
 let vergroesserung = 60;
 let backgroundColor = 'rgba(0,0,25,1)';
 let backgroundColorLeftNavBarButton = 'rgba(40,40,40,1)';
@@ -118,6 +118,13 @@ let farbePolstellen = {
 		a:1
 }
 
+let farbeIntegral = {
+		r:100,
+		b:0,
+		g:200,
+		a:1
+}
+
 
 
 
@@ -136,11 +143,12 @@ let farbenArrayFunktionen = [];
 let farbenArrayFunktionenErsteAbleitung = [];
 let farbenArrayFunktionenZweiteAbleitung = [];
 let farbenArrayFunktionenDritteAbleitung = [];
+let farbenArrayFunktionenStammfunktion = [];
 
 farbenInitialisieren();
 function farbenInitialisieren(){
 
-	let farbenDerFunktionen1={r:38,  g:38,  b:178, a:1}
+	let farbenDerFunktionen1={r:60,  g:60,  b:250, a:1}
 	let farbenDerFunktionen2={r:31,  g:177,  b:31,  a:1}
 	let farbenDerFunktionen3={r:97,  g:11,  b:11,  a:1}
 	let farbenDerFunktionen4={r:132, g:75,  b:8,   a:1}
@@ -203,6 +211,23 @@ function farbenInitialisieren(){
 	farbenArrayFunktionenDritteAbleitung.push(farbenDerFunktionen5DritteAbleitung);
 	farbenArrayFunktionenDritteAbleitung.push(farbenDerFunktionen6DritteAbleitung);
 	farbenArrayFunktionenDritteAbleitung.push(farbenDerFunktionen7DritteAbleitung);
+	
+
+	let farbenDerFunktionen1Stammfunktion={r:129, g:129, b:247, a:1}
+	let farbenDerFunktionen2Stammfunktion={r:129, g:247, b:129, a:1}
+	let farbenDerFunktionen3Stammfunktion={r:247, g:129, b:129, a:1}
+	let farbenDerFunktionen4Stammfunktion={r:247, g:190, b:129, a:1}
+	let farbenDerFunktionen5Stammfunktion={r:243, g:247, b:129, a:1}
+	let farbenDerFunktionen6Stammfunktion={r:129, g:247, b:216, a:1}
+	let farbenDerFunktionen7Stammfunktion={r:247, g:129, b:243, a:1}
+	
+	farbenArrayFunktionenStammfunktion.push(farbenDerFunktionen1Stammfunktion);
+	farbenArrayFunktionenStammfunktion.push(farbenDerFunktionen2Stammfunktion);
+	farbenArrayFunktionenStammfunktion.push(farbenDerFunktionen3Stammfunktion);
+	farbenArrayFunktionenStammfunktion.push(farbenDerFunktionen4Stammfunktion);
+	farbenArrayFunktionenStammfunktion.push(farbenDerFunktionen5Stammfunktion);
+	farbenArrayFunktionenStammfunktion.push(farbenDerFunktionen6Stammfunktion);
+	farbenArrayFunktionenStammfunktion.push(farbenDerFunktionen7Stammfunktion);
 }
 
 let buchstabenArrayTmp = ['f','g','h','i','j','k'];
@@ -1141,7 +1166,7 @@ function zeichneLegende(){
 			if(funktionenListe[i].integralAnzeigen){
 				canvasContext.font = '20px Calibri';
 //				canvasContext.fillStyle = 'rgba(50,50,200,1)';
-				canvasContext.fillStyle = 'rgba(' + String(farbenArrayFunktionenDritteAbleitung[i].r) + ',' + String(farbenArrayFunktionenDritteAbleitung[i].g) + ',' + String(farbenArrayFunktionenDritteAbleitung[i].b) + ',' + String(farbenArrayFunktionenDritteAbleitung[i].a) + ')';
+				canvasContext.fillStyle = 'rgba(' + String(farbenArrayFunktionenStammfunktion[i].r) + ',' + String(farbenArrayFunktionenStammfunktion[i].g) + ',' + String(farbenArrayFunktionenStammfunktion[i].b) + ',' + String(farbenArrayFunktionenStammfunktion[i].a) + ')';
 				canvasContext.textAlign = "left";
 				if(funktionenListe[i].stammfunktion.inhaltKnotenString.length>maxBuchstabenlaengeLegende){
 					canvasContext.fillText( buchstabenArray[i].toUpperCase() + "(x) = " + funktionenListe[i].stammfunktion.inhaltKnotenString.substring(0,28)+"...", 20, (1+(anzahlStrings++))*abstand);
@@ -1515,9 +1540,10 @@ function checkEingabeV2(){
 			equationOld=equation;
 			if(checkAufFalscheSymbole(equation)&&checkKlammernKorrekt(equation)&&checkDerSyntax(equation)&&checkObVollständigerAusdruck(equation)&&checkObKorrekteKommaZahl(equation)){
 
-//				let tree = math.parse(equation);
-//				let erg = math.derivative(equation, "x"); 
-//				let text = tree.toString();
+				let tree = math.parse(equation);
+				let erg = math.derivative(equation, "x"); 
+				let text = tree.toString();
+				let text2 = erg.toString();
 				let rootSyntaxbaum = new FunktionAlsVektorSyntaxbaum();	
 				funktionenVorschau = rootSyntaxbaum;
 				let polynomListe = [];
@@ -1736,7 +1762,7 @@ function zeichneFunktionsgraphen(){
 					for(let j=funktionenListe[i].integralVon;j<funktionenListe[i].integralBis;j+=0.01){
 						canvasContext.stroke();
 						canvasContext.beginPath();
-						canvasContext.strokeStyle = 'rgba(' + String(farbeWendestellen.r) + ',' + String(farbeWendestellen.g) + ',' + String(farbeWendestellen.b) + ',' + String(farbeWendestellen.a) + ')';
+						canvasContext.strokeStyle = 'rgba(' + String(farbeIntegral.r) + ',' + String(farbeIntegral.g) + ',' + String(farbeIntegral.b) + ',' + String(farbeIntegral.a) + ')';
 						DrawLineOhneAbschneiden(j, 0);	
 						DrawLineOhneAbschneiden(j, -getPunktV4(j,funktionenListe[i]));
 					}

@@ -1,6 +1,6 @@
 function farbenInitialisieren(){
 
-	let farbenDerFunktionen1={r:158,  g:158,  b:178, a:1}
+	let farbenDerFunktionen1={r:158,  g:158,  b:250, a:1}
 	let farbenDerFunktionen2={r:11,  g:97,  b:11,  a:1}
 	let farbenDerFunktionen3={r:97,  g:11,  b:11,  a:1}
 	let farbenDerFunktionen4={r:132, g:75,  b:8,   a:1}

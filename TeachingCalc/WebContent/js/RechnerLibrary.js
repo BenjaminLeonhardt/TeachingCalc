@@ -618,7 +618,7 @@ function syntaxBaumZuTextV2(root,funktionAlsText){
 	 		
 				if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=0&&isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)){
 					if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=1){
-						funktionAlsText += aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient;
+						funktionAlsText += aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient.toFixed(2);
 						funktionAlsText += "*";
 					}
 					funktionAlsText += aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName;
@@ -1149,20 +1149,20 @@ function schaueAlleKnotenAnUndAufV2(rootFunktion, fStrich){
 
 function funktionIntegrierenSyntaxbaum(funktion) {
 	if(funktion.inhaltKnotenSymbol==='/'){
+		let F
 		
-		
-		return fStrich;
+		return F;
 		
 	}else{
-		let fStrich = new FunktionAlsVektorSyntaxbaum();
-		schaueAlleKnotenAnUndAufV2(funktion, fStrich);
+		let F = new FunktionAlsVektorSyntaxbaum();
+		schaueAlleKnotenAnUndAufV2(funktion, F);
 
-		while(fStrich.parent != null){
-			fStrich = fStrich.parent;
+		while(F.parent != null){
+			F = F.parent;
 		}
 		
-		fStrich.inhaltKnotenString = syntaxBaumZuTextV2(fStrich,"");
-		return fStrich;
+		F.inhaltKnotenString = syntaxBaumZuTextV2(F,"");
+		return F;
 	}
 	
 }
