@@ -176,6 +176,26 @@ function DrawLine(x1, y1) {
 	canvasContext.lineTo(x1, y1);
 }
 
+function DrawLineOhneAbschneiden(x1, y1) {
+//	Rotieren(x1, y1);
+//	Rotieren(x2, y2);
+	x1 *= vergroesserung;
+	y1 *= vergroesserung;
+
+
+	x1 += verschiebungDurchBenutzer.x+(canvas.width / 2);
+	y1 += verschiebungDurchBenutzer.y+(canvas.height / 2);
+//	if(x1<-600||x1>600+canvas.width){
+//		return;
+//	}
+//
+//	if(y1<0||y1>canvas.height){
+//		return;
+//	}
+	
+	canvasContext.lineTo(x1, y1);
+}
+
 function DrawLineOhneVergroeserung(x1, y1, höheAbschneiden) {
 //	Rotieren(x1, y1);
 //	Rotieren(x2, y2);

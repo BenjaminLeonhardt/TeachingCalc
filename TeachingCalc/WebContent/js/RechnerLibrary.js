@@ -195,6 +195,11 @@ function getPunktV3(x, funktion, y) {
 
 
 function getPunktV4(x, funktion, y=0) {
+	
+	if(funktion.inhaltKnotenSymbol==='/'){
+		y = getPunktV4(x, funktion.linkesChild, 0) / getPunktV4(x, funktion.rechtesChild, 0);
+		return y;
+	}
 
 	if(funktion.linkesChild!=undefined||funktion.linkesChild!=null){
 		if ((funktion.inhaltKnotenSymbol === '+'|| funktion.inhaltKnotenSymbol === '-') && (funktion.linkesChild.inhaltKnotenSymbol==="+"||funktion.linkesChild.inhaltKnotenSymbol==="-")) {//bis an das linke ende des baums
@@ -220,7 +225,7 @@ function getPunktV4(x, funktion, y=0) {
 			return y;
 		}else if (funktion.inhaltKnotenSymbol === '-' && (funktion.rechtesChild.inhaltKnotenSymbol==="*"||funktion.linkesChild.inhaltKnotenSymbol==="*")) {//bis an das rechte ende des baums
 			if(funktion.parent===null){
-				y += fV3(x, funktion.rechtesChild.inhaltKnotenPolynom);
+				y -= fV3(x, funktion.rechtesChild.inhaltKnotenPolynom);
 				
 				if(!isNaN(funktion.linkesChild.inhaltKnotenPolynom.koeffizient)){
 					y = fV3(x, funktion.linkesChild.inhaltKnotenPolynom) - y;
@@ -234,17 +239,18 @@ function getPunktV4(x, funktion, y=0) {
 			}
 			
 			return y;
-		}else if (funktion.inhaltKnotenSymbol === '/' && (funktion.rechtesChild.inhaltKnotenSymbol==="*"||funktion.linkesChild.inhaltKnotenSymbol==="*")) {//bis an das rechte ende des baums
-			y += getPunktV4(x,funktion.linkesChild,0); 
-			let ynenner = getPunktV4(x,funktion.rechtesChild,0);
-			if(ynenner!=0){
-				y = y/ynenner;
-			}else{
-				return NaN;
-			}
-			
-			return y;
 		}
+//		}else if (funktion.inhaltKnotenSymbol === '/' && (funktion.rechtesChild.inhaltKnotenSymbol==="*"||funktion.linkesChild.inhaltKnotenSymbol==="*")) {//bis an das rechte ende des baums
+//			y += getPunktV4(x,funktion.linkesChild,0); 
+//			let ynenner = getPunktV4(x,funktion.rechtesChild,0);
+//			if(ynenner!=0){
+//				y = y/ynenner;
+//			}else{
+//				return NaN;
+//			}
+//			
+//			return y;
+//		}
 	}
 
 	
@@ -271,7 +277,7 @@ function getPunktV4(x, funktion, y=0) {
 					y += fV3(x, funktion.linkesChild.inhaltKnotenPolynom);
 				}
 			}
-			if(funktion.parent===null){
+			if(funktion.parent===null&&funktion.inhaltKnotenSymbol!='/'){
 				if((funktion.linkesChild.inhaltKnotenPolynom.zahlOderVariablenName==="x"||funktion.linkesChild.inhaltKnotenPolynom.zahlOderVariablenName==="X")){
 					y += fV3(x, funktion.linkesChild.inhaltKnotenPolynom);
 				}
@@ -299,6 +305,9 @@ function getPunktV4(x, funktion, y=0) {
 			if(!isNaN(funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)&&funktion.inhaltKnotenSymbol==="+"){ //wenn +konstante, es fehlt noch 2² und 2*2 
 				y += funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName;
 			}else if(!isNaN(funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)&&funktion.inhaltKnotenSymbol==="-"){ //wenn -konstante, es fehlt noch 2² und 2*2 
+				if(funktion.linkesChild.inhaltKnotenSymbol==='x'||funktion.linkesChild.inhaltKnotenSymbol==='X'){
+					y = fV3(x, funktion.linkesChild.inhaltKnotenPolynom);
+				}
 				y -= funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName;
 			}
 			
@@ -310,20 +319,20 @@ function getPunktV4(x, funktion, y=0) {
 				y -= fV3(x, funktion.rechtesChild.inhaltKnotenPolynom);
 			}
 
-			if(funktion.parent===null){
-				if((funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==="x"||funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==="X")){
-					if(funktion.inhaltKnotenSymbol==='/'){
-						y /= fV3(x, funktion.rechtesChild.inhaltKnotenPolynom);
-					}
-				}
-			}
+//			if(funktion.parent===null){
+//				if((funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==="x"||funktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName==="X")){
+//					if(funktion.inhaltKnotenSymbol==='/'){
+//						y /= fV3(x, funktion.rechtesChild.inhaltKnotenPolynom);
+//					}
+//				}
+//			}
 		}
 	}
 	
 	if(funktion.rechtesChild===undefined||funktion.rechtesChild===null&&funktion.linkesChild===undefined||funktion.linkesChild===null){
-		if(!isNaN(funktion.inhaltKnotenSymbol)&&funktion.inhaltKnotenSymbol!=""){
-			y += funktion.inhaltKnotenSymbol;
-		}
+//		if(!isNaN(funktion.inhaltKnotenSymbol)&&funktion.inhaltKnotenSymbol!=""){
+//			y += funktion.inhaltKnotenSymbol;
+//		}
 		if(!isNaN(funktion.inhaltKnotenPolynom.zahlOderVariablenName)){
 			y += funktion.inhaltKnotenPolynom.koeffizient;
 		}
@@ -356,6 +365,22 @@ function funktionAbleitenV3(polynomF) {
 		polynomFStrich.zahlOderVariablenName = polynomFStrich.koeffizient;
 	}else{
 		polynomFStrich.zahlOderVariablenName = polynomF.zahlOderVariablenName;
+	}
+	
+	
+	return polynomFStrich;
+}
+
+
+
+function funktionAufleiten(polynomF) {
+	let polynomFStrich = new Polynom();		
+	polynomFStrich.koeffizient = polynomF.koeffizient*(1/(polynomF.potenz+1));
+	polynomFStrich.potenz =  polynomF.potenz + 1;
+	if(polynomFStrich.potenz===0){
+		polynomFStrich.zahlOderVariablenName = polynomFStrich.koeffizient;
+	}else{
+		polynomFStrich.zahlOderVariablenName = 'x';
 	}
 	
 	
@@ -504,6 +529,14 @@ function syntaxBaumZuText(root){
 function syntaxBaumZuTextV2(root,funktionAlsText){
 	
 	let aktuellerKnoten = root;
+	if(aktuellerKnoten.inhaltKnotenSymbol==='/'){
+		funktionAlsText += '(';
+		funktionAlsText += syntaxBaumZuTextV2(aktuellerKnoten.linkesChild,"")
+		funktionAlsText += ')/('
+		funktionAlsText += syntaxBaumZuTextV2(aktuellerKnoten.rechtesChild,"")
+		funktionAlsText += ')';
+		return funktionAlsText;
+	}
 	if(aktuellerKnoten.linkesChild===null&&aktuellerKnoten.rechtesChild===null&&aktuellerKnoten.parent===null){
 		if(aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName==='x'){
 			if(aktuellerKnoten.inhaltKnotenPolynom.koeffizient!=1){
@@ -527,13 +560,13 @@ function syntaxBaumZuTextV2(root,funktionAlsText){
 	if(aktuellerKnoten.linkesChild!=null){
 		if(aktuellerKnoten.linkesChild.linkesChild!=null){
 			funktionAlsText += syntaxBaumZuTextV2(aktuellerKnoten.linkesChild,funktionAlsText);
-			if(aktuellerKnoten.linkesChild.inhaltKnotenSymbol==='+'||aktuellerKnoten.linkesChild.inhaltKnotenSymbol==='-'){
+			if(aktuellerKnoten.linkesChild.inhaltKnotenSymbol==='+'||aktuellerKnoten.linkesChild.inhaltKnotenSymbol==='-'||aktuellerKnoten.linkesChild.inhaltKnotenSymbol==='*'){
 				
 				if(aktuellerKnoten.rechtesChild!=null){
 					
 					funktionAlsText += aktuellerKnoten.inhaltKnotenSymbol;
 			 		
-					if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=0&&isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)){
+					if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=0&&!isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient)&&isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)){
 						if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=1){
 							funktionAlsText += aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient;
 							funktionAlsText += "*";
@@ -546,12 +579,24 @@ function syntaxBaumZuTextV2(root,funktionAlsText){
 							}
 						}
 					}else if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=0&&!isNaN(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)){
-						if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=1){
+						//if(aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient!=1){
 							funktionAlsText += aktuellerKnoten.rechtesChild.inhaltKnotenPolynom.koeffizient;
 							
-						}					
+						//}					
 					}
-					
+					if(aktuellerKnoten.rechtesChild.rechtesChild!=null){
+						if(aktuellerKnoten.rechtesChild.rechtesChild.inhaltKnotenPolynom.koeffizient!=1){
+							funktionAlsText += aktuellerKnoten.rechtesChild.rechtesChild.inhaltKnotenPolynom.koeffizient;
+							funktionAlsText += "*";
+						}
+						funktionAlsText += aktuellerKnoten.rechtesChild.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName;
+						if(aktuellerKnoten.rechtesChild.rechtesChild.inhaltKnotenPolynom.potenz!=0){
+							if(aktuellerKnoten.rechtesChild.rechtesChild.inhaltKnotenPolynom.potenz!=1){
+								funktionAlsText += "^"
+								funktionAlsText += aktuellerKnoten.rechtesChild.rechtesChild.inhaltKnotenPolynom.potenz;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -599,9 +644,12 @@ function syntaxBaumZuTextV2(root,funktionAlsText){
 			if(aktuellerKnoten.inhaltKnotenPolynom.koeffizient!=1&&isNaN(aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName)){
 				funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.koeffizient;
 				funktionAlsText += "*";
-				funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName;
+				
 			}else if(aktuellerKnoten.inhaltKnotenPolynom.koeffizient!=1&&!isNaN(aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName)){
 				funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.koeffizient;
+			}
+			if(aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName==='x'||aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName==='X'){
+				funktionAlsText += aktuellerKnoten.inhaltKnotenPolynom.zahlOderVariablenName;
 			}
 			
 			if(aktuellerKnoten.inhaltKnotenPolynom.potenz>1){
@@ -871,9 +919,163 @@ function funktionAbleitenGebrochenRationalV3(funktion) {
 	
 }
 
+function syntaxbaumZusammenfassen(funktion){
+	if(funktion.inhaltKnotenSymbol==='/'){
+		syntaxbaumZusammenfassen(funktion.linkesChild);
+		syntaxbaumZusammenfassen(funktion.rechtesChild);
+	}else{
+		if(funktion.linkesChild!=null){
+			if(funktion.linkesChild.linkesChild===null&&funktion.rechtesChild.rechtesChild===null){
+				if(funktion.linkesChild.inhaltKnotenPolynom.potenz===funktion.rechtesChild.inhaltKnotenPolynom.potenz){
+					if(funktion.inhaltKnotenSymbol==='+'){
+	                    if(funktion.linkesChild.inhaltKnotenPolynom.potenz>=0){
+	                    	funktion.inhaltKnotenPolynom.potenz = funktion.linkesChild.inhaltKnotenPolynom.potenz;
+	                    	funktion.inhaltKnotenPolynom.zahlOderVariablenName = funktion.linkesChild.inhaltKnotenPolynom.zahlOderVariablenName;
+	                    	funktion.inhaltKnotenPolynom.koeffizient = funktion.linkesChild.inhaltKnotenPolynom.koeffizient+funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+	                    	if(funktion.inhaltKnotenPolynom.koeffizient!=1){
+	                    			funktion.inhaltKnotenSymbol = '^';
+	                    	}else if(funktion.inhaltKnotenPolynom.koeffizient!=1){
+	                    			funktion.inhaltKnotenSymbol = '';
+	                    	}
+	                    	funktion.linkesChild=null;
+	                    	funktion.rechtesChild=null;
+	                    	
+	                    }else if(funktion.linkesChild.inhaltKnotenPolynom.potenz===0){
+	                    	funktion.inhaltKnotenPolynom.potenz = funktion.linkesChild.inhaltKnotenPolynom.potenz;
+	                    	funktion.inhaltKnotenPolynom.zahlOderVariablenName = funktion.linkesChild.inhaltKnotenPolynom.zahlOderVariablenName;
+	                    	funktion.inhaltKnotenPolynom.koeffizient = funktion.linkesChild.inhaltKnotenPolynom.koeffizient+funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+	                    	funktion.inhaltKnotenSymbol = '';
+	                    	funktion.linkesChild=null;
+	                    	funktion.rechtesChild=null;
+	                    	
+	                    }
+					}else if(funktion.inhaltKnotenSymbol==='-'){
+					    if(funktion.linkesChild.inhaltKnotenPolynom.potenz>=0){
+	                    	funktion.inhaltKnotenPolynom.potenz = funktion.linkesChild.inhaltKnotenPolynom.potenz;
+	                    	funktion.inhaltKnotenPolynom.zahlOderVariablenName = funktion.linkesChild.inhaltKnotenPolynom.zahlOderVariablenName;
+	                    	funktion.inhaltKnotenPolynom.koeffizient = funktion.linkesChild.inhaltKnotenPolynom.koeffizient-funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+	                    	if(funktion.inhaltKnotenPolynom.koeffizient!=1){
+	                    			funktion.inhaltKnotenSymbol = '^';
+	                    	}else if(funktion.inhaltKnotenPolynom.koeffizient!=1){
+	                    			funktion.inhaltKnotenSymbol = '';
+	                    	}
+	                    	funktion.linkesChild=null;
+	                    	funktion.rechtesChild=null;
+	                    	
+	                    }else if(funktion.linkesChild.inhaltKnotenPolynom.potenz===0){
+	                    	funktion.inhaltKnotenPolynom.potenz = funktion.linkesChild.inhaltKnotenPolynom.potenz;
+	                    	funktion.inhaltKnotenPolynom.zahlOderVariablenName = funktion.linkesChild.inhaltKnotenPolynom.zahlOderVariablenName;
+	                    	funktion.inhaltKnotenPolynom.koeffizient = funktion.linkesChild.inhaltKnotenPolynom.koeffizient-funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+	                    	funktion.inhaltKnotenSymbol = '';
+	                    	funktion.linkesChild=null;
+	                    	funktion.rechtesChild=null;
+	                    	
+	                    }
+					
+					}
+				}
+				return;
+			}
+		
+			let knotenTmp = funktion.linkesChild;
+			let knotenTmp2 = funktion;
+			while(knotenTmp.linkesChild!=null){
+				
+				while(knotenTmp2.linkesChild!=null){
+					if(knotenTmp.inhaltKnotenSymbol==='+'){
+
+					}else if(knotenTmp2.parent.inhaltKnotenSymbol==='-'&&knotenTmp.rechtesChild.inhaltKnotenPolynom.potenz===knotenTmp2.rechtesChild.inhaltKnotenPolynom.potenz){
+						knotenTmp.rechtesChild.inhaltKnotenPolynom.koeffizient -= knotenTmp2.rechtesChild.inhaltKnotenPolynom.koeffizient;
+					}
+					knotenTmp = knotenTmp.linkesChild;
+				}
+				knotenTmp = knotenTmp.linkesChild;
+			}
+		}
+		
+	}
+	
+}
+
+function syntaxbaumAusmultiplizieren(funktion){
+	if(funktion.inhaltKnotenSymbol==='*'){
+//		if(funktion.linkesChild!=null){
+//			if(funktion.linkesChild.inhaltKnotenSymbol==='*'){
+//				syntaxbaumAusmultiplizieren(funktion.linkesChild);
+//			}
+//		}
+		if(funktion.linkesChild!=null&&funktion.rechtesChild!=null){
+			let polynom = new Polynom();
+			polynom.koeffizient = funktion.linkesChild.inhaltKnotenPolynom.koeffizient * funktion.rechtesChild.inhaltKnotenPolynom.koeffizient;
+			polynom.zahlOderVariablenName = 'x';
+			polynom.potenz = funktion.linkesChild.inhaltKnotenPolynom.potenz + funktion.rechtesChild.inhaltKnotenPolynom.potenz;
+			funktion.inhaltKnotenPolynom = polynom;
+			funktion.inhaltKnotenSymbol = '^';
+			funktion.linkesChild = null;
+			funktion.rechtesChild = null;
+		}
+		
+	}
+	if(funktion.linkesChild!=null&&funktion.inhaltKnotenSymbol!='*'){
+		syntaxbaumAusmultiplizieren(funktion.linkesChild);
+	}
+	if(funktion.rechtesChild!=null&&funktion.inhaltKnotenSymbol!='*'){
+		syntaxbaumAusmultiplizieren(funktion.rechtesChild);
+	}
+}
+
 
 function funktionAbleitenSyntaxbaum(funktion) {
 	if(funktion.inhaltKnotenSymbol==='/'){
+		
+		let u = funktion.linkesChild;
+		
+		let uStrich = new FunktionAlsVektorSyntaxbaum();
+		schaueAlleKnotenAnUndLeiteAbV2(funktion.linkesChild, uStrich);
+		while(uStrich.parent != null){
+			uStrich = uStrich.parent;
+		}
+		
+		
+		let v = funktion.rechtesChild;
+		
+		let vStrich = new FunktionAlsVektorSyntaxbaum();
+		schaueAlleKnotenAnUndLeiteAbV2(funktion.rechtesChild, vStrich);
+		while(vStrich.parent != null){
+			vStrich = vStrich.parent;
+		}
+		
+		let fStrich = new FunktionAlsVektorSyntaxbaum();
+		
+		fStrich.inhaltKnotenSymbol = '/';
+		fStrich.linkesChild = new FunktionAlsVektorSyntaxbaum();
+		fStrich.linkesChild.inhaltKnotenSymbol = '-';
+		fStrich.linkesChild.parent = fStrich;
+		fStrich.linkesChild.linkesChild = new FunktionAlsVektorSyntaxbaum();
+		fStrich.linkesChild.linkesChild.parent = fStrich.linkesChild;
+		fStrich.linkesChild.linkesChild.inhaltKnotenSymbol = '*';
+		fStrich.linkesChild.rechtesChild = new FunktionAlsVektorSyntaxbaum();
+		fStrich.linkesChild.rechtesChild.parent = fStrich.linkesChild.rechtesChild;
+		fStrich.linkesChild.rechtesChild.inhaltKnotenSymbol = '*';
+		
+		fStrich.linkesChild.linkesChild.linkesChild = uStrich;
+		fStrich.linkesChild.linkesChild.rechtesChild = v;
+		
+		fStrich.linkesChild.rechtesChild.linkesChild = u;
+		fStrich.linkesChild.rechtesChild.rechtesChild = vStrich;
+		
+		fStrich.rechtesChild = new FunktionAlsVektorSyntaxbaum();
+		fStrich.rechtesChild.parent = fStrich;
+		fStrich.rechtesChild.inhaltKnotenSymbol = '*';
+		fStrich.rechtesChild.linkesChild = v;
+		fStrich.rechtesChild.linkesChild.parent = fStrich.rechtesChild;
+		fStrich.rechtesChild.rechtesChild = v;
+		fStrich.rechtesChild.rechtesChild.parent = fStrich.rechtesChild;
+		
+		syntaxbaumAusmultiplizieren(fStrich);
+		syntaxbaumZusammenfassen(fStrich);
+		fStrich.inhaltKnotenString = syntaxBaumZuTextV2(fStrich,"");
+		return fStrich;
 		
 	}else{
 		let fStrich = new FunktionAlsVektorSyntaxbaum();
@@ -888,6 +1090,83 @@ function funktionAbleitenSyntaxbaum(funktion) {
 	}
 	
 }
+
+
+function schaueAlleKnotenAnUndAufV2(rootFunktion, fStrich){
+	if(rootFunktion.linkesChild===null&&rootFunktion.rechtesChild===null&&rootFunktion.parent===null){
+		if(rootFunktion.inhaltKnotenSymbol==='x'||rootFunktion.inhaltKnotenSymbol==='X'){
+			fStrich.inhaltKnotenPolynom = funktionAufleiten(rootFunktion.inhaltKnotenPolynom);
+		}else if(rootFunktion.inhaltKnotenSymbol==='^'){
+			fStrich.inhaltKnotenPolynom = funktionAufleiten(rootFunktion.inhaltKnotenPolynom);
+		}else if(rootFunktion.inhaltKnotenPolynom.potenz!=0&&rootFunktion.inhaltKnotenPolynom.koeffizient!=0&&((rootFunktion.inhaltKnotenPolynom.zahlOderVariablenName==='x')||(rootFunktion.inhaltKnotenPolynom.zahlOderVariablenName==='X'))){
+			fStrich.inhaltKnotenPolynom = funktionAufleiten(rootFunktion.inhaltKnotenPolynom);
+		}else if(rootFunktion.inhaltKnotenPolynom.potenz===0&&rootFunktion.inhaltKnotenPolynom.koeffizient!=0){
+			fStrich.inhaltKnotenPolynom = funktionAufleiten(rootFunktion.inhaltKnotenPolynom);
+		}else{
+			fStrich.inhaltKnotenPolynom.potenz = 0;
+			fStrich.inhaltKnotenPolynom.zahlOderVariablenName = 0;
+			fStrich.inhaltKnotenPolynom.koeffizient = 0;
+		}
+		return;
+	}
+	if(rootFunktion.linkesChild!=null){
+		schaueAlleKnotenAnUndAufV2(rootFunktion.linkesChild, fStrich)
+	}else{
+		if(isNaN(fStrich.inhaltKnotenPolynom.koeffizient)&&isNaN(fStrich.inhaltKnotenPolynom.potenz)&&isNaN(fStrich.inhaltKnotenPolynom.zahlOderVariablenName)){
+			fStrich.inhaltKnotenPolynom = funktionAufleiten(rootFunktion.inhaltKnotenPolynom);
+		}else{
+			fStrich.parent =  new FunktionAlsVektorSyntaxbaum();
+			fStrich.parent.inhaltKnotenPolynom = funktionAufleiten(rootFunktion.inhaltKnotenPolynom);
+		}
+	}
+	if(rootFunktion.rechtesChild!=null){
+		if(isNaN(rootFunktion.rechtesChild.inhaltKnotenPolynom.koeffizient)&&isNaN(rootFunktion.rechtesChild.inhaltKnotenPolynom.potenz)&&isNaN(rootFunktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)){
+			
+		}else{
+			if(rootFunktion.rechtesChild.inhaltKnotenPolynom.potenz>0&&isNaN(rootFunktion.rechtesChild.inhaltKnotenPolynom.zahlOderVariablenName)){
+				if(fStrich.parent!=null){
+					fStrich = fStrich.parent;
+				}
+				fStrich.parent =  new FunktionAlsVektorSyntaxbaum();
+				fStrich.parent.inhaltKnotenSymbol = rootFunktion.inhaltKnotenSymbol;
+				fStrich.parent.rechtesChild =  new FunktionAlsVektorSyntaxbaum();
+				fStrich.parent.rechtesChild.inhaltKnotenPolynom =  funktionAufleiten(rootFunktion.rechtesChild.inhaltKnotenPolynom);
+				fStrich.parent.linkesChild = fStrich;
+			}else if(rootFunktion.rechtesChild.inhaltKnotenPolynom.potenz===0){
+				if(fStrich.parent!=null){
+					fStrich = fStrich.parent;
+				}
+				fStrich.parent =  new FunktionAlsVektorSyntaxbaum();
+				fStrich.parent.inhaltKnotenSymbol = rootFunktion.inhaltKnotenSymbol;
+				fStrich.parent.rechtesChild =  new FunktionAlsVektorSyntaxbaum();
+				fStrich.parent.rechtesChild.inhaltKnotenPolynom =  funktionAufleiten(rootFunktion.rechtesChild.inhaltKnotenPolynom);
+				fStrich.parent.linkesChild = fStrich;
+			}
+		}
+	}
+	
+}
+
+function funktionIntegrierenSyntaxbaum(funktion) {
+	if(funktion.inhaltKnotenSymbol==='/'){
+		
+		
+		return fStrich;
+		
+	}else{
+		let fStrich = new FunktionAlsVektorSyntaxbaum();
+		schaueAlleKnotenAnUndAufV2(funktion, fStrich);
+
+		while(fStrich.parent != null){
+			fStrich = fStrich.parent;
+		}
+		
+		fStrich.inhaltKnotenString = syntaxBaumZuTextV2(fStrich,"");
+		return fStrich;
+	}
+	
+}
+
 
 
 function funktionVectorToString(funktionAlsVector, mitMalZeichenZwischenXundZahl) {
@@ -1370,6 +1649,9 @@ function newtonVerfahren_GebrochenRational(startPunktNewton, funktion, gebrochen
 		
 		while (getPunktV4(xn1Zaehler, fStrichXZaehler, 0) === 0) {
 			xn1Zaehler++;
+			if(xn1Zaehler>100000){
+				return;
+			}
 		}
 		while ((Math.abs(xnZaehler - xn1Zaehler)>tolleranz || Math.abs(getPunktV4(xn1Zaehler, fXZaehler, 0))>tolleranz) && counterZaehler<1000) {
 			if (counterZaehler > 0) {

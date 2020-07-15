@@ -32,9 +32,11 @@ function addToFunctionDropdownList(funktion){
 	while (liste.options.length > 0) {
 		liste.options.remove(liste.options.length-1);
 	}
+	buchstabenArray.push(buchstabenArrayTmp[funktionenListe.length-1]);
 	for(let i=0; i<funktionenListe.length; i++){
 		let option = document.createElement("option");
-	    option.text = buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString;
+		
+	    option.text =  buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString;
 	    liste.add(option);
 	}
 	liste.value = liste.options[liste.length-1].text;
@@ -104,6 +106,17 @@ function onChangeDritteAbleitungAnzeigen(){
 	funktionenListe[indexGewaehltesElement].dritteAbleitungAnzeigen = document.getElementById("DritteAbleitungAnzeigenCheckbox").checked;
 }
 
+function onChangeIntegralAnzeigen(){
+	var liste = document.getElementById("funktionenDropdown");
+	let indexGewaehltesElement = 0;
+	for(let i=0; i<funktionenListe.length; i++){
+		if(liste.value===buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString){
+			indexGewaehltesElement = i;
+		}
+	}
+	funktionenListe[indexGewaehltesElement].integralAnzeigen = document.getElementById("IntegralAnzeigenCheckbox").checked;
+}
+
 function onChangeNormaleAnzeigen(){
 	var liste = document.getElementById("funktionenDropdown");
 	let indexGewaehltesElement = 0;
@@ -140,6 +153,7 @@ function onChangeFunktionenDropdown(){
 	document.getElementById("DritteAbleitungAnzeigenCheckbox").checked = funktionenListe[indexGewaehltesElement].dritteAbleitungAnzeigen;
 	document.getElementById("NormaleAnzeigenCheckbox").checked = funktionenListe[indexGewaehltesElement].normaleAnzeigen;
 	document.getElementById("KrümmungskreisAnzeigenCheckbox").checked = funktionenListe[indexGewaehltesElement].krümmungskreisAnzeigen;
+	displayButtonsV2(funktionenListe[indexGewaehltesElement]);
 }
 
 
@@ -492,6 +506,21 @@ function displayButtonsV2(funktionObjekt){
 		[].forEach.call(document.getElementsByClassName("gebrochenRational"), function(el){
 			el.style.display = "none";
 		});
+		[].forEach.call(document.getElementsByClassName("ZweitenGrades"), function(el){
+			el.style.display = "none";
+		});
+		[].forEach.call(document.getElementsByClassName("DrittenGrades"), function(el){
+			el.style.display = "none";
+		});
+		[].forEach.call(document.getElementsByClassName("ViertenGrades"), function(el){
+			el.style.display = "none";
+		});
+		[].forEach.call(document.getElementsByClassName("FuenftenGrades"), function(el){
+			el.style.display = "none";
+		});
+		[].forEach.call(document.getElementsByClassName("Gerade"), function(el){
+			el.style.display = "none";
+		});
 		
 		if(polynomGrad===1){
 			[].forEach.call(document.getElementsByClassName("ZweitenGrades"), function(el){
@@ -661,7 +690,7 @@ function getABC(funktion){
 	}else if((funktion.inhaltKnotenSymbol==='+'||funktion.inhaltKnotenSymbol==='-') &&
 			funktion.linkesChild.linkesChild.inhaltKnotenPolynom.potenz===2 &&
 			funktion.linkesChild.rechtesChild.inhaltKnotenPolynom.potenz===1 &&
-			funktion.rechtesChild.inhaltKnotenPolynom.potenz===1){
+			funktion.rechtesChild.inhaltKnotenPolynom.potenz===0){
 		
 	
 		
@@ -714,6 +743,40 @@ function getAB(funktion){
 }
 
 
+function onClickEntfernen(){
+	for(let i=0;i<funktionenListe.length;i++){
+		if((document.getElementById("funktionenDropdown").value === buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString)){
+			buchstabenArray.splice(i, 1);
+			funktionenListe.splice(i, 1);
+			removeToFunctionDropdownList(funktionenListe[i]);
+			break;
+		}
+	}
+}
+
+
+function removeToFunctionDropdownList(funktion){
+	let liste = document.getElementById("funktionenDropdown");
+	while (liste.options.length > 0) {
+		liste.options.remove(liste.options.length-1);
+	}
+	for(let i=0; i<funktionenListe.length; i++){
+		let option = document.createElement("option");
+	    option.text = buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString;
+	    liste.add(option);
+	}
+	liste.value = liste.options[liste.length-1].text;
+	
+	document.getElementById("GraphAnzeigenCheckbox").checked = funktionenListe[funktionenListe.length-1].graphAnzeigen;
+	document.getElementById("TangenteAnzeigenCheckbox").checked = funktionenListe[funktionenListe.length-1].tangenteAnzeigen;
+	document.getElementById("ErsteAbleitungAnzeigenCheckbox").checked = funktionenListe[funktionenListe.length-1].ersteAbleitungAnzeigen;
+	document.getElementById("ZweiteAbleitungAnzeigenCheckbox").checked = funktionenListe[funktionenListe.length-1].zweiteAbleitungAnzeigen;
+	document.getElementById("DritteAbleitungAnzeigenCheckbox").checked = funktionenListe[funktionenListe.length-1].dritteAbleitungAnzeigen;
+	document.getElementById("NormaleAnzeigenCheckbox").checked = funktionenListe[funktionenListe.length-1].normaleAnzeigen;
+	document.getElementById("KrümmungskreisAnzeigenCheckbox").checked = funktionenListe[funktionenListe.length-1].krümmungskreisAnzeigen;
+
+	displayButtonsV2(funktionenListe[funktionenListe.length-1]);
+}
 
 
 
@@ -758,8 +821,6 @@ function onClickGeradengleichungNullstellen(){
 		}
 	}
 }
-
-
 
 function onClickMitternachtsformelNullstellen(){
 	zeichneReiter6 = true;
@@ -980,7 +1041,7 @@ function onClickSatzVonVietaNullstellen(){
 }
 
 function onClickNewtonVerfahrenNullstellen(){
-	let tolleranz = Math.pow(10,-15);
+	let tolleranz = Math.pow(10,-13);
 	zeichneReiter6 = true;
 	zeigeInhaltReiter6 = 5;
 	aktiverReiter = 6;
@@ -1259,6 +1320,9 @@ function onClickMitternachtsformelExtremstellen(){
 					funktionenListe[i].extremstellen.push(x2);
 					
 					let text = "";
+					if(x1===x2){
+						text += "Doppelter Hoch/Tiefpunkt: ";
+					}
 					
 					for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
 						
@@ -1266,6 +1330,8 @@ function onClickMitternachtsformelExtremstellen(){
 							text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 						}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
 							text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+						}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)===0){
+							text +=  "p" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 						}
 							
 						
@@ -1340,12 +1406,17 @@ function onClickPQFormelExtremstellen(){
 
 					
 					let text = "";
+					if(x1===x2){
+						text += "Doppelter Hoch/Tiefpunkt: ";
+					}
 					
 					for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
 						if(  getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)>0 ){
 							text +=  "tp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j]) + "|" + zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 						}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)<0){
 							text +=  "hp" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
+						}else if(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i].zweiteAbleitung)===0){
+							text +=  "p" + (j+1) + "(" + zahlRunden(funktionenListe[i].extremstellen[j])+"|"+ zahlRunden(getPunktV4(funktionenListe[i].extremstellen[j],funktionenListe[i])) + ") ";
 						}
 					}
 					document.getElementById("ExtremstellenTextfeld").value = text;		
@@ -1442,7 +1513,7 @@ function onClickSatzVonVietaExtremstellen(){
 }
 
 function onClickNewtonVerfahrenExtremstellen(){
-	let tolleranz = Math.pow(10,-15);
+	let tolleranz = Math.pow(10,-13);
 	zeichneReiter6 = true;
 	zeigeInhaltReiter6 = 11;
 	aktiverReiter = 6;
@@ -1871,7 +1942,7 @@ function onClickSatzVonVietaWendepunkte(){
 }
 
 function onClickNewtonVerfahrenWendepunkte(){
-	let tolleranz = Math.pow(10,-14);
+	let tolleranz = Math.pow(10,-13);
 	zeichneReiter6 = true;
 	zeigeInhaltReiter6 = 17;
 	aktiverReiter = 6;
@@ -2033,7 +2104,70 @@ function onClickRegulaFalsiWendepunkte(){
 	}
 }
 
+function onClickIntegralBerechnen(){
+	zeichneReiter6 = true;
+	zeigeInhaltReiter6 = 19;
+	aktiverReiter=6;
+	for(let i=0;i<funktionenListe.length;i++){
+		if((document.getElementById("funktionenDropdown").value === buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString)){
+			onClickNewtonVerfahrenNullstellen();
+			
+			funktionenListe[i].integralVon = parseFloat(document.getElementById("IntegralVonTextfeld").value);
+			funktionenListe[i].integralBis = parseFloat(document.getElementById("IntegralBisTextfeld").value);
+			if(funktionenListe[i].integralVon>funktionenListe[i].integralBis){
+				document.getElementById("IntegralErgebnisTextfeld").value = "Die von-Grenze ist größer als die bis-Grenze keine berechnung möglich";
+				return;
+			}else{
+				
+				let uebergangspunkte = []
+				
+				for(let j=0;j<funktionenListe[i].nullstellen.length;j++){
+					if(funktionenListe[i].nullstellen[j]>funktionenListe[i].integralVon&&funktionenListe[i].nullstellen[j]<funktionenListe[i].integralBis){
+						uebergangspunkte.push(funktionenListe[i].nullstellen[j]);
+					}
+				}
+                
+                let punktVon = 0;
+				let punktBis = 0;
 
+                let flaeche = 0;
+                
+                if(uebergangspunkte.length===0){
+                	let punktVon = getPunktV4(funktionenListe[i].integralVon, funktionenListe[i].stammfunktion,0);
+				    let punktBis = getPunktV4(funktionenListe[i].integralBis, funktionenListe[i].stammfunktion,0);
+				    flaeche = Math.abs(punktBis - punktVon);
+				    document.getElementById("IntegralErgebnisTextfeld").value = flaeche;
+				    return;
+                }
+                
+                //uebergangspunkte.sort();
+                
+				for(let j=0;j<=uebergangspunkte.length;j++){
+					if(j==0){
+                             punktVon = getPunktV4(funktionenListe[i].integralVon, funktionenListe[i].stammfunktion,0);
+				             punktBis = getPunktV4(uebergangspunkte[j], funktionenListe[i].stammfunktion,0);
+
+					}else if(j<uebergangspunkte.length){
+                            punktVon = getPunktV4(uebergangspunkte[j-1], funktionenListe[i].stammfunktion,0);
+				            punktBis = getPunktV4(uebergangspunkte[j], funktionenListe[i].stammfunktion,0);
+					}if(j===uebergangspunkte.length){
+						    punktVon = getPunktV4(uebergangspunkte[j-1], funktionenListe[i].stammfunktion,0);
+				            punktBis = getPunktV4(funktionenListe[i].integralBis, funktionenListe[i].stammfunktion,0);
+					}
+
+					flaeche += Math.abs(punktBis - punktVon);
+				}
+			
+				document.getElementById("IntegralErgebnisTextfeld").value = flaeche;
+				
+				funktionenListe[i].integralFlaecheAnzeigen = true;
+				document.getElementById("IntegralFlaecheAnzeigenCheckbox").checked = true;
+			}
+			
+			
+		}
+	}
+}
 
 
 
@@ -2342,6 +2476,13 @@ function onChangeWendepunkteAnzeigen(){
 	}
 }
 
+function onChangeIntegralFlaecheAnzeigen(){
+	for(let i=0;i<funktionenListe.length;i++){
+		if((document.getElementById("funktionenDropdown").value === buchstabenArray[i] + "(x) = " + funktionenListe[i].inhaltKnotenString)){
+			funktionenListe[i].integralFlaecheAnzeigen=document.getElementById("IntegralFlaecheAnzeigenCheckbox").checked;
+		}
+	}
+}
 
 function onChangePolstellenAnzeigen(){
 	for(let i=0;i<funktionenListe.length;i++){

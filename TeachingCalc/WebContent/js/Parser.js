@@ -2259,6 +2259,15 @@ function erstelleSyntaxBaumV3(neuerFunktionSyntaxbaumGebrochenRational, funktion
 							//neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = functionAlsString[i];
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.inhalt;
+							if(!isNaN(neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.zahlOderVariablenName)){
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.potenz = 0;
+							}else{
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.potenz = 1;
+							}
+							
+							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.koeffizient = 1;
+							
 							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
 							neuerFunktionSyntaxbaum = parseFuntionBufferV3(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
 							let vectorKnoten=[];
@@ -2463,9 +2472,16 @@ function erstelleSyntaxBaumV4(neuerFunktionSyntaxbaumGebrochenRational, funktion
 							//neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = functionAlsString[i];
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenSymbol = aktuellesListenElement.inhalt;
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenString = functionAlsString;
-							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.inhalt;
+							
 							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.inhalt;
-							neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.potenz = 1;
+							if(functionAlsString[i] === 'x' || functionAlsString[i] === 'X'){
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.koeffizient = 1;
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.potenz = 1;
+							}else if(!isNaN(aktuellesListenElement.inhalt)){
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.inhalt;
+								neuerFunktionSyntaxbaumGebrochenRational.inhaltKnotenPolynom.potenz = 0;
+							}
+							
 							let neuerFunktionSyntaxbaum = new FunktionSyntaxbaum();
 							neuerFunktionSyntaxbaum = parseFuntionBufferV3(neuerFunktionSyntaxbaum, functionAlsString, functionAlsListe);
 							let vectorKnoten=[];
@@ -2692,15 +2708,24 @@ function rechterPartV4(aktuellerKnoten, functionAlsStringLokal) {
 					neuerRechterKnoten.inhaltKnotenSymbol=functionAlsStringLokal[i];
 					neuerRechterKnoten.index=i;
 					aktuellerKnoten.rechtesChild=neuerRechterKnoten;
-					
-					if(aktuellesListenElement.next.next.inhalt==="^"){
-						neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.prev.inhalt;
-						neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.next.inhalt;
-						neuerRechterKnoten.inhaltKnotenPolynom.potenz = aktuellesListenElement.next.next.next.inhalt;
-					}else{		
-						neuerRechterKnoten.linkesChild = linkerPartV4(neuerRechterKnoten, functionAlsStringLokal.substring(0,i));
-						neuerRechterKnoten.rechtesChild = rechterPartV4(neuerRechterKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));					
+					if(aktuellesListenElement.next.next != null){
+						if(aktuellesListenElement.next.next.inhalt==="^"){
+							neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.prev.inhalt;
+							neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.next.inhalt;
+							neuerRechterKnoten.inhaltKnotenPolynom.potenz = aktuellesListenElement.next.next.next.inhalt;
+						}else{		
+							neuerRechterKnoten.linkesChild = linkerPartV4(neuerRechterKnoten, functionAlsStringLokal.substring(0,i));
+							neuerRechterKnoten.rechtesChild = rechterPartV4(neuerRechterKnoten, functionAlsStringLokal.substring(i+1,rechteGrenze));					
+						}
+					}else{
+						if(aktuellesListenElement.inhalt==="^"){
+							neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = 1;
+							neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.prev.inhalt;
+							neuerRechterKnoten.inhaltKnotenPolynom.potenz = aktuellesListenElement.next.inhalt;
+						}
+						
 					}
+					
 					i = functionAlsStringLokal.length;
 					return neuerRechterKnoten;
 				}
@@ -2716,7 +2741,7 @@ function rechterPartV4(aktuellerKnoten, functionAlsStringLokal) {
 						neuerRechterKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
 						neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = aktuellesListenElement.inhalt;
 						neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.inhalt;
-						neuerRechterKnoten.inhaltKnotenPolynom.potenz = 1;
+						neuerRechterKnoten.inhaltKnotenPolynom.potenz = 0;
 						i=aktuellesListenElement.indexBis;
 						neuerRechterKnoten.index=i;
 //						if(linkeGrenze<aktuellesListenElement.indexBis){
@@ -2857,6 +2882,9 @@ function linkerPartV3(aktuellerKnoten, functionAlsStringLokal) {
 						i=aktuellesListenElement.indexBis;
 						neuerLinkerKnoten.index=i;
 						neuerLinkerKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
+						neuerLinkerKnoten.inhaltKnotenPolynom.koeffizient = 1;
+						neuerLinkerKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.inhalt;
+						neuerLinkerKnoten.inhaltKnotenPolynom.potenz = 1;
 					}
 
 					
@@ -2969,7 +2997,7 @@ function rechterPartV3(aktuellerKnoten, functionAlsStringLokal) {
 						neuerRechterKnoten.inhaltKnotenSymbol=aktuellesListenElement.inhalt;
 						neuerRechterKnoten.inhaltKnotenPolynom.koeffizient = 1;
 						neuerRechterKnoten.inhaltKnotenPolynom.zahlOderVariablenName = aktuellesListenElement.inhalt;
-						neuerRechterKnoten.inhaltKnotenPolynom.potenz = 1;
+						neuerRechterKnoten.inhaltKnotenPolynom.potenz = 0;
 						i=aktuellesListenElement.indexBis;
 						neuerRechterKnoten.index=i;
 //						if(linkeGrenze<aktuellesListenElement.indexBis){

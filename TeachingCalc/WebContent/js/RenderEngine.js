@@ -18,6 +18,9 @@ canvasContext.font = '15px Calibri';
 canvasContext.textAlign = "left";
 let breitePunktAmGraph = canvasContext.measureText("Punkt am Graph");
 
+let integralVon = 0;
+let integralBis = 0;
+
 let workersAvailable =false;
 if(window.Worker){
 	workersAvailable = true;
@@ -202,8 +205,8 @@ function farbenInitialisieren(){
 	farbenArrayFunktionenDritteAbleitung.push(farbenDerFunktionen7DritteAbleitung);
 }
 
-let buchstabenArray = ['f','g','h','i','j','k'];
-
+let buchstabenArrayTmp = ['f','g','h','i','j','k'];
+let buchstabenArray = [];
 
 
 let isDown = false;
@@ -468,6 +471,25 @@ canvas.addEventListener("mousewheel", function(event) {
 			}
 			funktionenListe[j].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessert);
 		}
+		
+		
+		funktionenListe[j].stammfunktion.punkteLinksVonNullVergroessert = [];
+		funktionenListe[j].stammfunktion.punkteRechtsVonNullVergroessert = [];
+		for(let i=0;i<funktionenListe[j].stammfunktion.punkteLinksVonNull.length;i++){
+			punktVergroessert={
+					x:funktionenListe[j].stammfunktion.punkteLinksVonNull[i].x*vergroesserung,
+					y:funktionenListe[j].stammfunktion.punkteLinksVonNull[i].y*vergroesserung
+			}
+			funktionenListe[j].stammfunktion.punkteLinksVonNullVergroessert.push(punktVergroessert);
+		}
+		for(let i=0;i<funktionenListe[j].stammfunktion.punkteRechtsVonNull.length;i++){
+			punktVergroessert={
+					x:funktionenListe[j].stammfunktion.punkteRechtsVonNull[i].x*vergroesserung,
+					y:funktionenListe[j].stammfunktion.punkteRechtsVonNull[i].y*vergroesserung
+			}
+			funktionenListe[j].stammfunktion.punkteRechtsVonNullVergroessert.push(punktVergroessert);
+		}
+		
 	}
 }, false);
 
@@ -893,7 +915,7 @@ if(equationFormAlternativ!=null){
 					funktionenListe[funktionenListe.length-1].dritteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
 
 					
-//					funktionenListe[funktionenListe.length-1].stammfunktion = 
+					funktionenListe[funktionenListe.length-1].stammfunktion = funktionIntegrierenSyntaxbaum(funktionGekuerzt);
 					
 					displayButtonsV2(funktionenListe[funktionenListe.length-1]);
 					//berechneKurvenDiskusionsPunkte(funktionenListe[funktionenListe.length-1]);
@@ -965,9 +987,14 @@ if(equationFormAlternativ!=null){
 								x:i,
 								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)
 						}
+						let punktIntegral = {
+								x:i,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].stammfunktion,0)
+						}
 						funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNull.push(punkterste);
 						funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNull.push(punktzweite);
 						funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNull.push(punktdritte);
+						funktionenListe[funktionenListe.length-1].stammfunktion.punkteRechtsVonNull.push(punktIntegral);
 						let punktVergroessertErste = {
 								x:i*vergroesserung,
 								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)*vergroesserung
@@ -980,10 +1007,15 @@ if(equationFormAlternativ!=null){
 								x:i*vergroesserung,
 								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)*vergroesserung
 						}
+						let punktVergroessertIntegral = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].stammfunktion,0)*vergroesserung
+						}
 						funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertErste);
 						funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertZweite);
 						funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteRechtsVonNullVergroessert.push(punktVergroessertDritte);
-			
+						funktionenListe[funktionenListe.length-1].stammfunktion.punkteRechtsVonNullVergroessert.push(punktVergroessertIntegral);
+						
 					}
 					for(let i=0;i>-1000;i-=0.1){
 						
@@ -999,10 +1031,14 @@ if(equationFormAlternativ!=null){
 								x:i,
 								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)
 						}
+						let punktIntegral = {
+								x:i,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].stammfunktion,0)
+						}
 						funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNull.push(punkterste);
 						funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNull.push(punktzweite);
 						funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNull.push(punktdritte);
-				
+						funktionenListe[funktionenListe.length-1].stammfunktion.punkteLinksVonNull.push(punktIntegral);
 						let punktVergroessErterste = {
 								x:i*vergroesserung,
 								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].ersteAbleitung,0)*vergroesserung
@@ -1015,10 +1051,14 @@ if(equationFormAlternativ!=null){
 								x:i*vergroesserung,
 								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].dritteAbleitung,0)*vergroesserung
 						}
+						let punktVergroessertIntegral = {
+								x:i*vergroesserung,
+								y:getPunktV4(i,funktionenListe[funktionenListe.length-1].stammfunktion,0)*vergroesserung
+						}
 						funktionenListe[funktionenListe.length-1].ersteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessErterste);
 						funktionenListe[funktionenListe.length-1].zweiteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertZweite);
 						funktionenListe[funktionenListe.length-1].dritteAbleitung.punkteLinksVonNullVergroessert.push(punktVergroessertDritte);
-						
+						funktionenListe[funktionenListe.length-1].stammfunktion.punkteLinksVonNullVergroessert.push(punktVergroessertIntegral);
 					}
 				}
 				
@@ -1045,6 +1085,9 @@ function zeichneLegende(){
 				hoeheLegende += abstand;
 			}
 			if(funktionenListe[i].dritteAbleitungAnzeigen){
+				hoeheLegende += abstand;
+			}
+			if(funktionenListe[i].integralAnzeigen){
 				hoeheLegende += abstand;
 			}
 		}
@@ -1093,6 +1136,17 @@ function zeichneLegende(){
 					canvasContext.fillText( buchstabenArray[i] + "'''(x) = " + funktionenListe[i].dritteAbleitung.inhaltKnotenString.substring(0,28)+"...", 20, (1+(anzahlStrings++))*abstand);
 				}else{
 					canvasContext.fillText( buchstabenArray[i] + "'''(x) = " + funktionenListe[i].dritteAbleitung.inhaltKnotenString, 20, (1+(anzahlStrings++))*abstand);
+				}
+			}
+			if(funktionenListe[i].integralAnzeigen){
+				canvasContext.font = '20px Calibri';
+//				canvasContext.fillStyle = 'rgba(50,50,200,1)';
+				canvasContext.fillStyle = 'rgba(' + String(farbenArrayFunktionenDritteAbleitung[i].r) + ',' + String(farbenArrayFunktionenDritteAbleitung[i].g) + ',' + String(farbenArrayFunktionenDritteAbleitung[i].b) + ',' + String(farbenArrayFunktionenDritteAbleitung[i].a) + ')';
+				canvasContext.textAlign = "left";
+				if(funktionenListe[i].stammfunktion.inhaltKnotenString.length>maxBuchstabenlaengeLegende){
+					canvasContext.fillText( buchstabenArray[i].toUpperCase() + "(x) = " + funktionenListe[i].stammfunktion.inhaltKnotenString.substring(0,28)+"...", 20, (1+(anzahlStrings++))*abstand);
+				}else{
+					canvasContext.fillText( buchstabenArray[i].toUpperCase() + "(x) = " + funktionenListe[i].stammfunktion.inhaltKnotenString, 20, (1+(anzahlStrings++))*abstand);
 				}
 			}
 		}
@@ -1472,6 +1526,7 @@ function checkEingabeV2(){
 				
 				erstelleSyntaxBaumV4(rootSyntaxbaum, equation);
 				let funktionGekuerzt = funktionenVorschau; 
+				syntaxbaumAusmultiplizieren(funktionGekuerzt);
 				//kuerzeSyntaxbaumGebrochenRationalV3(funktionGekuerzt);
 				//funktionenVorschau.gekürzt = funktionGekuerzt;
 				
@@ -1487,6 +1542,7 @@ function checkEingabeV2(){
 				funktionenVorschau.zweiteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.zweiteAbleitung.zweiteAbleitung);
 				funktionenVorschau.dritteAbleitung.zweiteAbleitung = funktionenVorschau.zweiteAbleitung.dritteAbleitung;
 				funktionenVorschau.dritteAbleitung.dritteAbleitung = funktionAbleitenSyntaxbaum(funktionenVorschau.dritteAbleitung.zweiteAbleitung);
+				funktionenVorschau.stammfunktion = funktionIntegrierenSyntaxbaum(funktionGekuerzt);
 				
 				for(let i=0;i<1000;i+=0.1){
 					let punkt = {
@@ -1676,6 +1732,14 @@ function zeichneFunktionsgraphen(){
 					for(let j=0;j<funktionenListe[i].nullstellen.length;j++){						
 						DrawCircle(funktionenListe[i].nullstellen[j], 0, 0.1, farbeNullstellen.r, farbeNullstellen.g, farbeNullstellen.b, farbeNullstellen.a,true,false);
 					}
+				}if(funktionenListe[i].integralFlaecheAnzeigen){
+					for(let j=funktionenListe[i].integralVon;j<funktionenListe[i].integralBis;j+=0.01){
+						canvasContext.stroke();
+						canvasContext.beginPath();
+						canvasContext.strokeStyle = 'rgba(' + String(farbeWendestellen.r) + ',' + String(farbeWendestellen.g) + ',' + String(farbeWendestellen.b) + ',' + String(farbeWendestellen.a) + ')';
+						DrawLineOhneAbschneiden(j, 0);	
+						DrawLineOhneAbschneiden(j, -getPunktV4(j,funktionenListe[i]));
+					}
 				}if(funktionenListe[i].extremstellenAnzeigen){
 					for(let j=0;j<funktionenListe[i].extremstellen.length;j++){
 						canvasContext.stroke();
@@ -1851,6 +1915,22 @@ function zeichneFunktionsgraphen(){
 					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenDritteAbleitung[k].r) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].g) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].b) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].a) + ')';
 					for(let i=0;i<funktionenListe[k].dritteAbleitung.punkteLinksVonNullVergroessert.length;i++){			
 						DrawLineOhneVergroeserung(funktionenListe[k].dritteAbleitung.punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].dritteAbleitung.punkteLinksVonNullVergroessert[i].y),false);			
+					}
+					canvasContext.stroke();
+			
+		}
+		if(funktionenListe[k].integralAnzeigen){
+			canvasContext.beginPath();
+					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenDritteAbleitung[k].r) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].g) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].b) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].a) + ')';
+					
+					for(let i=0;i<funktionenListe[k].stammfunktion.punkteRechtsVonNullVergroessert.length;i++){				
+						DrawLineOhneVergroeserung(funktionenListe[k].stammfunktion.punkteRechtsVonNullVergroessert[i].x, (-funktionenListe[k].stammfunktion.punkteRechtsVonNullVergroessert[i].y), false);		
+					}
+					canvasContext.stroke();
+					canvasContext.beginPath();
+					canvasContext.strokeStyle = 'rgba(' + String(farbenArrayFunktionenDritteAbleitung[k].r) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].g) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].b) + ',' + String(farbenArrayFunktionenDritteAbleitung[k].a) + ')';
+					for(let i=0;i<funktionenListe[k].stammfunktion.punkteLinksVonNullVergroessert.length;i++){			
+						DrawLineOhneVergroeserung(funktionenListe[k].stammfunktion.punkteLinksVonNullVergroessert[i].x, (-funktionenListe[k].stammfunktion.punkteLinksVonNullVergroessert[i].y),false);			
 					}
 					canvasContext.stroke();
 			

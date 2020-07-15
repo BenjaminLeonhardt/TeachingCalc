@@ -24,10 +24,12 @@
 <body>
 	<nav id="leftNavBar">
 		<select id="funktionenDropdown" onchange="onChangeFunktionenDropdown()"></select><br>
+		<button type="button" onclick="onClickEntfernen()" >Funktion entfernen</button>
 		<input type="checkbox" name="GraphAnzeigen" class="checkboxen" id="GraphAnzeigenCheckbox" onchange="onChangeGraphAnzeigen()"> Graph anzeigen<br>
 		<input type="checkbox" name="ErsteAbleitungAnzeigen" class="checkboxen" id="ErsteAbleitungAnzeigenCheckbox" onchange="onChangeErsteAbleitungAnzeigen()"> Erste Ableitung anzeigen<br>
 		<input type="checkbox" name="ZweiteAbleitungAnzeigen" class="checkboxen" id="ZweiteAbleitungAnzeigenCheckbox" onchange="onChangeZweiteAbleitungAnzeigen()"> Zweite Ableitung anzeigen<br>
 		<input type="checkbox" name="DritteAbleitungAnzeigen" class="checkboxen" id="DritteAbleitungAnzeigenCheckbox" onchange="onChangeDritteAbleitungAnzeigen()"> Dritte Ableitung anzeigen<br>
+		<input type="checkbox" name="IntegralAnzeigen" class="checkboxen" id="IntegralAnzeigenCheckbox" onchange="onChangeIntegralAnzeigen()"> Integral anzeigen<br>
 		<input type="checkbox" name="TangenteAnzeigen" class="checkboxen" id="TangenteAnzeigenCheckbox" onchange="onChangeTangenteAnzeigen()"> Tangente anzeigen<br>
 		<input type="checkbox" name="NormaleAnzeigen" class="checkboxen" id="NormaleAnzeigenCheckbox" onchange="onChangeNormaleAnzeigen()"> Normale anzeigen<br>
 		<input type="checkbox" name="KrümmungskreisAnzeigen" class="checkboxen" id="KrümmungskreisAnzeigenCheckbox" onchange="onChangeKrümmungskreisAnzeigen()"> Krümmungskreis anzeigen<br>
@@ -67,6 +69,19 @@
 			    <input type="text" id="WendepunkteTextfeld" name="WendepunkteTextfeld">
 			  </label><br>
 			<input type="checkbox" name="WendepunkteAnzeigen" class="checkboxen" id="WendepunkteAnzeigenCheckbox" onchange="onChangeWendepunkteAnzeigen()"> Wendepunkte anzeigen<br>
+			
+		<h3 id="Ueberschrift">Integral berechnen</h3>
+			<label for="IntegralVonLabel" id="IntegralVonLabel">Von:
+			    <input type="text" id="IntegralVonTextfeld" name="IntegralVonTextfeld">
+			  </label><br>
+			  <label for="IntegralBisLabel" id="IntegralBisLabel">Bis:
+			    <input type="text" id="IntegralBisTextfeld" name="IntegralBisTextfeld">
+			  </label><br>
+			  <label for="IntegralErgebnisLabel" id="IntegralErgebnisLabel">Erg.:
+			    <input type="text" id="IntegralErgebnisTextfeld" name="IntegralErgebnisTextfeld">
+			  </label><br>
+			  <button type="button" onclick="onClickIntegralBerechnen()" >Berechnen</button>
+			<input type="checkbox" name="IntegralFlaecheAnzeigen" class="checkboxen" id="IntegralFlaecheAnzeigenCheckbox" onchange="onChangeIntegralFlaecheAnzeigen()"> Fläche anzeigen<br>
 		
 		<h3 id="Ueberschrift" class="gebrochenRational">Polstellen</h3>
 		<button type="button" onclick="onClickPolstellenBerechnungErklaeren()" class="gebrochenRational">Berechnung zeigen</button><br class="gebrochenRational">

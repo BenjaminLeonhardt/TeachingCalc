@@ -24,6 +24,10 @@ class FunktionAlsVektorSyntaxbaum {
 		this.ersteAbleitungAnzeigen = false;
 		this.zweiteAbleitungAnzeigen = false;
 		this.dritteAbleitungAnzeigen = false;
+		this.integralAnzeigen = false;
+		this.integralFlaecheAnzeigen = false;
+		this.integralVon = 0;
+		this.integralBis = 0;	
 		this.normaleAnzeigen = false;
 		this.krümmungskreisAnzeigen = false;
 		this.nullstellen = [];
